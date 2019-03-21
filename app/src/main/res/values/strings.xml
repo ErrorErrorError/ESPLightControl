@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">ESP Led WiFi</string>
+    <string name="apps_add_device">Add\nDevice</string>
+    <string name="home_tab">Home</string>
+    <string name="light_tab">Light</string>
+    <string name="mode_tab">Modes</string>
+    <string name="presets_tab">Presets</string>
+    <string name="Devices">Devices</string>
+    <string name="DeviceName">Device Name</string>
+    <string name="IPAddress">IP Address</string>
+    <string name="Port">Port</string>
+    <string name="NoConnected">No Device Connected</string>
+    <string name="MusicModeText">Music Mode</string>
+    <string name="WavesModeText">Waves Mode</string>
+    <string name="SolidModeText">Solid Mode</string>
+    <string name="todo">TODO</string>
+    <string name="title">Title</string>
+    <string name="port">Port:</string>
+    <string name="description">Description</string>
+    <string name="connection">Connection:</string>
+</resources>

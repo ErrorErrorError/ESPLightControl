@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:stateListAnimator="@animator/anim_raise"
+    android:layout_gravity="top|center"
+    android:id="@+id/solidModeCardView"
+    style="@style/Custom.MaterialCardView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/SolidModeText"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/somatic_round"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_marginEnd="25dp"/>
+
+
+</com.google.android.material.card.MaterialCardView>

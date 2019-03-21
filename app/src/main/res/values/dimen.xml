@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="touch_raise">2dp</dimen>
+    <dimen name="corner_radius">36dp</dimen>
+    <dimen name="bottomNavHeight">95dp</dimen>
+    <dimen name="topHalfScreen">300dp</dimen>
+    <dimen name="addDeviceButtonHeight">100dp</dimen>
+</resources>
