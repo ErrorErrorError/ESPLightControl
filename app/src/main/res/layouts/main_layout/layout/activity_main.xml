@@ -18,16 +18,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragmentWaves">
-
     </com.errorerrorerror.esplightcontrol.adapter.CustomViewPager>
-
 
     <!-- waves top -->
     <include
         android:id="@+id/fragmentWaves"
         layout="@layout/wave_topbar"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="125dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
