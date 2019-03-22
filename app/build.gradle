@@ -28,7 +28,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     dataBinding {
         enabled true
     }
@@ -46,15 +45,14 @@ android {
                     ]
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     kapt {
         generateStubs = true
     }
+    buildToolsVersion '28.0.3'
 }
 
 dependencies {
@@ -89,7 +87,7 @@ dependencies {
     implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.4'
 
     //Lifecycle Components
-    def lifecycle_version = "2.1.0-alpha02"
+    def lifecycle_version = "2.1.0-alpha03"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 

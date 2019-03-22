@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <declare-styleable name="iOSStyleSlider">
 
         <attr name="issCornerRadius" format="dimension|reference"/>
@@ -9,7 +8,7 @@
         <attr name="issDisabled" format="boolean|reference"/>
         <attr name="issSetMaxValue" format="integer|reference"/>
         <attr name="issSetMinValue" format="integer|reference"/>
-
+        <attr name="issSetProgressBar" format="integer|reference"/>
     </declare-styleable>
 
 

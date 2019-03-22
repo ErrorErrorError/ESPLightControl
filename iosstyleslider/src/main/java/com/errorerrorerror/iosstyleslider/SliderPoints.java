@@ -2,13 +2,17 @@ package com.errorerrorerror.iosstyleslider;
 
 import android.graphics.Path;
 import android.graphics.Point;
+import android.util.Log;
 
 class SliderPoints {
 
+    private static final String TAG = "sliderpoints" ;
     private int width;
     private int height;
     private int mSliderRadius;
     private int slider;
+    private int min;
+    private int max;
     /* Points config
        p1 = first point
        p2 = first curve
@@ -41,18 +45,28 @@ class SliderPoints {
     }
 
 
-    void setSliderSize(int width, int height, int radius, int slider) {
+    void setSliderSize(int width, int height, int radius, int slider, int min, int max) {
         this.width = width;
         this.height = height;
         this.mSliderRadius = radius;
         this.slider = slider;
+        this.min = min;
+        this.max = max;
         sliderPoints();
     }
 
     private void sliderPoints() {
 
+        int range = max - min;
         int val = height - (height * slider) / 100;
 
+
+        Log.d(TAG, "\nval2: " + val +
+                " \nheight: " + height +
+                " \nslider: " + slider +
+                " \nmax: " + max +
+                " \nmin: " + min +
+                " \nrange: " + range);
 
         mSliderP1.set(0, mSliderRadius + val);
         mSliderP2.set(mSliderRadius, val);

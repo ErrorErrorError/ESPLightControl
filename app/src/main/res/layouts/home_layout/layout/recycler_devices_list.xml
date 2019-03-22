@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -24,12 +24,11 @@
         app:rightIcon="@drawable/ic_delete"
         app:rightIconBgColor="@color/redDelete">
 
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardViewCustomRow"
-            style="@style/RecyclerviewItems.CardView"
             android:clickable="false"
             android:focusable="true"
+            style="@style/RecyclerviewItems.CardView"
             android:foreground="?attr/selectableItemBackground"
             app:cardPreventCornerOverlap="true">
 
@@ -50,7 +49,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
-                         android:contentDescription="@string/todo"
+                        android:contentDescription="@string/todo"
                         android:rotation="0"
                         app:srcCompat="@drawable/ic_microcontroller_icon_mini" />
                 </LinearLayout>
@@ -102,14 +101,16 @@
                             android:layout_height="wrap_content"
                             android:text="@string/port"
                             android:textSize="12sp" />
-<!--
-                        <TextView
-                            android:id="@+id/portNumInputSum"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:text="@string/port"
-                            android:textSize="12sp" /> -->
+                        <!--
+
+                                               <TextView
+                                                   android:id="@+id/portNumInputSum"
+                                                   android:layout_width="wrap_content"
+                                                   android:layout_height="wrap_content"
+                                                   android:layout_marginStart="2dp"
+                                                   android:text="@string/port"
+                                                   android:textSize="12sp" />
+                       -->
                     </LinearLayout>
                 </LinearLayout>
 
@@ -117,29 +118,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center|end">
+
                     <com.nightonke.jellytogglebutton.JellyToggleButton
                         android:id="@+id/connectionSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:jtbThumbRadius="10dp"
-                        app:jtbThumbShadow="true"
+                        app:jtbBackgroundMeasureRatioValue="2"
                         app:jtbBackgroundRadius="7dp"
+                        app:jtbDuration="700"
+                        app:jtbEaseType="ease_in_out_bounce"
                         app:jtbJelly="active_tremble_tail_slim_jim"
                         app:jtbLeftBackgroundColor="@android:color/darker_gray"
                         app:jtbLeftThumbColor="#ECECEC"
-                        app:jtbBackgroundMeasureRatioValue="2"
                         app:jtbMoveToSameStateCallListener="true"
                         app:jtbRightBackgroundColor="#D8DCF9"
-                        app:jtbEaseType="ease_in_out_bounce"
                         app:jtbRightThumbColor="@color/colorAccent"
-                        app:jtbDuration="700"
-                        />
+                        app:jtbThumbRadius="10dp"
+                        app:jtbThumbShadow="true" />
                 </RelativeLayout>
             </LinearLayout>
-
-
         </com.google.android.material.card.MaterialCardView>
     </com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout>
-
-
 </LinearLayout>

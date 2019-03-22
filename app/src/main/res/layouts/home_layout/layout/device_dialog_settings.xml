@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -6,11 +6,10 @@
     android:paddingTop="20dp"
     android:paddingBottom="10dp">
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/deviceNameTextLayout"
-        style="@style/Custom.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
+        style="@style/Custom.TextInputLayout.OutlinedBox"
         android:layout_height="match_parent"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
@@ -24,22 +23,20 @@
             android:inputType="text"
             android:maxLength="28"
             android:maxLines="1"
-            android:textSize="15sp">
-
-        </com.google.android.material.textfield.TextInputEditText>
+            android:textSize="15sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:clipToPadding="true">
+        android:clipToPadding="true"
+        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ipAddressTextLayout"
-            style="@style/Custom.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            style="@style/Custom.TextInputLayout.OutlinedBox"
             android:layout_marginStart="40dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="150dp"
@@ -52,21 +49,18 @@
                 android:gravity="center|start"
                 android:inputType="text"
                 android:maxLines="1"
-                android:textSize="15sp">
-
-            </com.google.android.material.textfield.TextInputEditText>
+                android:textSize="15sp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/portTextLayout"
-            style="@style/Custom.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="-140dp"
+            style="@style/Custom.TextInputLayout.OutlinedBox"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="40dp"
             android:hint="@string/Port">
-
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/portInput"
@@ -75,9 +69,7 @@
                 android:gravity="center|start"
                 android:inputType="number"
                 android:maxLength="5"
-                android:textSize="15sp">
-
-            </com.google.android.material.textfield.TextInputEditText>
+                android:textSize="15sp"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </LinearLayout>

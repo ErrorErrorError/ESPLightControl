@@ -16,28 +16,7 @@ import dagger.Provides;
 
 @Module
 public class RoomModule {
-/*
-    //Added new column called 'device_connectivity'
-    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-        @Override
-        public void migrate(SupportSQLiteDatabase database) {
-            // If we alter alter the table, edit like this:.
-            database.execSQL("ALTER TABLE devices "
-                    + " ADD COLUMN device_connectivity TEXT");
-        }
-    };
 
-    //Adds radio switch
-    private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
-        @Override
-        public void migrate(SupportSQLiteDatabase database) {
-            // If we alter alter the table, edit like this:.
-            database.execSQL("ALTER TABLE devices "
-                    + " ADD COLUMN device_on INTEGER");
-        }
-    };
-
-    */
     private static final String DATABASE_NAME = "devices_registered";
     private DevicesDatabase devicesDatabase;
 
@@ -46,7 +25,6 @@ public class RoomModule {
                 application.getApplicationContext(),
                 DevicesDatabase.class,
                 DATABASE_NAME)
-                //.addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .build();
     }
 

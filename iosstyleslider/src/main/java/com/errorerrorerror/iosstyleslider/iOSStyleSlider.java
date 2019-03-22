@@ -31,9 +31,10 @@ public class iOSStyleSlider extends View {
     private final static int DEFAULT_BACKGROUND_SLIDER_COLOR = Color.parseColor("#efefef");
     private final static int DEFAULT_WIDTH = 100; //Wrapped Default
     private final static int DEFAULT_HEIGHT = 250; //Wrapped default
-    private final static int DEFAULT_SLIDER_VALUE = 80;
     private final static int DEFAULT_MIN_VALUE = 0;
-    private final static int DEFAULT_MAX_VALUE = 0;
+    private final static int DEFAULT_MAX_VALUE = 100;
+    private final static int DEFAULT_PROGRESS = 80;
+    private static final String TAG = "iosstyleslider";
 
     //Do not change this
     private Paint mPaint;
@@ -42,21 +43,24 @@ public class iOSStyleSlider extends View {
     private Path mSliderPath;
     private RectF mSliderBackgroundF;
     private float mSliderRadius;
-    private int mSliderValue = DEFAULT_SLIDER_VALUE;
-    private SliderPoints sliderPoints = new SliderPoints();
+    private SliderPoints sliderPoints;
     private boolean sliderDragged;
     private boolean sliderTouched;
     private int widthSliderWPadding;
     private int heightSliderWPadding;
+    //private boolean mMaxInitialized;
+    //private boolean mMinInitialized;
 
 
     //Users Can Change these values
     private int mSliderColor = DEFAULT_SLIDER_COLOR;
-    private int mSiderBackgroundColor = DEFAULT_BACKGROUND_SLIDER_COLOR;
+    private int mSliderBackgroundColor = DEFAULT_BACKGROUND_SLIDER_COLOR;
     private float desiredWidth; //Default Width if Wrapped
     private float desiredHeight; //Default Height if Wrapped
     private int mSliderMin = DEFAULT_MIN_VALUE;
     private int mSliderMax = DEFAULT_MAX_VALUE;
+    private int mSliderProgress = DEFAULT_PROGRESS;
+    private boolean mSliderOrientation;
 
 
     public iOSStyleSlider(Context context) {
@@ -74,17 +78,17 @@ public class iOSStyleSlider extends View {
         init(attrs);
     }
 
-    public void setSliderValue(int value) {
-        if(value > 100)
-        {
+    public void setSliderProgress(int value) {
+        if (value > 100) {
             value = 100;
-        }
-        else if (value < 0)
-        {
+        } else if (value < 0) {
             value = 0;
         }
 
-        this.mSliderValue = value;
+        if (value != mSliderProgress) {
+            this.mSliderProgress = value;
+        }
+        invalidate();
     }
 
     private void init(@Nullable AttributeSet set) {
@@ -106,19 +110,20 @@ public class iOSStyleSlider extends View {
 
         mSliderRadius = ta.getDimension(R.styleable.iOSStyleSlider_issCornerRadius, DEFAULT_SLIDER_RADIUS);
         mSliderColor = ta.getColor(R.styleable.iOSStyleSlider_issColorSlider, mSliderColor);
-        mSiderBackgroundColor = ta.getColor(R.styleable.iOSStyleSlider_issColorBackgroundSlider, mSiderBackgroundColor);
-        mSliderMin = ta.getInteger(R.styleable.iOSStyleSlider_issSetMinValue, mSliderMin);
-        mSliderMax = ta.getInteger(R.styleable.iOSStyleSlider_issSetMaxValue, mSliderMax);
+        mSliderBackgroundColor = ta.getColor(R.styleable.iOSStyleSlider_issColorBackgroundSlider, mSliderBackgroundColor);
+        setSliderMin(ta.getInteger(R.styleable.iOSStyleSlider_issSetMinValue, mSliderMin));
+        setSlidertMax(ta.getInteger(R.styleable.iOSStyleSlider_issSetMaxValue, mSliderMax));
+        setSliderProgress(ta.getInt(R.styleable.iOSStyleSlider_issSetProgressBar, mSliderProgress));
 
         ta.recycle();
     }
 
     private void setup() {
+        sliderPoints = new SliderPoints();
         widthSliderWPadding = getMeasuredWidth() - getPaddingRight();
         heightSliderWPadding = getMeasuredHeight() - getPaddingBottom();
     }
 
-    @SuppressLint("DrawAllocation")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected synchronized void onDraw(Canvas canvas) {
@@ -126,22 +131,22 @@ public class iOSStyleSlider extends View {
 
         //Backgound Slider
         mPaint.reset();
-        mPaint.setColor(mSiderBackgroundColor);
+        mPaint.setColor(mSliderBackgroundColor);
         mSliderBackgroundF.set(0, 0, widthSliderWPadding, heightSliderWPadding);
         canvas.drawRoundRect(mSliderBackgroundF, mSliderRadius, mSliderRadius, mPaint);
 
-
-        Log.d("TESTVAL", "Val: " + mSliderValue);
+        Log.d(TAG, "Val: " + mSliderProgress);
 
         //Slider
         mSliderPath.reset();
         mPaint.setAntiAlias(true);
         mPaint.setColor(mSliderColor);
-        sliderPoints.setSliderSize(widthSliderWPadding, heightSliderWPadding, (int) mSliderRadius, (int) mSliderValue);
+        sliderPoints.setSliderSize(widthSliderWPadding, heightSliderWPadding, (int) mSliderRadius, mSliderProgress, mSliderMin, mSliderMax);
         mSliderPath.set(sliderPoints.getSliderPath());
         canvas.drawPath(mSliderPath, mPaint);
 
     }
+
 
     @Override
     public boolean performClick() {
@@ -159,22 +164,21 @@ public class iOSStyleSlider extends View {
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                calculateSliderHeight(event.getY());
-                sliderDragged = true;
-                sliderTouched = true;
+                //sliderDragged = true;
+                //sliderTouched = true;
+                setSliderProgress(calculateSliderHeight(event.getY()));
                 break;
             case MotionEvent.ACTION_MOVE:
                 //Log.d("IOSSTYLE", "onTouchEvent: " + event.getY());
-
-                calculateSliderHeight(event.getY());
-                sliderDragged = true;
-                sliderTouched = true;
+                //sliderDragged = true;
+                //sliderTouched = true;
+                setSliderProgress(calculateSliderHeight(event.getY()));
+                break;
             default:
-                sliderTouched = false;
-                sliderDragged = false;
+                //sliderTouched = false;
+                //sliderDragged = false;
                 break;
         }
-        invalidate();
         return true;
     }
 
@@ -185,23 +189,6 @@ public class iOSStyleSlider extends View {
         //Elevation
         setOutlineProvider(new CustomOutline(w, h, mSliderRadius));
         setClipToOutline(true);
-    }
-
-    private class CustomOutline extends ViewOutlineProvider {
-        int width;
-        int height;
-        float cornerRadius;
-
-        CustomOutline(int width, int height, float cornerRadius) {
-            this.width = width;
-            this.height = height;
-            this.cornerRadius = cornerRadius;
-        }
-
-        @Override
-        public void getOutline(View view, Outline outline) {
-            outline.setRoundRect(0, 0, width, height, cornerRadius);
-        }
     }
 
     @Override
@@ -231,35 +218,73 @@ public class iOSStyleSlider extends View {
         return result;
     }
 
-    private void calculateSliderHeight(float fingerSlide) {
+    private int calculateSliderHeight(float fingerSlide) {
         if (fingerSlide > heightSliderWPadding) {
             fingerSlide = heightSliderWPadding;
         } else if (fingerSlide < 0) {
             fingerSlide = 0;
         }
-        mSliderValue = (int) (((heightSliderWPadding - fingerSlide) * 100) / heightSliderWPadding);
-
-
+        return (int) (((heightSliderWPadding - fingerSlide) * 100) / heightSliderWPadding);
     }
 
-    @Nullable
+    public void setSliderMin(int min) {
+        if (min >= mSliderMax) {
+            mSliderMax = min;
+        } else {
+            mSliderMin = min;
+        }
+    }
+
+    public void setSlidertMax(int max) {
+        if (max <= mSliderMin) {
+            mSliderMin = max;
+        } else {
+            mSliderMax = max;
+        }
+    }
+
+
+
     @Override
     protected Parcelable onSaveInstanceState() {
+        //begin boilerplate code that allows parent classes to save state
         Parcelable superState = super.onSaveInstanceState();
+
         SavedState ss = new SavedState(superState);
-        ss.value = (int) mSliderValue;
+        //end
+        ss.sliderProgress = this.mSliderProgress;
+
         return ss;
     }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
+        //begin boilerplate code so parent classes can restore state
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
         SavedState ss = (SavedState) state;
-        setSliderValue((int) ss.value);
         super.onRestoreInstanceState(ss.getSuperState());
+        //end
+
+        setSliderProgress(ss.sliderProgress);
     }
 
-    private static class SavedState extends BaseSavedState {
-        float value; //this will store the current value from ValueBar
+    static class SavedState extends BaseSavedState {
+        //required field that makes Parcelables from a Parcel
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
+        int sliderProgress;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -267,24 +292,31 @@ public class iOSStyleSlider extends View {
 
         private SavedState(Parcel in) {
             super(in);
-            value = in.readFloat();
+            this.sliderProgress = in.readInt();
         }
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
-            out.writeDouble(value);
+            out.writeInt(this.sliderProgress);
+        }
+    }
+
+    private class CustomOutline extends ViewOutlineProvider {
+        int width;
+        int height;
+        float cornerRadius;
+        int yShift;
+
+        CustomOutline(int width, int height, float cornerRadius) {
+            this.width = width;
+            this.height = height;
+            this.cornerRadius = cornerRadius;
         }
 
-        public static final Parcelable.Creator<SavedState> CREATOR
-                = new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
+        @Override
+        public void getOutline(View view, Outline outline) {
+            outline.setRoundRect(0, 0, width, height, cornerRadius);
+        }
     }
 }
