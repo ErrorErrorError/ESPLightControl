@@ -16,7 +16,9 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
@@ -44,10 +46,14 @@ public class iOSStyleSlider extends View {
     private RectF mSliderBackgroundF;
     private float mSliderRadius;
     private SliderPoints sliderPoints;
-    private boolean sliderDragged;
+    //private boolean sliderLongPressed;
     private boolean sliderTouched;
-    private int widthSliderWPadding;
-    private int heightSliderWPadding;
+    private float widthSliderWPadding;
+    private float heightSliderWPadding;
+    private VelocityTracker mVelocityTracker;
+
+
+
     //private boolean mMaxInitialized;
     //private boolean mMinInitialized;
 
@@ -60,8 +66,7 @@ public class iOSStyleSlider extends View {
     private int mSliderMin = DEFAULT_MIN_VALUE;
     private int mSliderMax = DEFAULT_MAX_VALUE;
     private int mSliderProgress = DEFAULT_PROGRESS;
-    private boolean mSliderOrientation;
-
+    //private boolean mSliderOrientation;
 
     public iOSStyleSlider(Context context) {
         super(context);
@@ -76,19 +81,6 @@ public class iOSStyleSlider extends View {
     public iOSStyleSlider(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
-    }
-
-    public void setSliderProgress(int value) {
-        if (value > 100) {
-            value = 100;
-        } else if (value < 0) {
-            value = 0;
-        }
-
-        if (value != mSliderProgress) {
-            this.mSliderProgress = value;
-        }
-        invalidate();
     }
 
     private void init(@Nullable AttributeSet set) {
@@ -114,7 +106,6 @@ public class iOSStyleSlider extends View {
         setSliderMin(ta.getInteger(R.styleable.iOSStyleSlider_issSetMinValue, mSliderMin));
         setSlidertMax(ta.getInteger(R.styleable.iOSStyleSlider_issSetMaxValue, mSliderMax));
         setSliderProgress(ta.getInt(R.styleable.iOSStyleSlider_issSetProgressBar, mSliderProgress));
-
         ta.recycle();
     }
 
@@ -128,20 +119,24 @@ public class iOSStyleSlider extends View {
     @Override
     protected synchronized void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         //Backgound Slider
         mPaint.reset();
         mPaint.setColor(mSliderBackgroundColor);
         mSliderBackgroundF.set(0, 0, widthSliderWPadding, heightSliderWPadding);
         canvas.drawRoundRect(mSliderBackgroundF, mSliderRadius, mSliderRadius, mPaint);
 
-        Log.d(TAG, "Val: " + mSliderProgress);
+        // Log.d(TAG, "Val: " + mSliderProgress);
 
         //Slider
         mSliderPath.reset();
         mPaint.setAntiAlias(true);
         mPaint.setColor(mSliderColor);
-        sliderPoints.setSliderSize(widthSliderWPadding, heightSliderWPadding, (int) mSliderRadius, mSliderProgress, mSliderMin, mSliderMax);
+        sliderPoints.setSliderSize(widthSliderWPadding,
+                heightSliderWPadding,
+                mSliderRadius,
+                mSliderProgress,
+                mSliderMin,
+                mSliderMax);
         mSliderPath.set(sliderPoints.getSliderPath());
         canvas.drawPath(mSliderPath, mPaint);
 
@@ -158,29 +153,89 @@ public class iOSStyleSlider extends View {
         return super.performLongClick();
     }
 
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int action = event.getAction();
+        int index = event.getActionIndex();
+        int action = event.getActionMasked();
+        int pointerId = event.getPointerId(index);
+
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                //sliderDragged = true;
-                //sliderTouched = true;
-                setSliderProgress(calculateSliderHeight(event.getY()));
+                if (mVelocityTracker == null) {
+
+                    // Retrieve a new VelocityTracker object to watch the velocity
+                    // of a motion.
+                    mVelocityTracker = VelocityTracker.obtain();
+                } else {
+
+                    // Reset the velocity tracker back to its initial state.
+                    mVelocityTracker.clear();
+                }
+
+                // Add a user's movement to the tracker.
+                mVelocityTracker.addMovement(event);
                 break;
             case MotionEvent.ACTION_MOVE:
-                //Log.d("IOSSTYLE", "onTouchEvent: " + event.getY());
-                //sliderDragged = true;
-                //sliderTouched = true;
-                setSliderProgress(calculateSliderHeight(event.getY()));
+                mVelocityTracker.addMovement(event);
+                // When you want to determine the velocity, call
+                // computeCurrentVelocity(). Then call getXVelocity()
+                // and getYVelocity() to retrieve the velocity for each pointer ID.
+                mVelocityTracker.computeCurrentVelocity(1, 10);
+
+                // Log velocity of pixels per second
+                // Best practice to use VelocityTrackerCompat where possible.
+                //Log.d(TAG, "\nY velocity: " + mVelocityTracker.getYVelocity(pointerId));
+
+                float test = mVelocityTracker.getYVelocity(pointerId);
+                if (test >= .4 || test <= -.4)
+                {
+                    setSliderProgress((int) (mSliderProgress - test));
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                // Return a VelocityTracker object back to be re-used by others.
+                mVelocityTracker.recycle();
                 break;
             default:
-                //sliderTouched = false;
-                //sliderDragged = false;
-                break;
+                animate().translationZ(0);
         }
         return true;
     }
+
+    /*
+
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouchEvent(MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_MOVE:
+                        //Log.d(TAG, "onTouchEvent: " + event.getY() + " thumb position: " + getSliderThumbPosition());
+                        //sliderLongPressed = true;
+                        //sliderTouched = true;
+                        //setSliderProgress(calculateSliderHeight(event.getY()));
+                        if (event.getY() != test) {
+                            if (event.getY() > getSliderThumbPosition()) {
+                                mSliderProgress--;
+                            } else {
+                                mSliderProgress++;
+                            }
+                        }
+                        test = event.getY();
+                        break;
+                    default:
+                        sliderTouched = false;
+                        //sliderLongPressed = false;
+                        break;
+                }
+                invalidate();
+                return true;
+            }
+        */
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -218,6 +273,7 @@ public class iOSStyleSlider extends View {
         return result;
     }
 
+    /*
     private int calculateSliderHeight(float fingerSlide) {
         if (fingerSlide > heightSliderWPadding) {
             fingerSlide = heightSliderWPadding;
@@ -226,6 +282,7 @@ public class iOSStyleSlider extends View {
         }
         return (int) (((heightSliderWPadding - fingerSlide) * 100) / heightSliderWPadding);
     }
+    */
 
     public void setSliderMin(int min) {
         if (min >= mSliderMax) {
@@ -243,7 +300,23 @@ public class iOSStyleSlider extends View {
         }
     }
 
+    public int getSliderProgress() {
+        return mSliderProgress;
+    }
 
+    public void setSliderProgress(int value) {
+        if (value > 100) {
+            value = 100;
+        } else if (value < 0) {
+            value = 0;
+        }
+
+        if (value != mSliderProgress) {
+            this.mSliderProgress = value;
+        }
+
+        invalidate();
+    }
 
     @Override
     protected Parcelable onSaveInstanceState() {
@@ -306,7 +379,7 @@ public class iOSStyleSlider extends View {
         int width;
         int height;
         float cornerRadius;
-        int yShift;
+        //int yShift;
 
         CustomOutline(int width, int height, float cornerRadius) {
             this.width = width;
