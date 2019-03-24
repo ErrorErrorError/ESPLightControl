@@ -7,11 +7,10 @@ import android.os.IBinder;
 
 import com.errorerrorerror.esplightcontrol.R;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import static com.errorerrorerror.esplightcontrol.EspApp.CHANNEL_ID;
@@ -42,7 +41,7 @@ public class NetworkService extends Service {
     }
 
     @Override
-    public int onStartCommand(@NotNull Intent intent, int flags, int startId) {
+    public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
 
         return START_STICKY;
     }

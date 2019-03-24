@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="iOSStyleSlider">
+    <declare-styleable name="IOSStyleSlider">
 
         <attr name="issCornerRadius" format="dimension|reference"/>
         <attr name="issColorSlider" format="color|reference"/>

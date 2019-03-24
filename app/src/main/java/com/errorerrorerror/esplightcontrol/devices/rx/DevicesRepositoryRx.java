@@ -1,4 +1,4 @@
-package com.errorerrorerror.esplightcontrol.devices.Rx;
+package com.errorerrorerror.esplightcontrol.devices.rx;
 
 
 import com.errorerrorerror.esplightcontrol.devices.Devices;

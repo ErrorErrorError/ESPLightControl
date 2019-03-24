@@ -1,10 +1,10 @@
 package com.errorerrorerror.esplightcontrol.devices;
 
-import com.errorerrorerror.esplightcontrol.Async.DeleteDeviceAsync;
-import com.errorerrorerror.esplightcontrol.Async.InsertDeviceAsync;
-import com.errorerrorerror.esplightcontrol.Async.SetSwitchClass;
-import com.errorerrorerror.esplightcontrol.Async.SwitchDeviceAsync;
-import com.errorerrorerror.esplightcontrol.Async.UpdateDeviceAsync;
+import com.errorerrorerror.esplightcontrol.async.DeleteDeviceAsync;
+import com.errorerrorerror.esplightcontrol.async.InsertDeviceAsync;
+import com.errorerrorerror.esplightcontrol.async.SetSwitchClass;
+import com.errorerrorerror.esplightcontrol.async.SwitchDeviceAsync;
+import com.errorerrorerror.esplightcontrol.async.UpdateDeviceAsync;
 
 import java.util.List;
 

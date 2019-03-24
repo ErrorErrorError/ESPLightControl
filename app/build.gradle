@@ -75,11 +75,6 @@ dependencies {
     //sqlite databased debug ependency
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.5'
 
-    //ButterKnife Dependency
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    kapt 'com.jakewharton:butterknife-compiler:10.1.0'
-
     //Swipable Recyclerview
     implementation project(':swipeablerecyclerviewcell')
 
@@ -118,6 +113,8 @@ dependencies {
 
     //JellyToggle
     implementation project(':jellytogglebutton')
+
+    //iOSStyleSlider
     implementation project(':iosstyleslider')
 }
 

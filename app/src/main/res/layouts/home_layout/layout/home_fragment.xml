@@ -1,44 +1,146 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/homeFrag"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center|top"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include
-        layout="@layout/add_button"
+    <LinearLayout
+        android:id="@+id/homeFrag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp" />
+        android:layout_gravity="center|top"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <include
-            layout="@layout/connected_devices_text"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/addDeviceButton"
+            style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="top|center"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:stateListAnimator="@animator/anim_raise"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp" />
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewAddDevice"
+            <LinearLayout
+                android:id="@+id/linearLayoutAdddevice"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/addDeviceButtonHeight"
+                android:clickable="false"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/microimage"
+                    android:layout_width="45dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="1dp"
+                    android:contentDescription="@string/todo"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/ic_microcontroller_icon" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5" />
+
+                <ImageView
+                    android:layout_width="4.5dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="1dp"
+                    android:contentDescription="@string/todo"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/ic_border_icon_text" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5" />
+
+                <TextView
+                    android:id="@+id/adddvctxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:clickable="false"
+                    android:fontFamily="@font/somatic_round"
+                    android:gravity="center|start"
+                    android:text="@string/apps_add_device"
+                    android:textColor="#ffff"
+                    android:textSize="23sp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".85" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutRV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/linearLayoutConnectedDevices"
-            android:layout_marginTop="1dp"
-            android:fadingEdge="vertical"
-            android:fadingEdgeLength="10dp"
-            android:overScrollMode="never"
-            android:requiresFadingEdge="vertical"
-            tools:ignore="UnknownIdInLayout" />
-    </RelativeLayout>
-</LinearLayout>
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutConnectedDevices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/somatic_round"
+                    android:text="@string/Devices"
+                    android:textColor="#7D7D7D"
+                    android:textSize="21sp"
+                    android:textStyle="normal" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#CECECE" />
+
+                <TextView
+                    android:id="@+id/noDeviceConnectedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:fontFamily="@font/somatic_round"
+                    android:text="@string/NoConnected"
+                    android:textColor="#CECECE"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewAddDevice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/linearLayoutConnectedDevices"
+                android:layout_marginTop="1dp"
+                android:fadingEdge="vertical"
+                android:fadingEdgeLength="10dp"
+                android:overScrollMode="never"
+                android:requiresFadingEdge="vertical"
+                tools:ignore="UnknownIdInLayout" />
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

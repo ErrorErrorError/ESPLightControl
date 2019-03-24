@@ -7,15 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.errorerrorerror.esplightcontrol.R;
-import com.errorerrorerror.esplightcontrol.adapter.CustomViewPager;
 import com.errorerrorerror.esplightcontrol.adapter.ViewPagerAdapter;
+import com.errorerrorerror.esplightcontrol.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,31 +28,26 @@ public class MainActivity extends AppCompatActivity {
     private final ModesFragment modesFragment = new ModesFragment();
     private final LightFragment lightFragment = new LightFragment();
     private final PresetsFragment presetsFragment = new PresetsFragment();
-    private ViewPagerAdapter vpAdapter;
+    ActivityMainBinding binding;
 
-    private BindingViews.MainActivityViews bindings = new BindingViews.MainActivityViews();
-    private CustomViewPager viewPager;
-    private CurvedBubbleNavigation curvedBubbleNavigation;
 
     @TargetApi(Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(bindings, MainActivity.this);
-        curvedBubbleNavigation = bindings.curvedBubbleNavigation;
-        viewPager = bindings.viewPager;
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+
+        //curvedBubbleNavigation = bindings.curvedBubbleNavigation;
+        //viewPager = bindings.viewPager;
 
         // View Pager Set up
         setupFrag();
 
         //Sets up transparent status bar
         transparentStatusBar();
-
-
     }
-
 
     private void setupFrag() {
         // used for ViewPager adapter
@@ -64,15 +60,14 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(presetsFragment);
 
         //Set Adapter
-        vpAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments);
-        viewPager.setAdapter(vpAdapter);
+        //vpAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments);
+        binding.viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments));
 
-        //navigation.setupWithViewPager(viewPager);
-        curvedBubbleNavigation.setNavigationChangeListener((view, position) -> {
-            int limit = vpAdapter.getCount();
-            viewPager.setOffscreenPageLimit(limit);
+        binding.customBubbleBar.setNavigationChangeListener((view, position) -> {
+            int limit = Objects.requireNonNull(binding.viewPager.getAdapter()).getCount();
+            binding.viewPager.setOffscreenPageLimit(limit);
             System.out.println("qwertyThis is position: " + position);
-            viewPager.setCurrentItem(position, false);
+            binding.viewPager.setCurrentItem(position, false);
         });
     }
 

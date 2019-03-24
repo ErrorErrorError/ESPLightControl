@@ -9,21 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.errorerrorerror.esplightcontrol.EspApp;
-import com.errorerrorerror.esplightcontrol.Interface.OnClickedDevice;
-import com.errorerrorerror.esplightcontrol.Interface.OnClickedSwitch;
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.adapter.RecyclerDeviceAdapter;
+import com.errorerrorerror.esplightcontrol.databinding.DeviceDialogSettingsBinding;
+import com.errorerrorerror.esplightcontrol.databinding.HomeFragmentBinding;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
+import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
+import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
 import com.errorerrorerror.esplightcontrol.utils.DialogCreateUtil;
 import com.errorerrorerror.esplightcontrol.utils.DisplayUtils;
 import com.errorerrorerror.esplightcontrol.utils.ValidationUtil;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 
 import java.util.Objects;
@@ -38,7 +36,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.ButterKnife;
 
 public class HomeFragment extends Fragment implements OnClickedDevice, OnClickedSwitch {
     private static final String TAG = "HomeFragment";
@@ -48,26 +45,16 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     //ViewModel Injector
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
     private DevicesCollectionViewModel collectionViewModel;
     //Utils
     private ValidationUtil validationUtil;
-    //Recyclerview
-    private RecyclerView recyclerView;
-    private LinearLayout linearLayoutAddDeviceBackgroud;
+
     private RecyclerDeviceAdapter adapter;
 
-    //Views In HomeFragment
-    private TextView notConnectedText;
-    private MaterialCardView materialCardView;
 
-
-    //Text Input
-    private TextInputLayout textInputLayoutName;
-    private TextInputLayout textInputLayoutIP;
-    private TextInputLayout textInputLayoutPort;
-    private TextInputEditText devName;
-    private TextInputEditText devIp;
-    private TextInputEditText devPort;
+    private HomeFragmentBinding homeBinding;
+    private DeviceDialogSettingsBinding deviceDialogBinding;
 
 
     @Override
@@ -82,7 +69,9 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home_fragment, container, false);
+        homeBinding = HomeFragmentBinding.inflate(inflater, container, false);
+
+        return homeBinding.getRoot();
     }
 
     @Override
@@ -95,7 +84,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
 
         //Listens for devices
         devicesListeners();
-        materialCardView.setOnClickListener(v -> showAddDialog());
+        homeBinding.addDeviceButton.setOnClickListener(v -> showAddDialog());
 
     }
 
@@ -103,27 +92,19 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Bind views
-        BindingViews.HomeBindingsViews homeBindingsViews = new BindingViews.HomeBindingsViews();
-        ButterKnife.bind(homeBindingsViews, view);
-        recyclerView = homeBindingsViews.recyclerView;
-        materialCardView = homeBindingsViews.materialCardView;
-        notConnectedText = homeBindingsViews.notConnectedText;
-        linearLayoutAddDeviceBackgroud = homeBindingsViews.linearLayoutAddDeviceBackgroud;
-
         //Changes Vector drawable to png if less than 24api. Vector uses gradient and is only supported 24 =< x
         setAddDeviceBackground();
 
-        //sets up Recyclerview 7 Listeners
+        //sets up RecyclerView Listeners
         initRecyclerLayers();
     }
 
     private void setAddDeviceBackground() //if lower than 24 api, usees png
     {
         if (Build.VERSION.SDK_INT < 24) {
-            linearLayoutAddDeviceBackgroud.setBackgroundResource(R.drawable.cardview_background_gradient_for_lowerend_devices);
+            homeBinding.linearLayoutAdddevice.setBackgroundResource(R.drawable.cardview_background_gradient_for_lowerend_devices);
         } else {
-            linearLayoutAddDeviceBackgroud.setBackgroundResource(R.drawable.ic_cardview_background_gradient);
+            homeBinding.linearLayoutAdddevice.setBackgroundResource(R.drawable.ic_cardview_background_gradient);
         }
     }
 
@@ -134,30 +115,28 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         linearLayoutManager.setStackFromEnd(true);
 
         //Custom Height so the remove item animation works on every device screen
-        ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+        ViewGroup.LayoutParams params = homeBinding.recyclerviewAddDevice.getLayoutParams();
         DisplayUtils displayUtils = new DisplayUtils(params,
                 getContext());
-        recyclerView.setLayoutParams(displayUtils.getRecyclerViewHeight());
-        recyclerView.setLayoutManager(linearLayoutManager);
+        homeBinding.recyclerviewAddDevice.setLayoutParams(displayUtils.getRecyclerViewHeight());
+        homeBinding.recyclerviewAddDevice.setLayoutManager(linearLayoutManager);
 
         //Set No Device Connected text based on height
         int textHeight = (int) (params.height / 2.1);
-        LinearLayout.LayoutParams textL = (LinearLayout.LayoutParams) notConnectedText.getLayoutParams();
+        LinearLayout.LayoutParams textL = (LinearLayout.LayoutParams) homeBinding.noDeviceConnectedText.getLayoutParams();
         textL.setMargins(0, textHeight, 0, 0);
-        notConnectedText.setLayoutParams(textL);
+        homeBinding.noDeviceConnectedText.setLayoutParams(textL);
 
         //Gains performance
-        recyclerView.setHasFixedSize(true);
-        Objects.requireNonNull(recyclerView.getItemAnimator())
+        homeBinding.recyclerviewAddDevice.setHasFixedSize(true);
+        Objects.requireNonNull(homeBinding.recyclerviewAddDevice.getItemAnimator())
                 .setChangeDuration(0); //Removes onChange Animation
     }
 
     private void devicesListeners() {
 
         adapter = new RecyclerDeviceAdapter(HomeFragment.this, HomeFragment.this);
-        recyclerView.setAdapter(adapter);
-
-
+        homeBinding.recyclerviewAddDevice.setAdapter(adapter);
 
         collectionViewModel.getAllDevices().observe(getViewLifecycleOwner(),
                 devicesList -> {
@@ -169,11 +148,11 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
 
                     //Hides text if not empty
                     if (devicesList.isEmpty()) {
-                        notConnectedText.animate().alpha(1.0f).setStartDelay(200)
+                        homeBinding.noDeviceConnectedText.animate().alpha(1.0f).setStartDelay(200)
                                 .setListener(new Animator.AnimatorListener() {
                                     @Override
                                     public void onAnimationStart(Animator animation) {
-                                        notConnectedText.setVisibility(View.VISIBLE);
+                                        homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
                                     }
 
                                     @Override
@@ -193,9 +172,9 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
                                 })
                                 .setDuration(800);
                     } else {
-                        notConnectedText.setVisibility(View.GONE);
+                        homeBinding.noDeviceConnectedText.setVisibility(View.GONE);
                     }
-         });
+                });
 
 
         //Scroll to top on new item
@@ -203,7 +182,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                recyclerView.smoothScrollToPosition(positionStart);
+                homeBinding.recyclerviewAddDevice.smoothScrollToPosition(positionStart);
             }
         });
     }
@@ -217,26 +196,24 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         createDialog.setContext(getContext());
 
         AlertDialog alertDialog = createDialog.getDialogCreated();
-
-        // Replace the "Add" button's click listener.
         alertDialog
                 .getButton(DialogInterface.BUTTON_POSITIVE)
                 .setOnClickListener(view -> {
                     //Tests input
-                    boolean test = validationUtil.testAllAdd(Objects.requireNonNull(devName.getText()).toString(),
-                            Objects.requireNonNull(devIp.getText()).toString(),
-                            Objects.requireNonNull(devPort.getText()).toString(),
-                            textInputLayoutName,
-                            textInputLayoutIP,
-                            textInputLayoutPort);
+                    boolean test = validationUtil.testAllAdd(Objects.requireNonNull(deviceDialogBinding.deviceName.getText()).toString(),
+                            Objects.requireNonNull(deviceDialogBinding.IPAddressInput.getText()).toString(),
+                            Objects.requireNonNull(deviceDialogBinding.portInput.getText()).toString(),
+                            deviceDialogBinding.deviceNameTextLayout,
+                            deviceDialogBinding.ipAddressTextLayout,
+                            deviceDialogBinding.portTextLayout);
                     if (!test) {
                         createDialog.shakeAnim(alertDialog);
                     } else {
                         // Add input to Database if there is input
                         // dismiss the dialog
-                        Devices devices = new Devices(devName.getText().toString(),
-                                devIp.getText().toString(),
-                                devPort.getText().toString(),
+                        Devices devices = new Devices(deviceDialogBinding.deviceName.getText().toString(),
+                                deviceDialogBinding.IPAddressInput.getText().toString(),
+                                "Port: " + deviceDialogBinding.portInput.getText().toString(),
                                 "",
                                 true);
 
@@ -249,22 +226,8 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     private View initDialogView() {
         @SuppressLint("InflateParams") View dialogView = LayoutInflater.from(HomeFragment.this.getActivity())
                 .inflate(R.layout.device_dialog_settings, null);
+        deviceDialogBinding = DeviceDialogSettingsBinding.bind(dialogView);
 
-        //BindTextViewInput
-        BindingViews.DialogInputViews input = new BindingViews.DialogInputViews();
-        ButterKnife.bind(input, dialogView);
-
-        devName = input.inputEditTexts.get(0);
-        devIp = input.inputEditTexts.get(1);
-        devPort = input.inputEditTexts.get(2);
-
-        //BindTextInputLayout
-        BindingViews.DialogInputLayoutInput inputLayout = new BindingViews.DialogInputLayoutInput();
-        ButterKnife.bind(inputLayout, dialogView);
-
-        textInputLayoutName = inputLayout.layoutsEditText.get(0);
-        textInputLayoutIP = inputLayout.layoutsEditText.get(1);
-        textInputLayoutPort = inputLayout.layoutsEditText.get(2);
         return dialogView;
     }
 
@@ -280,37 +243,38 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     @Override
     public void onEditDeviceClicked(int position) {
 
+
         //Edits dialog
         createDialog.setTitle("Edit Device Info");
         createDialog.setPositiveButtonText("Edit");
         createDialog.setNegativeButtonText("Cancel");
         createDialog.setViewDialog(initDialogView());
         createDialog.setContext(getContext());
-
-        devName.setText(adapter.getCurrentList().get(position).getDevice());
-        devIp.setText(adapter.getCurrentList().get(position).getIp());
-        devPort.setText(adapter.getCurrentList().get(position).getPort());
+        deviceDialogBinding.deviceName.setText(adapter.getCurrentList().get(position).getDevice());
+        deviceDialogBinding.IPAddressInput.setText(adapter.getCurrentList().get(position).getIp());
+        deviceDialogBinding.portInput.setText(adapter.getCurrentList().get(position).getPort());
 
         // Replace the "Edit" button's click listener.
+
         AlertDialog alertDialog = createDialog.getDialogCreated();
         alertDialog
                 .getButton(DialogInterface.BUTTON_POSITIVE)
                 .setOnClickListener(view -> {
-                    boolean test = validationUtil.testAllEdit(Objects.requireNonNull(devName.getText()).toString(),
-                            Objects.requireNonNull(devIp.getText()).toString(),
-                            Objects.requireNonNull(devPort.getText()).toString(),
+                    boolean test = validationUtil.testAllEdit(Objects.requireNonNull(deviceDialogBinding.deviceName.getText()).toString(),
+                            Objects.requireNonNull(deviceDialogBinding.IPAddressInput.getText()).toString(),
+                            Objects.requireNonNull(deviceDialogBinding.portInput.getText()).toString(),
                             position,
-                            textInputLayoutName,
-                            textInputLayoutIP,
-                            textInputLayoutPort);
+                            deviceDialogBinding.deviceNameTextLayout,
+                            deviceDialogBinding.ipAddressTextLayout,
+                            deviceDialogBinding.portTextLayout);
                     if (!test) {
                         createDialog.shakeAnim(alertDialog);
                     } else {
                         // Edit input to Database if there is input
                         // dismiss the dialog
-                        Devices device = new Devices(devName.getText().toString(),
-                                devIp.getText().toString(),
-                                devPort.getText().toString(),
+                        Devices device = new Devices(deviceDialogBinding.deviceName.getText().toString(),
+                                deviceDialogBinding.IPAddressInput.getText().toString(),
+                                "Port: " + deviceDialogBinding.portInput.getText().toString(),
                                 "",
                                 adapter.getCurrentList().get(position).isOn());
 

@@ -26,6 +26,7 @@ public final class DialogCreateUtil {
     public androidx.appcompat.app.AlertDialog getDialogCreated() {
         //Creates Dialog
 
+
         return new MaterialAlertDialogBuilder(this.context)
                 .setTitle(this.title)
                 .setMessage(null)    // Optional

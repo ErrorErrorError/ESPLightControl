@@ -30,4 +30,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    //IcePick
+    def icepick_version = "3.2.0"
+    implementation "frankiesardo:icepick:$icepick_version"
+    annotationProcessor "frankiesardo:icepick-processor:$icepick_version"
+
 }

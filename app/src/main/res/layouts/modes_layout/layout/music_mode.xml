@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/musicModeCardView"
-    style="@style/Custom.MaterialCardView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="top|center"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:orientation="vertical"
-    android:stateListAnimator="@animator/anim_raise">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/musicModeCardView"
+        style="@style/Custom.MaterialCardView"
         android:layout_width="match_parent"
-        android:layout_height="95dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:stateListAnimator="@animator/anim_raise">
 
-        <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/somatic_round"
+                android:text="@string/MusicModeText"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|start"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="1dp"
-            android:fontFamily="@font/somatic_round"
-            android:text="@string/MusicModeText"
-            android:textSize="20sp" />
+            android:layout_gravity="center|end"
+            android:layout_marginEnd="25dp" />
 
-    </LinearLayout>
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|end"
-        android:layout_marginEnd="25dp" />
-
-</com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

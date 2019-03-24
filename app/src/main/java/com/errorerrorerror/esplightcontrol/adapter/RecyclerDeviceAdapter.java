@@ -1,16 +1,20 @@
 package com.errorerrorerror.esplightcontrol.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.errorerrorerror.esplightcontrol.Interface.OnClickedDevice;
-import com.errorerrorerror.esplightcontrol.Interface.OnClickedSwitch;
+import com.errorerrorerror.esplightcontrol.databinding.RecyclerDevicesListBinding;
+import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
+import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnIconClickListener;
+import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnSwipeListener;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
@@ -34,6 +38,7 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
             };
 
 
+    private LayoutInflater layoutInflater;
     private final OnClickedDevice onClickedDevice;
     private final OnClickedSwitch onClickedSwitch;
 
@@ -47,30 +52,33 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
     @NonNull
     @Override
     public DevicesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_devices_list, parent, false);
-        return new DevicesViewHolder(view);
+        if(layoutInflater == null)
+        {
+            layoutInflater = LayoutInflater.from(parent.getContext());
+        }
+        final RecyclerDevicesListBinding binding =
+                DataBindingUtil.inflate(layoutInflater,R.layout.recycler_devices_list, parent, false);
+
+        return new DevicesViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DevicesViewHolder holder, int position) {
 
         Devices devices = getItem(position);
-        holder.deviceName.setText(devices.getDevice());
-        holder.ipInfo.setText(devices.getIp());
-        holder.port.setText(String.format("Port: %s", devices.getPort()));
-        holder.connectionStatus.setText(devices.getConnectivity());
-        holder.aSwitch.setCheckedImmediately(devices.isOn());
-        holder.itemView.setTag(devices.getId());
+        holder.bind(devices);
 
-        holder.aSwitch.setOnStateChangeListener((process, state, jtb) ->
+        holder.binding.connectionSwitch.setCheckedImmediately(devices.isOn());
+
+        holder.binding.connectionSwitch.setOnStateChangeListener((process, state, jtb) ->
                 onClickedSwitch.OnSwitched(jtb.isChecked(), holder.getAdapterPosition(), jtb));
 
-        holder.swipeRevealLayout.setOnIconClickListener(new OnIconClickListener() {
+
+        holder.binding.swipeLayout.setOnIconClickListener(new OnIconClickListener() {
             @Override
             public void onLeftIconClick() {
                 onClickedDevice.onEditDeviceClicked(holder.getAdapterPosition()); //Sends position to HomeFragment
-                holder.swipeRevealLayout.close(true);
+                holder.binding.swipeLayout.close(true);
             }
 
             @Override

@@ -10,22 +10,19 @@ import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.os.Build;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
+import icepick.Icepick;
+import icepick.State;
 
 
-public class iOSStyleSlider extends View {
+public class IOSStyleSlider extends View {
 
     /* Default Values */
     private final static int DEFAULT_SLIDER_RADIUS = 75;
@@ -36,27 +33,19 @@ public class iOSStyleSlider extends View {
     private final static int DEFAULT_MIN_VALUE = 0;
     private final static int DEFAULT_MAX_VALUE = 100;
     private final static int DEFAULT_PROGRESS = 80;
-    private static final String TAG = "iosstyleslider";
+    //private static final String TAG = "iosstyleslider";
 
+    @State
+    int mSliderProgress = DEFAULT_PROGRESS;
     //Do not change this
     private Paint mPaint;
-    //private int mTouchSlop;
-    //private int mClickTimeout;
     private Path mSliderPath;
     private RectF mSliderBackgroundF;
     private float mSliderRadius;
     private SliderPoints sliderPoints;
-    //private boolean sliderLongPressed;
-    private boolean sliderTouched;
     private float widthSliderWPadding;
     private float heightSliderWPadding;
     private VelocityTracker mVelocityTracker;
-
-
-
-    //private boolean mMaxInitialized;
-    //private boolean mMinInitialized;
-
 
     //Users Can Change these values
     private int mSliderColor = DEFAULT_SLIDER_COLOR;
@@ -65,20 +54,18 @@ public class iOSStyleSlider extends View {
     private float desiredHeight; //Default Height if Wrapped
     private int mSliderMin = DEFAULT_MIN_VALUE;
     private int mSliderMax = DEFAULT_MAX_VALUE;
-    private int mSliderProgress = DEFAULT_PROGRESS;
-    //private boolean mSliderOrientation;
 
-    public iOSStyleSlider(Context context) {
+    public IOSStyleSlider(Context context) {
         super(context);
         init(null);
     }
 
-    public iOSStyleSlider(Context context, AttributeSet attrs) {
+    public IOSStyleSlider(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    public iOSStyleSlider(Context context, AttributeSet attrs, int defStyleAttr) {
+    public IOSStyleSlider(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
@@ -98,14 +85,14 @@ public class iOSStyleSlider extends View {
         desiredHeight = DEFAULT_HEIGHT * density;
 
         //Attributes
-        TypedArray ta = getContext().obtainStyledAttributes(set, R.styleable.iOSStyleSlider);
+        TypedArray ta = getContext().obtainStyledAttributes(set, R.styleable.IOSStyleSlider);
 
-        mSliderRadius = ta.getDimension(R.styleable.iOSStyleSlider_issCornerRadius, DEFAULT_SLIDER_RADIUS);
-        mSliderColor = ta.getColor(R.styleable.iOSStyleSlider_issColorSlider, mSliderColor);
-        mSliderBackgroundColor = ta.getColor(R.styleable.iOSStyleSlider_issColorBackgroundSlider, mSliderBackgroundColor);
-        setSliderMin(ta.getInteger(R.styleable.iOSStyleSlider_issSetMinValue, mSliderMin));
-        setSlidertMax(ta.getInteger(R.styleable.iOSStyleSlider_issSetMaxValue, mSliderMax));
-        setSliderProgress(ta.getInt(R.styleable.iOSStyleSlider_issSetProgressBar, mSliderProgress));
+        mSliderRadius = ta.getDimension(R.styleable.IOSStyleSlider_issCornerRadius, DEFAULT_SLIDER_RADIUS);
+        mSliderColor = ta.getColor(R.styleable.IOSStyleSlider_issColorSlider, mSliderColor);
+        mSliderBackgroundColor = ta.getColor(R.styleable.IOSStyleSlider_issColorBackgroundSlider, mSliderBackgroundColor);
+        setSliderMin(ta.getInteger(R.styleable.IOSStyleSlider_issSetMinValue, mSliderMin));
+        setSlidertMax(ta.getInteger(R.styleable.IOSStyleSlider_issSetMaxValue, mSliderMax));
+        setSliderProgress(ta.getInt(R.styleable.IOSStyleSlider_issSetProgressBar, mSliderProgress));
         ta.recycle();
     }
 
@@ -115,17 +102,15 @@ public class iOSStyleSlider extends View {
         heightSliderWPadding = getMeasuredHeight() - getPaddingBottom();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected synchronized void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
         //Backgound Slider
         mPaint.reset();
         mPaint.setColor(mSliderBackgroundColor);
         mSliderBackgroundF.set(0, 0, widthSliderWPadding, heightSliderWPadding);
         canvas.drawRoundRect(mSliderBackgroundF, mSliderRadius, mSliderRadius, mPaint);
-
-        // Log.d(TAG, "Val: " + mSliderProgress);
 
         //Slider
         mSliderPath.reset();
@@ -143,17 +128,6 @@ public class iOSStyleSlider extends View {
     }
 
 
-    @Override
-    public boolean performClick() {
-        return super.performClick();
-    }
-
-    @Override
-    public boolean performLongClick() {
-        return super.performLongClick();
-    }
-
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -163,6 +137,7 @@ public class iOSStyleSlider extends View {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                animate().translationZ(10);
                 if (mVelocityTracker == null) {
 
                     // Retrieve a new VelocityTracker object to watch the velocity
@@ -189,53 +164,61 @@ public class iOSStyleSlider extends View {
                 //Log.d(TAG, "\nY velocity: " + mVelocityTracker.getYVelocity(pointerId));
 
                 float test = mVelocityTracker.getYVelocity(pointerId);
-                if (test >= .4 || test <= -.4)
-                {
+                if (test >= .4 || test <= -.4) {
                     setSliderProgress((int) (mSliderProgress - test));
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                animate().translationZ(0);
                 break;
             case MotionEvent.ACTION_CANCEL:
                 // Return a VelocityTracker object back to be re-used by others.
                 mVelocityTracker.recycle();
                 break;
             default:
-                animate().translationZ(0);
         }
         return true;
     }
 
     /*
-
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouchEvent(MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_MOVE:
-                        //Log.d(TAG, "onTouchEvent: " + event.getY() + " thumb position: " + getSliderThumbPosition());
-                        //sliderLongPressed = true;
-                        //sliderTouched = true;
-                        //setSliderProgress(calculateSliderHeight(event.getY()));
-                        if (event.getY() != test) {
-                            if (event.getY() > getSliderThumbPosition()) {
-                                mSliderProgress--;
-                            } else {
-                                mSliderProgress++;
-                            }
-                        }
-                        test = event.getY();
-                        break;
-                    default:
-                        sliderTouched = false;
-                        //sliderLongPressed = false;
-                        break;
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_MOVE:
+                //Log.d(TAG, "onTouchEvent: " + event.getY() + " thumb position: " + getSliderThumbPosition());
+                //sliderLongPressed = true;
+                //sliderTouched = true;
+                //setSliderProgress(calculateSliderHeight(event.getY()));
+                if (event.getY() != test) {
+                    if (event.getY() > getSliderThumbPosition()) {
+                        mSliderProgress--;
+                    } else {
+                        mSliderProgress++;
+                    }
                 }
-                invalidate();
-                return true;
-            }
-        */
+                test = event.getY();
+                break;
+            default:
+                sliderTouched = false;
+                //sliderLongPressed = false;
+                break;
+        }
+        invalidate();
+        return true;
+    }
+
+
+    private int calculateSliderHeight(float fingerSlide) {
+        if (fingerSlide > heightSliderWPadding) {
+            fingerSlide = heightSliderWPadding;
+        } else if (fingerSlide < 0) {
+            fingerSlide = 0;
+        }
+        return (int) (((heightSliderWPadding - fingerSlide) * 100) / heightSliderWPadding);
+    }
+   */
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -273,17 +256,6 @@ public class iOSStyleSlider extends View {
         return result;
     }
 
-    /*
-    private int calculateSliderHeight(float fingerSlide) {
-        if (fingerSlide > heightSliderWPadding) {
-            fingerSlide = heightSliderWPadding;
-        } else if (fingerSlide < 0) {
-            fingerSlide = 0;
-        }
-        return (int) (((heightSliderWPadding - fingerSlide) * 100) / heightSliderWPadding);
-    }
-    */
-
     public void setSliderMin(int min) {
         if (min >= mSliderMax) {
             mSliderMax = min;
@@ -314,72 +286,24 @@ public class iOSStyleSlider extends View {
         if (value != mSliderProgress) {
             this.mSliderProgress = value;
         }
-
         invalidate();
     }
 
+    @Nullable
     @Override
     protected Parcelable onSaveInstanceState() {
-        //begin boilerplate code that allows parent classes to save state
-        Parcelable superState = super.onSaveInstanceState();
-
-        SavedState ss = new SavedState(superState);
-        //end
-        ss.sliderProgress = this.mSliderProgress;
-
-        return ss;
+        return Icepick.saveInstanceState(this, super.onSaveInstanceState());
     }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        //begin boilerplate code so parent classes can restore state
-        if (!(state instanceof SavedState)) {
-            super.onRestoreInstanceState(state);
-            return;
-        }
-
-        SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-        //end
-
-        setSliderProgress(ss.sliderProgress);
-    }
-
-    static class SavedState extends BaseSavedState {
-        //required field that makes Parcelables from a Parcel
-        public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
-                    public SavedState createFromParcel(Parcel in) {
-                        return new SavedState(in);
-                    }
-
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                };
-        int sliderProgress;
-
-        SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        private SavedState(Parcel in) {
-            super(in);
-            this.sliderProgress = in.readInt();
-        }
-
-        @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeInt(this.sliderProgress);
-        }
+        super.onRestoreInstanceState(Icepick.restoreInstanceState(this, state));
     }
 
     private class CustomOutline extends ViewOutlineProvider {
         int width;
         int height;
         float cornerRadius;
-        //int yShift;
 
         CustomOutline(int width, int height, float cornerRadius) {
             this.width = width;

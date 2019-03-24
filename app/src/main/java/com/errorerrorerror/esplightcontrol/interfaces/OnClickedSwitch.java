@@ -1,4 +1,4 @@
-package com.errorerrorerror.esplightcontrol.Interface;
+package com.errorerrorerror.esplightcontrol.interfaces;
 
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 

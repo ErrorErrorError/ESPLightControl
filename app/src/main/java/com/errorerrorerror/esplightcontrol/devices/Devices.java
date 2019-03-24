@@ -1,5 +1,7 @@
 package com.errorerrorerror.esplightcontrol.devices;
 
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -90,6 +92,7 @@ public class Devices {
         this.connectivity = connectivity;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Devices{" +

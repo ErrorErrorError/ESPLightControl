@@ -1,10 +1,9 @@
-package com.errorerrorerror.esplightcontrol.Async;
+package com.errorerrorerror.esplightcontrol.async;
 //This is for async
 public class SetSwitchClass {
-    String connectivity;
-    long id;
-
-    Boolean bool;
+    private String connectivity;
+    private long id;
+    private Boolean bool;
 
     public SetSwitchClass(String connectivity, long id) {
         this.connectivity = connectivity;

@@ -1,4 +1,4 @@
-package com.errorerrorerror.esplightcontrol.Async;
+package com.errorerrorerror.esplightcontrol.async;
 
 import android.os.AsyncTask;
 

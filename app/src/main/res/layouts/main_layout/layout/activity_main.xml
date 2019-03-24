@@ -1,41 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainAct"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".views.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!--viewPager for botton nav-->
-    <com.errorerrorerror.esplightcontrol.adapter.CustomViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragmentWaves">
-    </com.errorerrorerror.esplightcontrol.adapter.CustomViewPager>
-
-    <!-- waves top -->
-    <include
-        android:id="@+id/fragmentWaves"
-        layout="@layout/wave_topbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainAct"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        tools:context=".views.MainActivity">
 
-    <include
-        android:id="@+id/fragmentTabs"
-        layout="@layout/bubble_tab_selection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <!--viewPager for botton nav-->
+        <com.errorerrorerror.esplightcontrol.adapter.CustomViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wavesTop" />
+
+        <!-- waves top -->
+        <include
+            android:id="@+id/wavesTop"
+            layout="@layout/wave_topbar"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.errorerrorerror.esplightcontrol.views.CurvedBubbleNavigation
+            android:id="@+id/customBubbleBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottomNavHeight"
+            android:paddingTop="7dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.gauravk.bubblenavigation.BubbleToggleView
+                android:id="@+id/home_bubble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="30dp"
+                android:gravity="center"
+                app:bt_colorActive="@color/colorAccent"
+                app:bt_colorInactive="@color/grayBoi"
+                app:bt_icon="@drawable/home_icon"
+                app:bt_iconHeight="20dp"
+                app:bt_iconWidth="20dp"
+                app:bt_title="@string/home_tab"
+                app:bt_titleSize="15sp" />
+
+            <com.gauravk.bubblenavigation.BubbleToggleView
+                android:id="@+id/modes_bubble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:gravity="center"
+                app:bt_colorActive="@color/colorAccent"
+                app:bt_colorInactive="@color/grayBoi"
+                app:bt_icon="@drawable/modes_icon"
+                app:bt_iconHeight="20dp"
+                app:bt_iconWidth="20dp"
+                app:bt_title="@string/mode_tab"
+                app:bt_titleSize="15sp" />
+
+            <com.gauravk.bubblenavigation.BubbleToggleView
+                android:id="@+id/light_bubble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
+                app:bt_colorActive="@color/lightBulbColorLight"
+                app:bt_colorInactive="@color/grayBoi"
+                app:bt_icon="@drawable/lightbulb_icon"
+                app:bt_iconHeight="20dp"
+                app:bt_iconWidth="20dp"
+                app:bt_title="@string/light_tab"
+                app:bt_titleSize="15sp" />
+
+            <com.gauravk.bubblenavigation.BubbleToggleView
+                android:id="@+id/presets_bubble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:gravity="center"
+                app:bt_colorActive="@color/colorAccent"
+                app:bt_colorInactive="@color/grayBoi"
+                app:bt_icon="@drawable/ic_presets_icon"
+                app:bt_iconHeight="20dp"
+                app:bt_iconWidth="20dp"
+                app:bt_title="@string/presets_tab"
+                app:bt_titleSize="15sp" />
+        </com.errorerrorerror.esplightcontrol.views.CurvedBubbleNavigation>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
