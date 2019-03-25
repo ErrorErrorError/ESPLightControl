@@ -180,46 +180,6 @@ public class IOSStyleSlider extends View {
         return true;
     }
 
-    /*
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int action = event.getAction();
-        switch (action) {
-            case MotionEvent.ACTION_MOVE:
-                //Log.d(TAG, "onTouchEvent: " + event.getY() + " thumb position: " + getSliderThumbPosition());
-                //sliderLongPressed = true;
-                //sliderTouched = true;
-                //setSliderProgress(calculateSliderHeight(event.getY()));
-                if (event.getY() != test) {
-                    if (event.getY() > getSliderThumbPosition()) {
-                        mSliderProgress--;
-                    } else {
-                        mSliderProgress++;
-                    }
-                }
-                test = event.getY();
-                break;
-            default:
-                sliderTouched = false;
-                //sliderLongPressed = false;
-                break;
-        }
-        invalidate();
-        return true;
-    }
-
-
-    private int calculateSliderHeight(float fingerSlide) {
-        if (fingerSlide > heightSliderWPadding) {
-            fingerSlide = heightSliderWPadding;
-        } else if (fingerSlide < 0) {
-            fingerSlide = 0;
-        }
-        return (int) (((heightSliderWPadding - fingerSlide) * 100) / heightSliderWPadding);
-    }
-   */
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);

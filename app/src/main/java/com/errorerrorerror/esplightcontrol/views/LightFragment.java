@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.errorerrorerror.esplightcontrol.R;
+import com.errorerrorerror.esplightcontrol.databinding.LightFragmentBinding;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,9 +14,13 @@ import androidx.fragment.app.Fragment;
 
 public class LightFragment extends Fragment {
 
+    private LightFragmentBinding lightFragmentBinding;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.light_fragment, container,false);
+        lightFragmentBinding = LightFragmentBinding.inflate(inflater, container, false);
+
+            return lightFragmentBinding.getRoot();
     }
 }

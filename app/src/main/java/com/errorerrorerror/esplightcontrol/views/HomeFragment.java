@@ -22,9 +22,11 @@ import com.errorerrorerror.esplightcontrol.utils.DialogCreateUtil;
 import com.errorerrorerror.esplightcontrol.utils.DisplayUtils;
 import com.errorerrorerror.esplightcontrol.utils.ValidationUtil;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
+import com.jakewharton.rxbinding3.view.RxView;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -36,9 +38,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.functions.Consumer;
 
 public class HomeFragment extends Fragment implements OnClickedDevice, OnClickedSwitch {
-    private static final String TAG = "HomeFragment";
+    //private static final String TAG = "HomeFragment";
 
     private final DialogCreateUtil createDialog = new DialogCreateUtil();
 
@@ -74,6 +77,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         return homeBinding.getRoot();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -84,9 +88,12 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
 
         //Listens for devices
         devicesListeners();
-        homeBinding.addDeviceButton.setOnClickListener(v -> showAddDialog());
 
+        RxView.clicks(homeBinding.addDeviceButton)
+                .throttleFirst(500, TimeUnit.MILLISECONDS)
+                .subscribe((Consumer<Object>) o -> showAddDialog());
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -189,6 +196,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
 
     private void showAddDialog() //Shows Dialog to add device information
     {
+
         createDialog.setTitle("Add Device Info");
         createDialog.setPositiveButtonText("Add");
         createDialog.setNegativeButtonText("Cancel");
@@ -213,7 +221,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
                         // dismiss the dialog
                         Devices devices = new Devices(deviceDialogBinding.deviceName.getText().toString(),
                                 deviceDialogBinding.IPAddressInput.getText().toString(),
-                                "Port: " + deviceDialogBinding.portInput.getText().toString(),
+                                deviceDialogBinding.portInput.getText().toString(),
                                 "",
                                 true);
 
@@ -274,7 +282,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
                         // dismiss the dialog
                         Devices device = new Devices(deviceDialogBinding.deviceName.getText().toString(),
                                 deviceDialogBinding.IPAddressInput.getText().toString(),
-                                "Port: " + deviceDialogBinding.portInput.getText().toString(),
+                                deviceDialogBinding.portInput.getText().toString(),
                                 "",
                                 adapter.getCurrentList().get(position).isOn());
 

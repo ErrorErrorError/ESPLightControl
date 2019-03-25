@@ -38,10 +38,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-
-        //curvedBubbleNavigation = bindings.curvedBubbleNavigation;
-        //viewPager = bindings.viewPager;
-
         // View Pager Set up
         setupFrag();
 
@@ -60,13 +56,11 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(presetsFragment);
 
         //Set Adapter
-        //vpAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments);
         binding.viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments));
 
         binding.customBubbleBar.setNavigationChangeListener((view, position) -> {
             int limit = Objects.requireNonNull(binding.viewPager.getAdapter()).getCount();
             binding.viewPager.setOffscreenPageLimit(limit);
-            System.out.println("qwertyThis is position: " + position);
             binding.viewPager.setCurrentItem(position, false);
         });
     }

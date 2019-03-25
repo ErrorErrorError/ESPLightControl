@@ -8,14 +8,14 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.errorerrorerror.esplightcontrol.R;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
 
 public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
-    private static Path mPath;
-    private static Paint mPaint;
     private static final Point mFirstCurveStartPoint = new Point();
     private static final Point mFirstCurveEndPoint = new Point();
     private static final Point mSecondCurveStartPoint = new Point();
@@ -24,6 +24,9 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
     private static final Point mFirstCurveControlPoint2 = new Point();
     private static final Point mSecondCurveControlPoint1 = new Point();
     private static final Point mSecondCurveControlPoint2 = new Point();
+    private static final String TAG = "CURVEDBUBBLE";
+    private static Path mPath;
+    private static Paint mPaint;
     private final int CURVE_RADIUS = getResources().getDimensionPixelOffset(R.dimen.corner_radius); //Do not exceed 200
 
 
@@ -52,21 +55,22 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
             setLayerType(View.LAYER_TYPE_SOFTWARE, mPaint);
         }
 
-        mPaint.setShadowLayer(20, 0, 0, Color.rgb(221, 221, 221)); // This set's color shadow to grey
+
+        mPaint.setShadowLayer(getElevation(), 0, 0, Color.rgb(221, 221, 221)); // This set's color shadow to grey
         setBackgroundColor(Color.TRANSPARENT);
+
     }
 
     @Override
-    protected  void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-
-        int mNavigationBarWidth;
-        int mNavigationBarHeight;
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
 
         // get width and height of navigation bar
         // Navigation bar bounds (width & height)
-        mNavigationBarWidth = getWidth();
-        mNavigationBarHeight = getHeight();
+        int mNavigationBarWidth = getMeasuredWidth() - getPaddingRight();
+        int mNavigationBarHeight = getMeasuredHeight() - getPaddingBottom();
+
+
 
         // the coordinates (x,y) of the start point before curve
         mFirstCurveStartPoint.set(0, CURVE_RADIUS);
@@ -90,7 +94,7 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
         mPath.reset();
 
         //There is a padding for the shadows, this prevent it from clipping on a custom view
-        int padding = 20;
+        int padding = (int) getElevation();
 
         mPath.moveTo(CURVE_RADIUS, padding);
         mPath.lineTo(mSecondCurveStartPoint.x, mSecondCurveStartPoint.y + padding);
@@ -108,13 +112,19 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
                 mFirstCurveControlPoint2.x, mFirstCurveControlPoint2.y + padding,
                 mFirstCurveEndPoint.x, mFirstCurveEndPoint.y + padding);
         mPath.close();
-    }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
         canvas.drawPath(mPath, mPaint);
     }
+
+
+    @Override
+    protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+
+    }
+
+
 }
 
 

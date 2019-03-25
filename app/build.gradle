@@ -69,6 +69,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha03'
 
+
+
     //Wave
     implementation 'com.scwang.wave:MultiWaveHeader:1.0.0-alpha-1'
 
@@ -102,6 +104,15 @@ dependencies {
     //RxAndroid
     def rx_android_version = "2.1.1"
     implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
+
+    //RxBindings
+    def rx_binding_version = "3.0.0-alpha2"
+    implementation "com.jakewharton.rxbinding3:rxbinding:$rx_binding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-core:$rx_binding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rx_binding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:$rx_binding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-viewpager:$rx_binding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-material:$rx_binding_version"
 
     //Dagger core & Dagger Android
     def dagger_version = "2.20"
