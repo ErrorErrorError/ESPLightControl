@@ -25,20 +25,21 @@ public final class DialogCreateUtil {
 
     public androidx.appcompat.app.AlertDialog getDialogCreated() {
         //Creates Dialog
-
-
-        return new MaterialAlertDialogBuilder(this.context)
+        AlertDialog test = new  MaterialAlertDialogBuilder(this.context)
                 .setTitle(this.title)
                 .setMessage(null)    // Optional
                 .setView(this.viewDialog)         // This one holds the EditText
                 .setNegativeButton(negativeButtonText, null)
                 .setPositiveButton(positiveButtonText, null)
                 .setCancelable(false)
-                .setBackground(ContextCompat.
-                        getDrawable(this.context,
-                                R.drawable.dialog_shape))
                 .show();
-        //Set background window shape
+        Objects.requireNonNull(test.getWindow()).setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.dialog_shape));
+        test.getWindow().setLayout(
+                (int) context.getResources().getDisplayMetrics().density * 475,
+                test.getWindow().getAttributes().height
+        );
+
+        return test;
     }
 
     public void shakeAnim(AlertDialog alertDialog) //Shakes dialog animation

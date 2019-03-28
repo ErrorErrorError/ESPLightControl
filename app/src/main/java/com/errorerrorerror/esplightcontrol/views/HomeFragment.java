@@ -1,10 +1,10 @@
 package com.errorerrorerror.esplightcontrol.views;
 
 import android.animation.Animator;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +38,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.CompositeDisposable;
+
 
 public class HomeFragment extends Fragment implements OnClickedDevice, OnClickedSwitch {
-    //private static final String TAG = "HomeFragment";
+    private static final String TAG = "HomeFragment";
 
     private final DialogCreateUtil createDialog = new DialogCreateUtil();
 
@@ -50,14 +51,14 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     ViewModelProvider.Factory viewModelFactory;
 
     private DevicesCollectionViewModel collectionViewModel;
+
     //Utils
     private ValidationUtil validationUtil;
-
     private RecyclerDeviceAdapter adapter;
-
 
     private HomeFragmentBinding homeBinding;
     private DeviceDialogSettingsBinding deviceDialogBinding;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
 
     @Override
@@ -77,7 +78,6 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         return homeBinding.getRoot();
     }
 
-    @SuppressLint("CheckResult")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -89,9 +89,10 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         //Listens for devices
         devicesListeners();
 
-        RxView.clicks(homeBinding.addDeviceButton)
+        compositeDisposable.add(RxView.clicks(homeBinding.addDeviceButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe((Consumer<Object>) o -> showAddDialog());
+                .subscribe(unit ->
+                        showAddDialog()));
     }
 
 
@@ -106,7 +107,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         initRecyclerLayers();
     }
 
-    private void setAddDeviceBackground() //if lower than 24 api, usees png
+    private void setAddDeviceBackground() //if lower than 24 api, uses png
     {
         if (Build.VERSION.SDK_INT < 24) {
             homeBinding.linearLayoutAdddevice.setBackgroundResource(R.drawable.cardview_background_gradient_for_lowerend_devices);
@@ -204,10 +205,9 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         createDialog.setContext(getContext());
 
         AlertDialog alertDialog = createDialog.getDialogCreated();
-        alertDialog
-                .getButton(DialogInterface.BUTTON_POSITIVE)
-                .setOnClickListener(view -> {
-                    //Tests input
+
+        compositeDisposable.add(RxView.clicks(alertDialog.getButton(DialogInterface.BUTTON_POSITIVE))
+                .subscribe(unit -> {   //Tests input
                     boolean test = validationUtil.testAllAdd(Objects.requireNonNull(deviceDialogBinding.deviceName.getText()).toString(),
                             Objects.requireNonNull(deviceDialogBinding.IPAddressInput.getText()).toString(),
                             Objects.requireNonNull(deviceDialogBinding.portInput.getText()).toString(),
@@ -226,14 +226,20 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
                                 true);
 
                         collectionViewModel.addDevice(devices);
+
                         alertDialog.dismiss();
                     }
-                });
+                }));
+
+        compositeDisposable.add(RxView.clicks(alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE))
+                .subscribe(unit ->
+                    alertDialog.dismiss()));
     }
 
     private View initDialogView() {
-        @SuppressLint("InflateParams") View dialogView = LayoutInflater.from(HomeFragment.this.getActivity())
+        View dialogView = LayoutInflater.from(HomeFragment.this.getActivity())
                 .inflate(R.layout.device_dialog_settings, null);
+
         deviceDialogBinding = DeviceDialogSettingsBinding.bind(dialogView);
 
         return dialogView;
@@ -251,7 +257,6 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     @Override
     public void onEditDeviceClicked(int position) {
 
-
         //Edits dialog
         createDialog.setTitle("Edit Device Info");
         createDialog.setPositiveButtonText("Edit");
@@ -265,9 +270,9 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         // Replace the "Edit" button's click listener.
 
         AlertDialog alertDialog = createDialog.getDialogCreated();
-        alertDialog
-                .getButton(DialogInterface.BUTTON_POSITIVE)
-                .setOnClickListener(view -> {
+
+        compositeDisposable.add(RxView.clicks(alertDialog.getButton(DialogInterface.BUTTON_POSITIVE))
+                .subscribe(unit -> {
                     boolean test = validationUtil.testAllEdit(Objects.requireNonNull(deviceDialogBinding.deviceName.getText()).toString(),
                             Objects.requireNonNull(deviceDialogBinding.IPAddressInput.getText()).toString(),
                             Objects.requireNonNull(deviceDialogBinding.portInput.getText()).toString(),
@@ -290,7 +295,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
                         collectionViewModel.editDevice(device);
                         alertDialog.dismiss();
                     }
-                });
+                }));
     }
 
     @Override
@@ -299,6 +304,14 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
             return;
         }
         collectionViewModel.setSwitchConnection(bool, adapter.getCurrentList().get(position).getId());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        homeBinding.unbind();
+        compositeDisposable.dispose();
+        Log.d(TAG, "composite disposed: " + compositeDisposable.isDisposed());
     }
 }
 

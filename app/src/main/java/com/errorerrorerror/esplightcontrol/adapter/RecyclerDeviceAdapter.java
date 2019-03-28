@@ -1,17 +1,14 @@
 package com.errorerrorerror.esplightcontrol.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
+import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.databinding.RecyclerDevicesListBinding;
+import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
-import com.errorerrorerror.esplightcontrol.R;
-import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnIconClickListener;
-import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnSwipeListener;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -36,11 +33,9 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
                     return oldItem.equals(newItem);
                 }
             };
-
-
-    private LayoutInflater layoutInflater;
     private final OnClickedDevice onClickedDevice;
     private final OnClickedSwitch onClickedSwitch;
+    private LayoutInflater layoutInflater;
 
     public RecyclerDeviceAdapter(OnClickedDevice onClickedDevice, OnClickedSwitch onClickedSwitch) {
         super(DIFF_CALLBACK);
@@ -52,12 +47,11 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
     @NonNull
     @Override
     public DevicesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(layoutInflater == null)
-        {
+        if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
         final RecyclerDevicesListBinding binding =
-                DataBindingUtil.inflate(layoutInflater,R.layout.recycler_devices_list, parent, false);
+                DataBindingUtil.inflate(layoutInflater, R.layout.recycler_devices_list, parent, false);
 
         return new DevicesViewHolder(binding);
     }

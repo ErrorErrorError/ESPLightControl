@@ -4,24 +4,26 @@ import android.animation.AnimatorSet
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import androidx.core.content.ContextCompat
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import com.tenclouds.swipeablerecyclerviewcell.R
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.AnimatedRevealView
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnDeleteListener
 import com.tenclouds.swipeablerecyclerviewcell.utils.*
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.max
 import kotlin.properties.Delegates
 
 const val LEFT_VIEW_TO_DELETE = 1
 const val RIGHT_VIEW_TO_DELETE = 2
 const val NONE_VIEW_TO_DELETE = 0
+const val TAG = "SwipeRevealLayout"
 
 internal class MetaBalls : LinearLayout, AnimatedRevealView {
     private val calculatedSelectorRadius by lazy {
@@ -55,11 +57,11 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
     var leftViewColor: Int by Delegates.observable(
             ContextCompat.getColor(context, R.color.greyFavourite))
     { _, _, new -> leftCircle.paint.color = new }
-/*
-    var connectorColor: Int by Delegates.observable(
-            ContextCompat.getColor(context, R.color.redDelete))
-    { _, _, new -> connectorPaint.color = new }
-*/
+    /*
+        var connectorColor: Int by Delegates.observable(
+                ContextCompat.getColor(context, R.color.redDelete))
+        { _, _, new -> connectorPaint.color = new }
+    */
     var leftIconResId: Int by Delegates.observable(
             R.drawable.ic_fav)
     { _, _, new -> leftView.setImageResource(new) }
@@ -102,6 +104,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
                            iconsDistance: Int,
                            iconsSize: Int,
                            iconsPadding: Int) {
+
         val minMargin = iconsSize * maxViewScale - iconsSize
         val startMargin = max(minMargin.toInt(), iconsMarginStart)
         val endMargin = max(minMargin.toInt(), iconsMarginEnd)
@@ -111,6 +114,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
         val rightLp = LinearLayout.LayoutParams(iconsSize, iconsSize)
                 .apply { setMargins(iconsDistance / 2, 0, endMargin, 0) }
+
 
         rightView.apply {
             layoutParams = rightLp
@@ -266,8 +270,21 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
         calculateViewPosition(leftView, destinationPoint)
 
-        calculateViewScale(progress, leftView)
-        calculateViewScale(progress, rightView)
+
+        //Log.d(TAG, "progress: $progress")
+        calculateViewAlpha(progress, leftView)
+        calculateViewAlpha(progress, rightView)
+
+        //calculateViewScale(progress, leftView)
+        //calculateViewScale(progress, rightView)
+    }
+
+    private fun calculateViewAlpha(progress: Float, view: View)
+    {
+        with(view)
+        {
+            alpha = progress
+        }
     }
 
     private fun calculateValuesForDeleteAnimation(progress: Float, startingX: Float) {
@@ -280,7 +297,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
     }
 
     private fun getRadiusDependingOnViewPosition(progress: Float): Float {
-        val startWhenProgress = 0.6f
+        val startWhenProgress = 0.0f //Used to be .6f
 
         return if (movementProgress < startWhenProgress) {
             //max 1.6f

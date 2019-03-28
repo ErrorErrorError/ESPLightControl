@@ -20,7 +20,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="-10dp"
             android:layout_marginBottom="-5dp"
-
             app:dragFromEdge="right"
             app:iconsDistance="12dp"
             app:iconsPadding="12dp"
@@ -143,7 +142,7 @@
                             app:jtbRightBackgroundColor="#D8DCF9"
                             app:jtbRightThumbColor="@color/colorAccent"
                             app:jtbThumbRadius="10dp"
-                            app:jtbThumbShadow="true" />
+                            app:jtbThumbShadow="true"/>
                     </RelativeLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

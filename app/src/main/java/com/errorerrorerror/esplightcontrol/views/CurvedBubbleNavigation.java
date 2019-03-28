@@ -47,7 +47,7 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
 
     private void init() {
         mPath = new Path();
-        mPaint = new Paint();
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setColor(Color.rgb(250, 250, 250));
 
