@@ -40,4 +40,8 @@ public class DevicesCollectionViewModel extends ViewModel {
         devicesDataSource.setSwitch(bool, id);
     }
 
+    public Devices getDeviceWithId(long id){
+        return devicesDataSource.getDevice(id);
+    }
+
 }

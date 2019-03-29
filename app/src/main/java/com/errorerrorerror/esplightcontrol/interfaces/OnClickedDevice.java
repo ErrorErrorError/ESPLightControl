@@ -4,5 +4,7 @@ public interface OnClickedDevice {
 
     void onRemoveDeviceClicked(int position);
 
-    void onEditDeviceClicked(int position);
+    void onEditDeviceClicked(long id);
+
+
 }

@@ -5,6 +5,7 @@ import android.app.Application;
 import com.errorerrorerror.esplightcontrol.di.AppModule;
 import com.errorerrorerror.esplightcontrol.di.DevicesScope;
 import com.errorerrorerror.esplightcontrol.di.RoomModule;
+import com.errorerrorerror.esplightcontrol.views.CustomDialogFrag;
 import com.errorerrorerror.esplightcontrol.views.HomeFragment;
 import com.errorerrorerror.esplightcontrol.views.LightFragment;
 import com.errorerrorerror.esplightcontrol.views.ModesFragment;
@@ -23,6 +24,7 @@ public interface ApplicationComponent {
     void inject(LightFragment lightFragment);
     void inject(ModesFragment modesFragment);
     void inject(PresetsFragment presetsFragment);
+    void inject(CustomDialogFrag customDialogFrag);
 
     Application application();
 

@@ -13,11 +13,12 @@ import java.util.List;
 
 public class ValidationUtil {
 
+    private static final String TAG = "ValidationUtil";
     private final List<Devices> devicesList;
     private final Context context;
 
 
-    public ValidationUtil(List<Devices> devicesList, Context context){
+    public ValidationUtil(List<Devices> devicesList, Context context) {
         this.devicesList = devicesList;
         this.context = context;
     }
@@ -33,7 +34,7 @@ public class ValidationUtil {
 
             isValid = true;
 
-            if (!devicesList.isEmpty() ) {
+            if (!devicesList.isEmpty()) {
                 for (int i = 0; i < devicesList.size(); i++) {
                     String deviceMatch = devicesList.get(i).getDevice();
 
@@ -144,7 +145,7 @@ public class ValidationUtil {
     }
 
     //Testing User Input Device name Edit
-    private boolean deviceNameValidationEdit(String name, int position, TextInputLayout textInputLayoutName) //Validates name and checks if the name is already used
+    private boolean deviceNameValidationEdit(String name, long id, TextInputLayout textInputLayoutName) //Validates name and checks if the name is already used
     {
         boolean isValid;
         boolean isRepeated = false;
@@ -156,7 +157,7 @@ public class ValidationUtil {
             if (!devicesList.isEmpty()) {
                 for (int i = 0; i < devicesList.size(); i++) {
 
-                    if (i != position) {
+                    if (devicesList.get(i).getId() != id) {
                         String deviceMatch = devicesList.get(i).getDevice();
                         if (!name.equals(deviceMatch)) {
                             isRepeated = false;
@@ -191,7 +192,7 @@ public class ValidationUtil {
     }
 
     //Testing User Input Device ip Edit
-    private boolean ipAddressValidationEdit(String ip, int position, TextInputLayout textInputLayoutIP) //Validates ipAddress as either ipV4 or ipV6
+    private boolean ipAddressValidationEdit(String ip, long id, TextInputLayout textInputLayoutIP) //Validates ipAddress as either ipV4 or ipV6
     {
         boolean ipValid;
         boolean ipRepeated = false;
@@ -211,7 +212,7 @@ public class ValidationUtil {
 
         if (ipValid) {
             for (int i = 0; i < devicesList.size(); i++) {
-                if (i != position) {
+                if (devicesList.get(i).getId() != id) {
                     String ipMatch = devicesList.get(i).getIp();
                     if (ipMatch.isEmpty()) {
                         break;
@@ -243,7 +244,7 @@ public class ValidationUtil {
         }
     }
 
-    public boolean testAllAdd(String name, String ip, String port, TextInputLayout textInputLayoutName, TextInputLayout textInputLayoutIP,TextInputLayout textInputLayoutPort) //tests if the input is valid
+    public boolean testAllAdd(String name, String ip, String port, TextInputLayout textInputLayoutName, TextInputLayout textInputLayoutIP, TextInputLayout textInputLayoutPort) //tests if the input is valid
     {
         boolean testReturn;
         boolean nameTest = deviceNameValidationAdd(name, textInputLayoutName);
@@ -255,30 +256,25 @@ public class ValidationUtil {
     }
 
     //Tests edit
-    public boolean testAllEdit(String name, String ip, String port, int position, TextInputLayout textInputLayoutName, TextInputLayout textInputLayoutIP,TextInputLayout textInputLayoutPort) //tests if the input is valid
+    public boolean testAllEdit(String name, String ip, String port, long id, TextInputLayout textInputLayoutName, TextInputLayout textInputLayoutIP, TextInputLayout textInputLayoutPort) //tests if the input is valid
     {
         boolean testReturn;
-        boolean nameTest = deviceNameValidationEdit(name, position, textInputLayoutName);
-        boolean ipTest = ipAddressValidationEdit(ip, position, textInputLayoutIP);
+        boolean nameTest = deviceNameValidationEdit(name, id, textInputLayoutName);
+        boolean ipTest = ipAddressValidationEdit(ip, id, textInputLayoutIP);
         boolean portTest = portValidationAdd(port, textInputLayoutPort);
         testReturn = nameTest && ipTest && portTest;
 
         return testReturn;
     }
 
-    private void setColors(TextInputLayout test, boolean passed)
-    {
-        if(passed)
-        {
+    private void setColors(TextInputLayout test, boolean passed) {
+        if (passed) {
             test.setErrorEnabled(false);
             test.setEndIconVisible(false);
             test.setBoxStrokeColor(context.getResources().getColor(R.color.colorAccent));
             test.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
             test.setDefaultHintTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent)));
-        }
-
-        else
-        {
+        } else {
             test.setErrorEnabled(true);
             test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
             test.setEndIconTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.redDelete)));

@@ -1,12 +1,14 @@
 package com.errorerrorerror.esplightcontrol.devices;
 
 import com.errorerrorerror.esplightcontrol.async.DeleteDeviceAsync;
+import com.errorerrorerror.esplightcontrol.async.GetDeviceAsync;
 import com.errorerrorerror.esplightcontrol.async.InsertDeviceAsync;
 import com.errorerrorerror.esplightcontrol.async.SetSwitchClass;
 import com.errorerrorerror.esplightcontrol.async.SwitchDeviceAsync;
 import com.errorerrorerror.esplightcontrol.async.UpdateDeviceAsync;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
@@ -50,4 +52,18 @@ public class DevicesDataSource implements DevicesRepository {
         return this.devicesDao.getAllDevices();
     }
 
+    @Override
+    public Devices getDevice(long id) {
+        Devices test = new Devices();
+
+        try {
+            test = new GetDeviceAsync(devicesDao).execute(id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return test;
+    }
 }

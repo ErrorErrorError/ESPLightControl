@@ -69,8 +69,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha03'
 
-
-
     //Wave
     implementation 'com.scwang.wave:MultiWaveHeader:1.0.0-alpha-1'
 
@@ -89,7 +87,7 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     //Room Dependencies
-    def room_version = "2.1.0-alpha05"
+    def room_version = "2.1.0-alpha06"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 

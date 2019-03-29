@@ -1,7 +1,6 @@
 package com.errorerrorerror.esplightcontrol.views;
 
 import android.animation.Animator;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,14 +12,10 @@ import android.widget.LinearLayout;
 import com.errorerrorerror.esplightcontrol.EspApp;
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.adapter.RecyclerDeviceAdapter;
-import com.errorerrorerror.esplightcontrol.databinding.DeviceDialogSettingsBinding;
 import com.errorerrorerror.esplightcontrol.databinding.HomeFragmentBinding;
-import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
-import com.errorerrorerror.esplightcontrol.utils.DialogCreateUtil;
 import com.errorerrorerror.esplightcontrol.utils.DisplayUtils;
-import com.errorerrorerror.esplightcontrol.utils.ValidationUtil;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
@@ -32,8 +27,9 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,22 +40,17 @@ import io.reactivex.disposables.CompositeDisposable;
 public class HomeFragment extends Fragment implements OnClickedDevice, OnClickedSwitch {
     private static final String TAG = "HomeFragment";
 
-    private final DialogCreateUtil createDialog = new DialogCreateUtil();
-
     //ViewModel Injector
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-
     private DevicesCollectionViewModel collectionViewModel;
 
+    private static final int ADD_DEVICE = -2;
     //Utils
-    private ValidationUtil validationUtil;
     private RecyclerDeviceAdapter adapter;
 
     private HomeFragmentBinding homeBinding;
-    private DeviceDialogSettingsBinding deviceDialogBinding;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,7 +65,6 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         homeBinding = HomeFragmentBinding.inflate(inflater, container, false);
-
         return homeBinding.getRoot();
     }
 
@@ -91,10 +81,43 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
 
         compositeDisposable.add(RxView.clicks(homeBinding.addDeviceButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(unit ->
-                        showAddDialog()));
+                .subscribe(unit -> addDeviceDialog(), error -> Log.e(TAG, "addDialog: "+ error.toString())));
     }
 
+    private void addDeviceDialog()
+    {
+        FragmentTransaction ft = checkDialog();
+
+        DialogFragment newFragment = CustomDialogFrag.newInstance("Add Device","Add a device name, ip, and the port.",
+                "Cancel",
+                "Add",
+                ADD_DEVICE);
+        newFragment.show(ft, "dialog");
+    }
+
+    private FragmentTransaction checkDialog()
+    {
+        assert getFragmentManager() != null;
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        return ft;
+    }
+
+    @Override
+    public void onEditDeviceClicked(long id) {
+        FragmentTransaction ft = checkDialog();
+
+        DialogFragment newFragment = CustomDialogFrag.newInstance("Edit Device","Edit the device",
+                "Cancel",
+                "Edit",
+                id);
+        newFragment.show(ft, "dialog");
+
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -107,8 +130,8 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         initRecyclerLayers();
     }
 
-    private void setAddDeviceBackground() //if lower than 24 api, uses png
-    {
+    //if lower than 24 api, uses png
+    private void setAddDeviceBackground() {
         if (Build.VERSION.SDK_INT < 24) {
             homeBinding.linearLayoutAdddevice.setBackgroundResource(R.drawable.cardview_background_gradient_for_lowerend_devices);
         } else {
@@ -151,9 +174,6 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
                     //Adds to adapter
                     adapter.submitList(devicesList);
 
-                    //Validation tool
-                    validationUtil = new ValidationUtil(devicesList, getContext());
-
                     //Hides text if not empty
                     if (devicesList.isEmpty()) {
                         homeBinding.noDeviceConnectedText.animate().alpha(1.0f).setStartDelay(200)
@@ -195,56 +215,6 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         });
     }
 
-    private void showAddDialog() //Shows Dialog to add device information
-    {
-
-        createDialog.setTitle("Add Device Info");
-        createDialog.setPositiveButtonText("Add");
-        createDialog.setNegativeButtonText("Cancel");
-        createDialog.setViewDialog(initDialogView());
-        createDialog.setContext(getContext());
-
-        AlertDialog alertDialog = createDialog.getDialogCreated();
-
-        compositeDisposable.add(RxView.clicks(alertDialog.getButton(DialogInterface.BUTTON_POSITIVE))
-                .subscribe(unit -> {   //Tests input
-                    boolean test = validationUtil.testAllAdd(Objects.requireNonNull(deviceDialogBinding.deviceName.getText()).toString(),
-                            Objects.requireNonNull(deviceDialogBinding.IPAddressInput.getText()).toString(),
-                            Objects.requireNonNull(deviceDialogBinding.portInput.getText()).toString(),
-                            deviceDialogBinding.deviceNameTextLayout,
-                            deviceDialogBinding.ipAddressTextLayout,
-                            deviceDialogBinding.portTextLayout);
-                    if (!test) {
-                        createDialog.shakeAnim(alertDialog);
-                    } else {
-                        // Add input to Database if there is input
-                        // dismiss the dialog
-                        Devices devices = new Devices(deviceDialogBinding.deviceName.getText().toString(),
-                                deviceDialogBinding.IPAddressInput.getText().toString(),
-                                deviceDialogBinding.portInput.getText().toString(),
-                                "",
-                                true);
-
-                        collectionViewModel.addDevice(devices);
-
-                        alertDialog.dismiss();
-                    }
-                }));
-
-        compositeDisposable.add(RxView.clicks(alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE))
-                .subscribe(unit ->
-                    alertDialog.dismiss()));
-    }
-
-    private View initDialogView() {
-        View dialogView = LayoutInflater.from(HomeFragment.this.getActivity())
-                .inflate(R.layout.device_dialog_settings, null);
-
-        deviceDialogBinding = DeviceDialogSettingsBinding.bind(dialogView);
-
-        return dialogView;
-    }
-
     @Override
     public void onRemoveDeviceClicked(int position) {
         if (position < 0) {
@@ -252,50 +222,6 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
         }
 
         collectionViewModel.deleteDevice(adapter.getCurrentList().get(position));
-    }
-
-    @Override
-    public void onEditDeviceClicked(int position) {
-
-        //Edits dialog
-        createDialog.setTitle("Edit Device Info");
-        createDialog.setPositiveButtonText("Edit");
-        createDialog.setNegativeButtonText("Cancel");
-        createDialog.setViewDialog(initDialogView());
-        createDialog.setContext(getContext());
-        deviceDialogBinding.deviceName.setText(adapter.getCurrentList().get(position).getDevice());
-        deviceDialogBinding.IPAddressInput.setText(adapter.getCurrentList().get(position).getIp());
-        deviceDialogBinding.portInput.setText(adapter.getCurrentList().get(position).getPort());
-
-        // Replace the "Edit" button's click listener.
-
-        AlertDialog alertDialog = createDialog.getDialogCreated();
-
-        compositeDisposable.add(RxView.clicks(alertDialog.getButton(DialogInterface.BUTTON_POSITIVE))
-                .subscribe(unit -> {
-                    boolean test = validationUtil.testAllEdit(Objects.requireNonNull(deviceDialogBinding.deviceName.getText()).toString(),
-                            Objects.requireNonNull(deviceDialogBinding.IPAddressInput.getText()).toString(),
-                            Objects.requireNonNull(deviceDialogBinding.portInput.getText()).toString(),
-                            position,
-                            deviceDialogBinding.deviceNameTextLayout,
-                            deviceDialogBinding.ipAddressTextLayout,
-                            deviceDialogBinding.portTextLayout);
-                    if (!test) {
-                        createDialog.shakeAnim(alertDialog);
-                    } else {
-                        // Edit input to Database if there is input
-                        // dismiss the dialog
-                        Devices device = new Devices(deviceDialogBinding.deviceName.getText().toString(),
-                                deviceDialogBinding.IPAddressInput.getText().toString(),
-                                deviceDialogBinding.portInput.getText().toString(),
-                                "",
-                                adapter.getCurrentList().get(position).isOn());
-
-                        device.setId(adapter.getItemId(position));
-                        collectionViewModel.editDevice(device);
-                        alertDialog.dismiss();
-                    }
-                }));
     }
 
     @Override

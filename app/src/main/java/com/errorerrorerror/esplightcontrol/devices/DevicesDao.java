@@ -34,6 +34,10 @@ public interface DevicesDao {
     @Query("UPDATE devices SET device_on = :bool WHERE id = :id")
     void updateSwitch(Boolean bool, long id);
 
+
+    @Query("SELECT * FROM devices WHERE id = :id")
+    Devices getDevicesWithId(long id);
+
 /*
     @Query("SELECT * FROM devices AT conn")
 */

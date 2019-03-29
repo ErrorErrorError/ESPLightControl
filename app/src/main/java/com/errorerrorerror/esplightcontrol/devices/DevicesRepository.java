@@ -17,4 +17,5 @@ public interface DevicesRepository {
     LiveData<List<Devices>> getAllDevices();
     void setConnectivity(String connectivity, long id);
     void setSwitch(Boolean bool, long id);
+    Devices getDevice(long id);
 }

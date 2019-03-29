@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipToPadding="true"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/add_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/somatic_round"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/add_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+            android:textSize="15sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/deviceNameTextLayout"
+            style="@style/Custom.TextInputLayout.OutlinedBox"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:hint="@string/DeviceName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/deviceName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center|start"
+                android:inputType="text"
+                android:maxLength="28"
+                android:maxLines="1"
+                android:textSize="15sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:clipToPadding="true"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ipAddressTextLayout"
+                style="@style/Custom.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="150dp"
+                android:layout_weight="1"
+                android:hint="@string/IPAddress">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/IPAddressInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center|start"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="15sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/portTextLayout"
+                style="@style/Custom.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="-140dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="25dp"
+                android:layout_weight=".5"
+                android:hint="@string/Port">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/portInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center|start"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:textSize="15sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="-8.5dp"
+            android:layout_marginBottom="-8.5dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/negativeButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:layout_marginEnd="-8.5dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/positiveButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

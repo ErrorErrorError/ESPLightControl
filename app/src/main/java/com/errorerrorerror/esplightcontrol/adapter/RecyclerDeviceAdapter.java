@@ -71,7 +71,7 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
         holder.binding.swipeLayout.setOnIconClickListener(new OnIconClickListener() {
             @Override
             public void onLeftIconClick() {
-                onClickedDevice.onEditDeviceClicked(holder.getAdapterPosition()); //Sends position to HomeFragment
+                onClickedDevice.onEditDeviceClicked(devices.getId());//Sends position to HomeFragment
                 holder.binding.swipeLayout.close(true);
             }
 
