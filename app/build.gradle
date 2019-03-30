@@ -92,8 +92,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     //RoomRx Dependency
-    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
-    implementation 'android.arch.lifecycle:reactivestreams:1.1.1'
+    implementation "androidx.room:room-rxjava2:$room_version"
 
     //RxJava2
     def rx_java_version = "2.2.7"

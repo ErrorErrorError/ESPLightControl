@@ -27,7 +27,6 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -88,7 +87,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     {
         FragmentTransaction ft = checkDialog();
 
-        DialogFragment newFragment = CustomDialogFrag.newInstance("Add Device","Add a device name, ip, and the port.",
+        androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance("Add Device","Add a device name, ip, and the port.",
                 "Cancel",
                 "Add",
                 ADD_DEVICE);
@@ -111,7 +110,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
     public void onEditDeviceClicked(long id) {
         FragmentTransaction ft = checkDialog();
 
-        DialogFragment newFragment = CustomDialogFrag.newInstance("Edit Device","Edit the device",
+        androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance("Edit Device","Edit the device",
                 "Cancel",
                 "Edit",
                 id);

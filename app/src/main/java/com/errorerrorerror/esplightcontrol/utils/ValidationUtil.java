@@ -1,6 +1,5 @@
 package com.errorerrorerror.esplightcontrol.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 
@@ -13,10 +12,20 @@ import java.util.List;
 
 public class ValidationUtil {
 
-    private static final String TAG = "ValidationUtil";
+    //private static final String TAG = "ValidationUtil";
     private final List<Devices> devicesList;
     private final Context context;
 
+    //Port Regex
+    private static final String portRegex = "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
+
+    //Ipv4 regex
+    private final String ipV4Regex = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+            "+([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+            "+([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+            "+([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+    //IpV6 regex
+    private final String ipV6Regex = "(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))";
 
     public ValidationUtil(List<Devices> devicesList, Context context) {
         this.devicesList = devicesList;
@@ -24,7 +33,6 @@ public class ValidationUtil {
     }
 
     //Testing User Input Device name Add
-    @SuppressLint("ResourceAsColor")
     private boolean deviceNameValidationAdd(String name, TextInputLayout textInputLayoutName) //Validates name and checks if the name is already used
     {
         boolean isValid;
@@ -77,14 +85,6 @@ public class ValidationUtil {
         boolean ipValid;
         boolean ipRepeated = false;
 
-        //Ipv4 regex
-        String ipV4Regex = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                "+([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                "+([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                "+([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-        //IpV6 regex
-        String ipV6Regex = "(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))";
-
         if (ip.matches(ipV4Regex)) {
             ipValid = true;
         } else ipValid = ip.matches(ipV6Regex);
@@ -125,8 +125,6 @@ public class ValidationUtil {
     //Testing User Input Device port Add
     private boolean portValidationAdd(String port, TextInputLayout textInputLayoutPort) //validates port
     {
-
-        String portRegex = "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
         boolean portValid;
 
         portValid = port.matches(portRegex);
@@ -198,14 +196,6 @@ public class ValidationUtil {
         boolean ipRepeated = false;
 
 
-        //Ipv4 regex
-        String ipV4Regex = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                "+([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                "+([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                "+([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-        //IpV6 regex
-        String ipV6Regex = "(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))";
-
         if (ip.matches(ipV4Regex)) {
             ipValid = true;
         } else ipValid = ip.matches(ipV6Regex);
@@ -267,13 +257,16 @@ public class ValidationUtil {
         return testReturn;
     }
 
+
     private void setColors(TextInputLayout test, boolean passed) {
+
         if (passed) {
             test.setErrorEnabled(false);
             test.setEndIconVisible(false);
             test.setBoxStrokeColor(context.getResources().getColor(R.color.colorAccent));
             test.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
             test.setDefaultHintTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent)));
+
         } else {
             test.setErrorEnabled(true);
             test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
@@ -281,7 +274,5 @@ public class ValidationUtil {
             test.setEndIconVisible(true);
             test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
         }
-
     }
-
 }
