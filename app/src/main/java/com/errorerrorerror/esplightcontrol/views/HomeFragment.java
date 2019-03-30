@@ -127,6 +127,7 @@ public class HomeFragment extends Fragment implements OnClickedDevice, OnClicked
 
         //sets up RecyclerView Listeners
         initRecyclerLayers();
+
     }
 
     //if lower than 24 api, uses png

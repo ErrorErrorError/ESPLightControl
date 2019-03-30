@@ -107,9 +107,9 @@ dependencies {
     implementation "com.jakewharton.rxbinding3:rxbinding:$rx_binding_version"
     implementation "com.jakewharton.rxbinding3:rxbinding-core:$rx_binding_version"
     implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rx_binding_version"
-    implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:$rx_binding_version"
     implementation "com.jakewharton.rxbinding3:rxbinding-viewpager:$rx_binding_version"
     implementation "com.jakewharton.rxbinding3:rxbinding-material:$rx_binding_version"
+
 
     //Dagger core & Dagger Android
     def dagger_version = "2.20"

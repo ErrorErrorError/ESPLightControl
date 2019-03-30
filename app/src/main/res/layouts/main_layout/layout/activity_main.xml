@@ -14,19 +14,18 @@
             android:id="@+id/viewPager"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="30dp"
             android:clipChildren="false"
             android:clipToPadding="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/wavesTop" />
+            app:layout_constraintTop_toBottomOf="@id/topPanelWave" />
 
         <!-- waves top -->
-        <include
-            android:id="@+id/wavesTop"
-            layout="@layout/wave_topbar"
+        <com.scwang.wave.MultiWaveHeader
+            android:id="@+id/topPanelWave"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="110dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
