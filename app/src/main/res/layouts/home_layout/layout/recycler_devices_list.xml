@@ -49,8 +49,8 @@
 
                     <ImageView
                         android:id="@+id/imageViewRecycler"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginStart="16dp"
                         android:contentDescription="@string/todo"
                         android:scaleType="centerInside"
@@ -61,10 +61,11 @@
 
 
                     <TextView
-                        android:layout_marginStart="5dp"
                         android:id="@+id/deviceNameRecycler"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="4dp"
                         android:text="@{device.device}"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toTopOf="@id/connectionStatus"
@@ -85,26 +86,26 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:layout_marginStart="5dp"
                         android:id="@+id/ipAddressRecycler"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:text="@{`Connectivity: ` + device.ip}"
                         android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@id/portName"
                         app:layout_constraintStart_toEndOf="@id/imageViewRecycler"
-                        app:layout_constraintTop_toBottomOf="@id/deviceNameRecycler"
-                        app:layout_constraintBottom_toTopOf="@id/portName"/>
+                        app:layout_constraintTop_toBottomOf="@id/deviceNameRecycler" />
 
 
                     <TextView
-                        android:layout_marginStart="5dp"
                         android:id="@+id/portName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:text="@{`Port: ` + device.port}"
                         android:textSize="12sp"
-                        app:layout_constraintTop_toBottomOf="@id/ipAddressRecycler"
-                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler"/>
+                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler"
+                        app:layout_constraintTop_toBottomOf="@id/ipAddressRecycler" />
                     <!--
 
                                            <TextView

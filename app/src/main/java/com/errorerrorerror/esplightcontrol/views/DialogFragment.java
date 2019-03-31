@@ -11,6 +11,7 @@ import com.errorerrorerror.esplightcontrol.EspApp;
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.databinding.DialogFragmentDevicesBinding;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
+import com.errorerrorerror.esplightcontrol.utils.Constants;
 import com.errorerrorerror.esplightcontrol.utils.ValidationUtil;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.jakewharton.rxbinding3.view.RxView;
@@ -29,7 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class DialogFragment extends RxDialogFragment {
-    private static final String TAG = "DialogFragment";
+
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private DialogFragmentDevicesBinding devicesBinding;
@@ -122,7 +123,7 @@ public class DialogFragment extends RxDialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
+        Log.d(Constants.DIALOG_TAG, "onDestroy: ");
     }
 
     private void addDevice() {
@@ -152,8 +153,8 @@ public class DialogFragment extends RxDialogFragment {
                                 .compose(bindToLifecycle())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(() -> Log.d(TAG, "Added Device Successfully on thread: " + Thread.currentThread().getName()),
-                                        onError -> Log.e(TAG, "addDevice: ", onError))
+                                .subscribe(() -> Log.d(Constants.DIALOG_TAG, "Added Device Successfully on thread: " + Thread.currentThread().getName()),
+                                        onError -> Log.e(Constants.DIALOG_TAG, "addDevice: ", onError))
                 );
                 dismiss();
             }

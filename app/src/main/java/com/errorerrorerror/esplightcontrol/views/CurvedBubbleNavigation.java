@@ -8,9 +8,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.errorerrorerror.esplightcontrol.R;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
@@ -24,7 +22,6 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
     private static final Point mFirstCurveControlPoint2 = new Point();
     private static final Point mSecondCurveControlPoint1 = new Point();
     private static final Point mSecondCurveControlPoint2 = new Point();
-    private static final String TAG = "CURVEDBUBBLE";
     private static Path mPath;
     private static Paint mPaint;
     private final int CURVE_RADIUS = getResources().getDimensionPixelOffset(R.dimen.corner_radius); //Do not exceed 200
@@ -69,7 +66,6 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
         // Navigation bar bounds (width & height)
         int mNavigationBarWidth = getMeasuredWidth() - getPaddingRight();
         int mNavigationBarHeight = getMeasuredHeight() - getPaddingBottom();
-
 
 
         // the coordinates (x,y) of the start point before curve

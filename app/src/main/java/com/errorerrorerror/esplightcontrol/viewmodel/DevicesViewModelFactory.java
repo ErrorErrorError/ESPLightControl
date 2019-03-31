@@ -23,8 +23,6 @@ public class DevicesViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(DevicesCollectionViewModel.class))
             return (T) new DevicesCollectionViewModel(devicesDataSource);
-        else if (modelClass.isAssignableFrom(DevicesConnectivityViewModel.class))
-            return (T) new DevicesConnectivityViewModel(devicesDataSource);
         else {
             throw new IllegalArgumentException("ViewModel Not Found");
         }

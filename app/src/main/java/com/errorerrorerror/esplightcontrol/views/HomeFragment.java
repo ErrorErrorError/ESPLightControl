@@ -15,6 +15,7 @@ import com.errorerrorerror.esplightcontrol.adapter.RecyclerDeviceAdapter;
 import com.errorerrorerror.esplightcontrol.databinding.HomeFragmentBinding;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
+import com.errorerrorerror.esplightcontrol.utils.Constants;
 import com.errorerrorerror.esplightcontrol.utils.DisplayUtils;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.jakewharton.rxbinding3.view.RxView;
@@ -39,8 +40,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class HomeFragment extends RxFragment implements OnClickedDevice, OnClickedSwitch {
-    private static final String TAG = "HomeFragment";
-    private static final int ADD_DEVICE = -2;
+
     //ViewModel Injector
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -83,7 +83,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
         collectionViewModel.addDisposable(RxView.clicks(homeBinding.addDeviceButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .compose(bindToLifecycle())
-                .subscribe(unit -> addDeviceDialog(), error -> Log.e(TAG, "addDialog: "+ error.toString())));
+                .subscribe(unit -> addDeviceDialog(), error -> Log.e(Constants.HOME_TAG, "addDialog: " + error.toString())));
 
     }
 
@@ -93,7 +93,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
         androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance("Add Device", "Add a device name, ip, and the port.",
                 "Cancel",
                 "Add",
-                ADD_DEVICE);
+                Constants.ADD_DEVICE);
         newFragment.show(ft, "dialog");
     }
 
@@ -179,51 +179,51 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
 
 
         collectionViewModel.addDisposable(collectionViewModel.getAllDevices()
-                        .compose(bindToLifecycle())
-                        .subscribeOn(Schedulers.io())
-                        //.observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                devices -> {adapter.submitList(devices);
-                                    Log.d(TAG, "devicesListeners: "+ Thread.currentThread().getName());
-                                    if (devices.isEmpty()) {
-                                        homeBinding.noDeviceConnectedText.animate().alpha(1.0f).setStartDelay(200)
-                                                .setListener(new Animator.AnimatorListener() {
-                                                    @Override
-                                                    public void onAnimationStart(Animator animation) {
-                                                        homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
-                                                    }
+                .compose(bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        devices -> {
+                            adapter.submitList(devices);
+                            Log.d(Constants.HOME_TAG, "devicesListeners: " + Thread.currentThread().getName());
+                            if (devices.isEmpty()) {
+                                homeBinding.noDeviceConnectedText.animate().alpha(1.0f).setStartDelay(200)
+                                        .setListener(new Animator.AnimatorListener() {
+                                            @Override
+                                            public void onAnimationStart(Animator animation) {
+                                                homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
+                                            }
 
-                                                    @Override
-                                                    public void onAnimationEnd(Animator animation) {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
 
-                                                    }
+                                            }
 
-                                                    @Override
-                                                    public void onAnimationCancel(Animator animation) {
+                                            @Override
+                                            public void onAnimationCancel(Animator animation) {
 
-                                                    }
+                                            }
 
-                                                    @Override
-                                                    public void onAnimationRepeat(Animator animation) {
+                                            @Override
+                                            public void onAnimationRepeat(Animator animation) {
 
-                                                    }
-                                                })
-                                                .setDuration(800);
-                                    } else {
-                                        homeBinding.noDeviceConnectedText.setVisibility(View.GONE);
-                                    }
-                                },
-                                onError -> Log.e(TAG, "devicesListeners: " + onError)
-                        )
-                );
+                                            }
+                                        })
+                                        .setDuration(800);
+                            } else {
+                                homeBinding.noDeviceConnectedText.setVisibility(View.GONE);
+                            }
+                        },
+                        onError -> Log.e(Constants.HOME_TAG, "devicesListeners: " + onError)
+                )
+        );
 
         //Scroll to top on new item
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                if(positionStart > 0)
-                {
-                    Log.d(TAG, "onItemRangeInserted: " + positionStart);
+                if (positionStart > 0) {
+                    Log.d(Constants.HOME_TAG, "onItemRangeInserted: " + positionStart);
                     homeBinding.recyclerviewAddDevice.smoothScrollToPosition(positionStart);
                 }
 
@@ -240,8 +240,8 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
         collectionViewModel.addDisposable(collectionViewModel.deleteDevice(adapter.getCurrentList().get(position))
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
-                .subscribe(() -> Log.d(TAG, "onRemoveDeviceClicked: on Thread " + Thread.currentThread().getName()),
-                        onError-> Log.e(TAG, "onRemoveDeviceClicked: ", onError))
+                .subscribe(() -> Log.d(Constants.HOME_TAG, "onRemoveDeviceClicked: on Thread " + Thread.currentThread().getName()),
+                        onError -> Log.e(Constants.HOME_TAG, "onRemoveDeviceClicked: ", onError))
         );
     }
 

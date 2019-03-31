@@ -8,6 +8,7 @@ import android.view.View;
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.adapter.ViewPagerAdapter;
 import com.errorerrorerror.esplightcontrol.databinding.ActivityMainBinding;
+import com.errorerrorerror.esplightcontrol.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,30 +23,29 @@ import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivityTest";
-
-    private static final String waves = "0,0,1,0.4,5";
-
     //Fragment items
     private final HomeFragment homeFragment = new HomeFragment();
     private final ModesFragment modesFragment = new ModesFragment();
     private final LightFragment lightFragment = new LightFragment();
     private final PresetsFragment presetsFragment = new PresetsFragment();
-    ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        //Binding Activity
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
 
         // View Pager Set up
         setupFrag();
 
         //Sets up transparent status bar
         transparentStatusBar();
+
+        //Top bar Animation
+        wavesAnimation();
     }
 
     private void setupFrag() {
@@ -74,7 +74,10 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
 
+    private void wavesAnimation()
+    {
         //Animation
         ValueAnimator velocity = ValueAnimator.ofFloat(150, 20);
         velocity.addUpdateListener(animation ->
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         binding.topPanelWave.setStartColor(ContextCompat.getColor(getApplicationContext(), R.color.gradientColorStartWithout75Alpha));
         binding.topPanelWave.setCloseColor(ContextCompat.getColor(getApplicationContext(), R.color.gradientColorEndWithout75Alpha));
         binding.topPanelWave.setColorAlpha(1f);
-        binding.topPanelWave.setWaves(waves);
+        binding.topPanelWave.setWaves(Constants.WAVES);
         binding.topPanelWave.setProgress(1f);
         binding.topPanelWave.start();
 
