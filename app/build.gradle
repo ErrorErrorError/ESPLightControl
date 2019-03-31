@@ -101,6 +101,18 @@ dependencies {
     //RxAndroid
     def rx_android_version = "2.1.1"
     implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
+    implementation 'com.github.bobekos:reactivelivedata:1.0.5'
+
+    //RxLifeCycles
+
+    def rx_lifecycle_version = "3.0.0"
+    implementation "com.trello.rxlifecycle3:rxlifecycle:$rx_lifecycle_version"
+    implementation "com.trello.rxlifecycle3:rxlifecycle-android:$rx_lifecycle_version"
+    implementation "com.trello.rxlifecycle3:rxlifecycle-components:$rx_lifecycle_version"
+    implementation "com.trello.rxlifecycle3:rxlifecycle-components-preference:$rx_lifecycle_version"
+    implementation "com.trello.rxlifecycle3:rxlifecycle-android-lifecycle:$rx_lifecycle_version"
+
+
 
     //RxBindings
     def rx_binding_version = "3.0.0-alpha2"
@@ -109,6 +121,8 @@ dependencies {
     implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rx_binding_version"
     implementation "com.jakewharton.rxbinding3:rxbinding-viewpager:$rx_binding_version"
     implementation "com.jakewharton.rxbinding3:rxbinding-material:$rx_binding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:$rx_binding_version"
+
 
 
     //Dagger core & Dagger Android

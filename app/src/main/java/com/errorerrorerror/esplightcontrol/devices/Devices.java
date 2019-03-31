@@ -33,6 +33,16 @@ public class Devices {
     public Devices() {
     }
 
+    @Ignore
+    public Devices(long id, String device, String ip, String port, String connectivity, Boolean on) {
+        this.id = id;
+        this.device = device;
+        this.ip = ip;
+        this.port = port;
+        this.connectivity = connectivity;
+        this.on = on;
+    }
+
     public Devices(String device, String ip, String port, String connectivity, Boolean on) {
         this.device = device;
         this.ip = ip;
@@ -118,10 +128,10 @@ public class Devices {
 
         Devices devices = (Devices) obj;
 
-        return this.getDevice().equals(devices.getDevice()) &&
-                this.getIp().equals(devices.getIp()) &&
-                this.getPort().equals(devices.getPort())&&
-                this.getConnectivity().equals(devices.getConnectivity());
+        return
+                this.getDevice().equals(devices.getDevice()) &&
+                        this.getIp().equals(devices.getIp()) &&
+                        this.getPort().equals(devices.getPort());
     }
 
     @Override
@@ -131,7 +141,6 @@ public class Devices {
         hash = mult * (hash + this.getDevice().hashCode());
         hash = mult * (hash + this.getIp().hashCode());
         hash = mult * (hash + this.getPort().hashCode());
-        hash = mult * (hash + this.getConnectivity().hashCode());
         return hash;
     }
 

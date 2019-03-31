@@ -1,6 +1,7 @@
 package com.errorerrorerror.esplightcontrol.views;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.errorerrorerror.esplightcontrol.utils.ValidationUtil;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.jakewharton.rxbinding3.view.RxView;
+import com.trello.rxlifecycle3.components.support.RxDialogFragment;
 
 import java.util.Objects;
 
@@ -23,17 +25,16 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
-public class DialogFragment extends androidx.fragment.app.DialogFragment {
-    //private static final String TAG = "DialogFragment";
+public class DialogFragment extends RxDialogFragment {
+    private static final String TAG = "DialogFragment";
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private DialogFragmentDevicesBinding devicesBinding;
     private DevicesCollectionViewModel collectionViewModel;
     private ValidationUtil validationUtil;
-
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     static DialogFragment newInstance(String title,
                                       String message,
@@ -83,6 +84,8 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setBackground();
+
         collectionViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(DevicesCollectionViewModel.class);
 
@@ -93,6 +96,124 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
         String positive = getArguments().getString("positive");
         long mode = getArguments().getLong("mode");
 
+        devicesBinding.addTitle.setText(title);
+        devicesBinding.addMessage.setText(message);
+        devicesBinding.positiveButton.setText(positive);
+        devicesBinding.negativeButton.setText(negative);
+
+        devicesBinding.negativeButton.setOnClickListener(v -> dismiss());
+        collectionViewModel.addDisposable(
+                collectionViewModel.getAllDevices()
+                        .compose(bindToLifecycle())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(devicesList -> {
+                            validationUtil = new ValidationUtil(devicesList, getContext());
+
+                            if (mode == -2) {
+                                addDevice();
+                            } else {
+                                editDevice(mode);
+                            }
+                        }));
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
+
+    private void addDevice() {
+        collectionViewModel.addDisposable(RxView.clicks(devicesBinding.positiveButton)
+                .compose(bindToLifecycle())
+                .subscribe(unit -> {
+            boolean test = validationUtil
+                    .testAllAdd(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
+                            Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
+                            Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
+                            devicesBinding.deviceNameTextLayout,
+                            devicesBinding.ipAddressTextLayout,
+                            devicesBinding.portTextLayout);
+
+            if (!test) {
+                shakeAnim();
+            } else {
+                // Add input to Database if there is input
+                // dismiss the dialog
+
+                collectionViewModel.addDisposable(
+                        collectionViewModel.insertEditDevice(new Devices(devicesBinding.deviceName.getText().toString(),
+                                devicesBinding.IPAddressInput.getText().toString(),
+                                devicesBinding.portInput.getText().toString(),
+                                "",
+                                true))
+                                .compose(bindToLifecycle())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(() -> Log.d(TAG, "Added Device Successfully on thread: " + Thread.currentThread().getName()),
+                                        onError -> Log.e(TAG, "addDevice: ", onError))
+                );
+                dismiss();
+            }
+
+        }));
+    }
+
+    private void editDevice(long mode) {
+
+        final boolean[] testBoolean = new boolean[1];
+        collectionViewModel.addDisposable(collectionViewModel.getDeviceWithId(mode)
+                .compose(bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(devices -> {
+                    devicesBinding.deviceName.setText(devices.getDevice());
+                    devicesBinding.IPAddressInput.setText(devices.getIp());
+                    devicesBinding.portInput.setText(devices.getPort());
+                    testBoolean[0] = devices.isOn();
+                })
+        );
+
+
+        collectionViewModel.addDisposable(RxView.clicks(devicesBinding.positiveButton)
+                .compose(bindToLifecycle())
+                .subscribe(s -> {
+            boolean test = validationUtil.testAllEdit(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
+                    Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
+                    Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
+                    mode,
+                    devicesBinding.deviceNameTextLayout,
+                    devicesBinding.ipAddressTextLayout,
+                    devicesBinding.portTextLayout);
+            if (!test) {
+                shakeAnim();
+            } else {
+                // Edit input to Database if there is input
+                // dismiss the dialog
+                Devices device = new Devices(devicesBinding.deviceName.getText().toString(),
+                        devicesBinding.IPAddressInput.getText().toString(),
+                        devicesBinding.portInput.getText().toString(),
+                        "",
+                        testBoolean[0]);
+
+                device.setId(mode);
+
+                collectionViewModel.addDisposable(
+                        collectionViewModel.insertEditDevice(device)
+                                .compose(bindToLifecycle())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe()
+                );
+
+                dismiss();
+            }
+        }));
+    }
+
+    private void setBackground() {
         //Sets background
         Objects.requireNonNull(Objects.requireNonNull(getDialog())
                 .getWindow()).setBackgroundDrawable(ContextCompat
@@ -103,81 +224,5 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
                 (int) getContext().getResources().getDisplayMetrics().density * 475,
                 Objects.requireNonNull(getDialog().getWindow()).getAttributes().height
         );
-
-        devicesBinding.addTitle.setText(title);
-        devicesBinding.addMessage.setText(message);
-        devicesBinding.positiveButton.setText(positive);
-        devicesBinding.negativeButton.setText(negative);
-
-        devicesBinding.negativeButton.setOnClickListener(v -> dismiss());
-        collectionViewModel.getAllDevices().observe(getViewLifecycleOwner(),
-                devicesList ->
-                        validationUtil = new ValidationUtil(devicesList, getContext())
-        );
-
-        if (mode == -2) {
-
-            compositeDisposable.add(RxView.clicks(devicesBinding.positiveButton).subscribe(unit -> {
-                boolean test = validationUtil.testAllAdd(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
-                        Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
-                        Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
-                        devicesBinding.deviceNameTextLayout,
-                        devicesBinding.ipAddressTextLayout,
-                        devicesBinding.portTextLayout);
-
-                if (!test) {
-                    shakeAnim();
-                } else {
-                    // Add input to Database if there is input
-                    // dismiss the dialog
-
-                    collectionViewModel.addDevice(
-                            new Devices(devicesBinding.deviceName.getText().toString(),
-                                    devicesBinding.IPAddressInput.getText().toString(),
-                                    devicesBinding.portInput.getText().toString(),
-                                    "",
-                                    true));
-                    dismiss();
-                }
-            }));
-
-        } else {
-
-            Devices temp = collectionViewModel.getDeviceWithId(mode);
-            devicesBinding.deviceName.setText(temp.getDevice());
-            devicesBinding.IPAddressInput.setText(temp.getIp());
-            devicesBinding.portInput.setText(temp.getPort());
-
-            compositeDisposable.add(RxView.clicks(devicesBinding.positiveButton).subscribe(s -> {
-                boolean test = validationUtil.testAllEdit(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
-                        Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
-                        Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
-                        mode,
-                        devicesBinding.deviceNameTextLayout,
-                        devicesBinding.ipAddressTextLayout,
-                        devicesBinding.portTextLayout);
-                if (!test) {
-                    shakeAnim();
-                } else {
-                    // Edit input to Database if there is input
-                    // dismiss the dialog
-                    Devices device = new Devices(devicesBinding.deviceName.getText().toString(),
-                            devicesBinding.IPAddressInput.getText().toString(),
-                            devicesBinding.portInput.getText().toString(),
-                            "",
-                            temp.isOn());
-
-                    device.setId(mode);
-                    collectionViewModel.editDevice(device);
-                    dismiss();
-                }
-            }));
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        compositeDisposable.dispose();
     }
 }

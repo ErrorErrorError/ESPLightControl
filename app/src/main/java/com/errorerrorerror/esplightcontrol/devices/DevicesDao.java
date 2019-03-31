@@ -2,29 +2,22 @@ package com.errorerrorerror.esplightcontrol.devices;
 
 import java.util.List;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
+import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 @Dao
 public interface DevicesDao {
 
-    @Insert
-    void insert(Devices... devices);
-
-
     @Query("SELECT * FROM devices")
-    LiveData<List<Devices>> getAllDevices();
+    Flowable<List<Devices>> getAllDevices();
 
     @Delete
     void delete(Devices... device);
-
-
-    @Update
-    void update(Devices... device);
 
 
     @Query("UPDATE devices SET device_connectivity = :connectivity WHERE id = :id")
@@ -36,9 +29,10 @@ public interface DevicesDao {
 
 
     @Query("SELECT * FROM devices WHERE id = :id")
-    Devices getDevicesWithId(long id);
+    Single<Devices> getDeviceWithId(long id);
 
-/*
-    @Query("SELECT * FROM devices AT conn")
-*/
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertEditDevice(Devices device);
+
+
 }

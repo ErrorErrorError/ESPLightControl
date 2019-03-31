@@ -3,7 +3,6 @@ package com.errorerrorerror.esplightcontrol.views;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.errorerrorerror.esplightcontrol.R;
@@ -41,18 +40,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        ValueAnimator velocity = ValueAnimator.ofFloat(100, 20);
-        velocity.addUpdateListener(animation -> {
-            Log.d(TAG, "transparentStatusBar: " + animation.getAnimatedValue());
-            binding.topPanelWave.setVelocity((Float) animation.getAnimatedValue());
-        });
-        velocity.setDuration(TimeUnit.SECONDS.toMillis(5));
 
         // View Pager Set up
         setupFrag();
 
         //Sets up transparent status bar
-        transparentStatusBar(velocity);
+        transparentStatusBar();
     }
 
     private void setupFrag() {
@@ -75,12 +68,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void transparentStatusBar(ValueAnimator velocity) //Allows transparent status bar//
+    private void transparentStatusBar() //Allows transparent status bar//
     {
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        //Animation
+        ValueAnimator velocity = ValueAnimator.ofFloat(150, 20);
+        velocity.addUpdateListener(animation ->
+                binding.topPanelWave.setVelocity((Float) animation.getAnimatedValue()));
 
         binding.topPanelWave.setStartColor(ContextCompat.getColor(getApplicationContext(), R.color.gradientColorStartWithout75Alpha));
         binding.topPanelWave.setCloseColor(ContextCompat.getColor(getApplicationContext(), R.color.gradientColorEndWithout75Alpha));
@@ -89,14 +87,26 @@ public class MainActivity extends AppCompatActivity {
         binding.topPanelWave.setProgress(1f);
         binding.topPanelWave.start();
 
-        //velocity.start();
-
-
+        //Starts animation
+        velocity.setDuration(TimeUnit.SECONDS.toMillis(5));
+        velocity.start();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         binding.unbind();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        binding.topPanelWave.stop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.topPanelWave.start();
     }
 }

@@ -5,14 +5,11 @@ import com.errorerrorerror.esplightcontrol.devices.DevicesDataSource;
 
 import java.util.List;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import io.reactivex.Single;
 
-
-//This viewmodel allows for the showed items to be deleted,
-// edited, or even add new devices
-
-public class DevicesCollectionViewModel extends ViewModel {
+public class DevicesCollectionViewModel extends DisposableViewModel {
 
     private DevicesDataSource devicesDataSource;
 
@@ -20,28 +17,26 @@ public class DevicesCollectionViewModel extends ViewModel {
         this.devicesDataSource = devicesDataSource;
     }
 
-    public LiveData<List<Devices>> getAllDevices() {
+    public Flowable<List<Devices>> getAllDevices() {
         return devicesDataSource.getAllDevices();
     }
 
-    public void addDevice(Devices devices) {
-        devicesDataSource.addDevices(devices);
+    public Completable deleteDevice(Devices devices) {
+        return Completable.fromAction(() ->
+                devicesDataSource.deleteDevice(devices));
     }
 
-    public void deleteDevice(Devices devices) {
-        devicesDataSource.deleteDevice(devices);
+    public Completable setSwitch(Boolean bool, long id) {
+        return Completable.fromAction(() ->
+                devicesDataSource.setSwitch(bool, id));
     }
 
-    public void editDevice(Devices devices) {
-        devicesDataSource.updateDevice(devices);
-    }
-
-    public void setSwitchConnection(Boolean bool, long id) {
-        devicesDataSource.setSwitch(bool, id);
-    }
-
-    public Devices getDeviceWithId(long id){
+    public Single<Devices> getDeviceWithId(long id) {
         return devicesDataSource.getDevice(id);
     }
 
+    public Completable insertEditDevice(Devices device) {
+        return Completable.fromAction(() ->
+                devicesDataSource.insertEditDevice(device));
+    }
 }

@@ -1,18 +1,11 @@
 package com.errorerrorerror.esplightcontrol.devices;
 
-import com.errorerrorerror.esplightcontrol.async.DeleteDeviceAsync;
-import com.errorerrorerror.esplightcontrol.async.GetDeviceAsync;
-import com.errorerrorerror.esplightcontrol.async.InsertDeviceAsync;
-import com.errorerrorerror.esplightcontrol.async.SetSwitchClass;
-import com.errorerrorerror.esplightcontrol.async.SwitchDeviceAsync;
-import com.errorerrorerror.esplightcontrol.async.UpdateDeviceAsync;
-
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
-import androidx.lifecycle.LiveData;
+import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 public class DevicesDataSource implements DevicesRepository {
 
@@ -23,47 +16,35 @@ public class DevicesDataSource implements DevicesRepository {
         this.devicesDao = devicesDao;
     }
 
-    @Override
-    public void addDevices(Devices devices) {
-        new InsertDeviceAsync(devicesDao).execute(devices);
-    }
-
-    @Override
-    public void updateDevice(Devices devices) {
-        new UpdateDeviceAsync(devicesDao).execute(devices);
-    }
 
     @Override
     public void deleteDevice(Devices devices) {
-        new DeleteDeviceAsync(devicesDao).execute(devices);
+        devicesDao.delete(devices);
+    }
+
+    @Override
+    public Flowable<List<Devices>> getAllDevices() {
+        return devicesDao.getAllDevices();
     }
 
     @Override
     public void setConnectivity(String connectivity, long id) {
+        devicesDao.updateConnectivity(connectivity, id);
     }
 
     @Override
     public void setSwitch(Boolean bool, long id) {
-        new SwitchDeviceAsync(devicesDao).execute(new SetSwitchClass(bool,id));
+            devicesDao.updateSwitch(bool, id);
     }
 
     @Override
-    public LiveData<List<Devices>> getAllDevices() {
-        return this.devicesDao.getAllDevices();
+    public Single<Devices> getDevice(long id) {
+        return devicesDao.getDeviceWithId(id);
     }
 
     @Override
-    public Devices getDevice(long id) {
-        Devices test = new Devices();
-
-        try {
-            test = new GetDeviceAsync(devicesDao).execute(id).get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return test;
+    public void insertEditDevice(Devices device) {
+        devicesDao.insertEditDevice(device);
     }
+
 }

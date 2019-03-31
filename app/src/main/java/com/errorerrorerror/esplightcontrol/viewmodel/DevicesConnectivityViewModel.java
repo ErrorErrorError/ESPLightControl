@@ -2,9 +2,7 @@ package com.errorerrorerror.esplightcontrol.viewmodel;
 
 import com.errorerrorerror.esplightcontrol.devices.DevicesDataSource;
 
-import androidx.lifecycle.ViewModel;
-
-public class DevicesConnectivityViewModel extends ViewModel {
+public class DevicesConnectivityViewModel extends DisposableViewModel {
 
     private DevicesDataSource devicesDataSource;
 

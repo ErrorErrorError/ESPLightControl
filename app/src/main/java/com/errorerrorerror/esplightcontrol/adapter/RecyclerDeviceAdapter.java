@@ -3,7 +3,6 @@ package com.errorerrorerror.esplightcontrol.adapter;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.databinding.RecyclerDevicesListBinding;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
@@ -11,7 +10,6 @@ import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnIconClickListener;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
@@ -33,6 +31,7 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
                     return oldItem.equals(newItem);
                 }
             };
+
     private final OnClickedDevice onClickedDevice;
     private final OnClickedSwitch onClickedSwitch;
     private LayoutInflater layoutInflater;
@@ -51,7 +50,7 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
         final RecyclerDevicesListBinding binding =
-                DataBindingUtil.inflate(layoutInflater, R.layout.recycler_devices_list, parent, false);
+                RecyclerDevicesListBinding.inflate(layoutInflater, parent, false);
 
         return new DevicesViewHolder(binding);
     }
@@ -59,19 +58,22 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
     @Override
     public void onBindViewHolder(@NonNull DevicesViewHolder holder, int position) {
 
-        Devices devices = getItem(position);
-        holder.bind(devices);
+        Devices device = getItem(position);
+        holder.bind(device);
 
-        holder.binding.connectionSwitch.setCheckedImmediately(devices.isOn());
-
+        /*
         holder.binding.connectionSwitch.setOnStateChangeListener((process, state, jtb) ->
                 onClickedSwitch.OnSwitched(jtb.isChecked(), holder.getAdapterPosition(), jtb));
+        */
 
+
+        holder.binding.connectionSwitch.setOnStateChangeListener((progress, state, jtb) ->
+                onClickedSwitch.OnSwitched(jtb.isChecked(), holder.getAdapterPosition(), jtb));
 
         holder.binding.swipeLayout.setOnIconClickListener(new OnIconClickListener() {
             @Override
             public void onLeftIconClick() {
-                onClickedDevice.onEditDeviceClicked(devices.getId());//Sends position to HomeFragment
+                onClickedDevice.onEditDeviceClicked(device.getId());//Sends id of device to HomeFragment
                 holder.binding.swipeLayout.close(true);
             }
 
@@ -80,6 +82,7 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
                 onClickedDevice.onRemoveDeviceClicked(holder.getAdapterPosition());
             }
         }, RIGHT_VIEW_TO_DELETE);
+
     }
 
     @Override

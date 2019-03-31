@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="device"
-            type="com.errorerrorerror.esplightcontrol.devices.Devices"/>
+            type="com.errorerrorerror.esplightcontrol.devices.Devices" />
     </data>
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout
             android:id="@+id/swipe_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="-10dp"
+            android:layout_marginTop="0dp"
             android:layout_marginBottom="-5dp"
             app:dragFromEdge="right"
             app:iconsDistance="12dp"
             app:iconsPadding="12dp"
             app:iconsSize="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:leftIcon="@drawable/ic_microcontroller_icon"
             app:leftIconBgColor="@color/colorAccent"
             app:revealedViewBackground="@android:color/transparent"
@@ -40,112 +43,104 @@
                 android:foreground="?attr/selectableItemBackground"
                 app:cardPreventCornerOverlap="true">
 
-                <LinearLayout
-                    android:id="@+id/relativeCard"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
+                    android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center">
-
-                        <ImageView
-                            android:id="@+id/imageViewRecycler"
-                            android:layout_width="match_parent"
-                            android:layout_height="25dp"
-                            android:layout_gravity="center"
-                            android:contentDescription="@string/todo"
-                            android:rotation="0"
-                            app:srcCompat="@drawable/ic_microcontroller_icon_mini" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llTextInfo"
+                    <ImageView
+                        android:id="@+id/imageViewRecycler"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:gravity="center|start"
-                        android:orientation="vertical">
+                        android:layout_marginStart="16dp"
+                        android:contentDescription="@string/todo"
+                        android:scaleType="centerInside"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_microcontroller_icon_mini" />
 
-                        <TextView
-                            android:id="@+id/deviceNameRecycler"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{device.device}"
-                            android:textSize="20sp" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                    <TextView
+                        android:layout_marginStart="5dp"
+                        android:id="@+id/deviceNameRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{device.device}"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toTopOf="@id/connectionStatus"
+                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler" />
 
-                            <TextView
-                                android:id="@+id/connectionStatus"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/connection"
-                                android:textSize="12sp" />
 
-                            <TextView
-                                android:id="@+id/ipAddressRecycler"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="2dp"
-                                android:text="@{device.ip}"
-                                android:textSize="12sp" />
-                        </LinearLayout>
+                    <TextView
+                        android:layout_marginStart="5dp"
+                        android:id="@+id/connectionStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/connection"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="20dp"
-                            android:orientation="horizontal">
+                    <TextView
+                        android:layout_marginStart="5dp"
+                        android:id="@+id/ipAddressRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{`Connectivity: ` + device.ip}"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler"
+                        app:layout_constraintTop_toBottomOf="@id/deviceNameRecycler"
+                        app:layout_constraintBottom_toTopOf="@id/portName"/>
 
-                            <TextView
-                                android:id="@+id/portName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@{device.port}"
-                                android:textSize="12sp" />
-                            <!--
 
-                                                   <TextView
-                                                       android:id="@+id/portNumInputSum"
-                                                       android:layout_width="wrap_content"
-                                                       android:layout_height="wrap_content"
-                                                       android:layout_marginStart="2dp"
-                                                       android:text="@string/port"
-                                                       android:textSize="12sp" />
-                           -->
-                        </LinearLayout>
-                    </LinearLayout>
+                    <TextView
+                        android:layout_marginStart="5dp"
+                        android:id="@+id/portName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{`Port: ` + device.port}"
+                        android:textSize="12sp"
+                        app:layout_constraintTop_toBottomOf="@id/ipAddressRecycler"
+                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler"/>
+                    <!--
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center|end">
+                                           <TextView
+                                               android:id="@+id/portNumInputSum"
+                                               android:layout_width="wrap_content"
+                                               android:layout_height="wrap_content"
+                                               android:layout_marginStart="2dp"
+                                               android:text="@string/port"
+                                               android:textSize="12sp" />
+                   -->
 
-                        <com.nightonke.jellytogglebutton.JellyToggleButton
-                            android:id="@+id/connectionSwitch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:jtbBackgroundMeasureRatioValue="2"
-                            app:jtbBackgroundRadius="7dp"
-                            app:jtbDuration="700"
-                            app:jtbEaseType="ease_in_out_bounce"
-                            app:jtbJelly="active_tremble_tail_slim_jim"
-                            app:jtbLeftBackgroundColor="@android:color/darker_gray"
-                            app:jtbLeftThumbColor="#ECECEC"
-                            app:jtbMoveToSameStateCallListener="true"
-                            app:jtbRightBackgroundColor="#D8DCF9"
-                            app:jtbRightThumbColor="@color/colorAccent"
-                            app:jtbThumbRadius="10dp"
-                            app:jtbThumbShadow="true"/>
-                    </RelativeLayout>
-                </LinearLayout>
+                    <com.nightonke.jellytogglebutton.JellyToggleButton
+                        android:id="@+id/connectionSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{safeUnbox(device.isOn())}"
+                        app:jtbBackgroundMeasureRatioValue="2"
+                        app:jtbBackgroundRadius="7dp"
+                        app:jtbDuration="700"
+                        app:jtbEaseType="ease_in_out_bounce"
+                        app:jtbJelly="active_tremble_tail_slim_jim"
+                        app:jtbLeftBackgroundColor="@android:color/darker_gray"
+                        app:jtbLeftThumbColor="#ECECEC"
+                        app:jtbRightBackgroundColor="#D8DCF9"
+                        app:jtbRightThumbColor="@color/colorAccent"
+                        app:jtbThumbRadius="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.917"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.493" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
