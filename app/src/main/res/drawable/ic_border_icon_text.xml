@@ -6,5 +6,5 @@
     android:alpha=".15">
   <path
       android:pathData="M5,0L5,0A5,5 0,0 1,10 5L10,195A5,5 0,0 1,5 200L5,200A5,5 0,0 1,0 195L0,5A5,5 0,0 1,5 0z"
-      android:fillColor="#FFFFFF"/>
+      android:fillColor="?textColorInverse"/>
 </vector>

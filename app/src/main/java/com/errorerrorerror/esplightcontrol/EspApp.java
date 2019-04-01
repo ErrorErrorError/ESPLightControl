@@ -23,6 +23,7 @@ public class EspApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         createNotificationChannel();
         dagger();
     }

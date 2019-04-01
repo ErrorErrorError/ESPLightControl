@@ -74,7 +74,7 @@ public class IOSStyleSlider extends View {
 
         setSaveEnabled(true);
 
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint = new Paint();
         mSliderBackgroundF = new RectF();
         mSliderPath = new Path();
 
@@ -108,6 +108,7 @@ public class IOSStyleSlider extends View {
 
         //Backgound Slider
         mPaint.reset();
+        mPaint.setAntiAlias(true);
         mPaint.setColor(mSliderBackgroundColor);
         mSliderBackgroundF.set(0, 0, widthSliderWPadding, heightSliderWPadding);
         canvas.drawRoundRect(mSliderBackgroundF, mSliderRadius, mSliderRadius, mPaint);

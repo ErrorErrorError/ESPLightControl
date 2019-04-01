@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="contentElevation" format="dimension|reference"/>
+    <attr name="baseBackgroundColor" format="color|reference"/>
+    <attr name="contentColor" format="color|reference"/>
+    <attr name="textColorInverse" format="color|reference"/>
+    <attr name="colorHighlight" format="color|reference"/>
+</resources>

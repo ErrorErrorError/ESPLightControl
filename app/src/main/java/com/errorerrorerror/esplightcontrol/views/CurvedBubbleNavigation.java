@@ -13,6 +13,8 @@ import android.view.View;
 import com.errorerrorerror.esplightcontrol.R;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
 
+import java.util.Objects;
+
 public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
     private static final Point mFirstCurveStartPoint = new Point();
     private static final Point mFirstCurveEndPoint = new Point();
@@ -46,16 +48,14 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
         mPath = new Path();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mPaint.setColor(Color.rgb(250, 250, 250));
+        mPaint.setColor(Objects.requireNonNull(getBackgroundTintList()).getDefaultColor());
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             setLayerType(View.LAYER_TYPE_SOFTWARE, mPaint);
         }
 
-
         mPaint.setShadowLayer(getElevation(), 0, 0, Color.rgb(221, 221, 221)); // This set's color shadow to grey
         setBackgroundColor(Color.TRANSPARENT);
-
     }
 
     @Override

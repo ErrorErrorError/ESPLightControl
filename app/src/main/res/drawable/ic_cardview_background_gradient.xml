@@ -4,12 +4,12 @@
     xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:pathData="M10,0L118,0A10,10 0,0 1,128 10L128,25.69A10,10 0,0 1,118 35.69L10,35.69A10,10 0,0 1,0 25.69L0,10A10,10 0,0 1,10 0z">
         <aapt:attr name="android:fillColor">
-            <gradient android:endX="128" android:endY="17.84"
-                android:startX="0" android:startY="17.84" android:type="linear"
+            <gradient android:endX="101.99" android:endY="55.84"
+                android:startX="26.01" android:startY="-20.15" android:type="linear"
                 tools:targetApi="n">
-                <item android:color="@color/gradientColorStartWith75Alpha" android:offset="0"
+                <item android:color="@color/gradientColorStart" android:offset="0"
                     tools:ignore="VectorRaster" />
-                <item android:color="@color/gradientColorEndWith75Alpha" android:offset="1"
+                <item android:color="@color/gradientColorEnd" android:offset="1"
                     tools:ignore="VectorRaster" />
             </gradient>
         </aapt:attr>

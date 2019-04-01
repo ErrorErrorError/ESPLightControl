@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#7673E7</color>
+    <color name="colorPrimary">#6d6ae6 </color>
     <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#7673E7</color>
-    <color name="gradientColorStartWithout75Alpha">#43CBFF</color>
-    <color name="gradientColorEndWithout75Alpha">#9708CC</color>
-    <color name="gradientColorStartWith75Alpha">#51CAFE</color>
-    <color name="gradientColorEndWith75Alpha">#9C1BD0</color>
+    <color name="colorAccent">#6d6ae6</color>
+    <color name="gradientColorStart">#43CBFF</color>
+    <color name="gradientColorEnd">#9708CC</color>
     <color name="redDelete">#9a3543</color>
     <color name="grayBoi">#7D7D7D</color>
     <color name="lightBulbColorLight">#ff9800</color>
+
+    <color name="windowColorLight">#F2F2F2</color>
+    <color name="contentColorLight">#FCFCFC</color>
+    <color name="contentHightlightLight">#e0e0e0</color>
+
+    <color name="windowColorDark">#080808</color>
+    <color name="contentColorDark">#1C1C1C</color>
+    <color name="contentHightlightDark">#333333</color>
+
 </resources>

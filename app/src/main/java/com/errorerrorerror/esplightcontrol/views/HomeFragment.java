@@ -1,6 +1,5 @@
 package com.errorerrorerror.esplightcontrol.views;
 
-import android.animation.Animator;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +49,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
     private RecyclerDeviceAdapter adapter;
     private HomeFragmentBinding homeBinding;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +84,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .compose(bindToLifecycle())
                 .subscribe(unit -> addDeviceDialog(), error -> Log.e(Constants.HOME_TAG, "addDialog: " + error.toString())));
+
 
     }
 
@@ -135,7 +136,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
     //if lower than 24 api, uses png
     private void setAddDeviceBackground() {
         if (Build.VERSION.SDK_INT < 24) {
-            homeBinding.linearLayoutAdddevice.setBackgroundResource(R.drawable.cardview_background_gradient_for_lowerend_devices);
+            homeBinding.linearLayoutAdddevice.setBackgroundResource(R.drawable.cardview_background_gradient);
         } else {
             homeBinding.linearLayoutAdddevice.setBackgroundResource(R.drawable.ic_cardview_background_gradient);
         }
@@ -161,22 +162,18 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
         textL.setMargins(0, textHeight, 0, 0);
         homeBinding.noDeviceConnectedText.setLayoutParams(textL);
 
-
         //Gains performance
         homeBinding.recyclerviewAddDevice.setHasFixedSize(true);
 
+        //Removes onChange Animation
         Objects.requireNonNull(homeBinding.recyclerviewAddDevice.getItemAnimator())
                 .setChangeDuration(0);
-        homeBinding.recyclerviewAddDevice.getItemAnimator().setAddDuration(0);//Removes onChange Animation
-
-
     }
 
     private void devicesListeners() {
 
         adapter = new RecyclerDeviceAdapter(HomeFragment.this, HomeFragment.this);
         homeBinding.recyclerviewAddDevice.setAdapter(adapter);
-
 
         collectionViewModel.addDisposable(collectionViewModel.getAllDevices()
                 .compose(bindToLifecycle())
@@ -186,33 +183,13 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
                         devices -> {
                             adapter.submitList(devices);
                             Log.d(Constants.HOME_TAG, "devicesListeners: " + Thread.currentThread().getName());
+
                             if (devices.isEmpty()) {
-                                homeBinding.noDeviceConnectedText.animate().alpha(1.0f).setStartDelay(200)
-                                        .setListener(new Animator.AnimatorListener() {
-                                            @Override
-                                            public void onAnimationStart(Animator animation) {
-                                                homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
-                                            }
-
-                                            @Override
-                                            public void onAnimationEnd(Animator animation) {
-
-                                            }
-
-                                            @Override
-                                            public void onAnimationCancel(Animator animation) {
-
-                                            }
-
-                                            @Override
-                                            public void onAnimationRepeat(Animator animation) {
-
-                                            }
-                                        })
-                                        .setDuration(800);
+                                homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
                             } else {
                                 homeBinding.noDeviceConnectedText.setVisibility(View.GONE);
                             }
+
                         },
                         onError -> Log.e(Constants.HOME_TAG, "devicesListeners: " + onError)
                 )
@@ -263,8 +240,6 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
     public void onDestroyView() {
         super.onDestroyView();
         homeBinding.unbind();
-        //compositeDisposable.dispose();
-        //Log.d(TAG, "composite disposed: " + compositeDisposable.isDisposed());
     }
 }
 
