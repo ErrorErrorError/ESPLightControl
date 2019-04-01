@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.jakewharton.rxbinding3:rxbinding-viewpager:3.0.0-alpha2@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/rxbinding-viewpager-3.0.0-alpha2.aar/7da0fd46e635552811a3f5154eab0729/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/rxbinding-viewpager-3.0.0-alpha2.aar/7da0fd46e635552811a3f5154eab0729/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton.rxbinding3/rxbinding-viewpager/3.0.0-alpha2/d0fe9ce381469163363f7ad8e390c669e8d6851b/rxbinding-viewpager-3.0.0-alpha2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
