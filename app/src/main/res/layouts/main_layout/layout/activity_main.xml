@@ -37,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottomNavHeight"
             android:elevation="?contentElevation"
-            android:paddingTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <com.gauravk.bubblenavigation.BubbleToggleView

@@ -109,7 +109,8 @@ public class DialogFragment extends RxDialogFragment {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(devicesList -> {
-                            validationUtil = new ValidationUtil(devicesList, getContext());
+                            validationUtil = new ValidationUtil(devicesList,
+                                    Objects.requireNonNull(getContext()).getResources().getColor(R.color.colorAccent));
 
                             if (mode == -2) {
                                 addDevice();
@@ -149,7 +150,8 @@ public class DialogFragment extends RxDialogFragment {
                                 devicesBinding.IPAddressInput.getText().toString(),
                                 devicesBinding.portInput.getText().toString(),
                                 "",
-                                true))
+                                true,
+                                false))
                                 .compose(bindToLifecycle())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -164,7 +166,7 @@ public class DialogFragment extends RxDialogFragment {
 
     private void editDevice(long mode) {
 
-        final boolean[] testBoolean = new boolean[1];
+        final boolean[] testBoolean = new boolean[2];
         collectionViewModel.addDisposable(collectionViewModel.getDeviceWithId(mode)
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
@@ -174,6 +176,7 @@ public class DialogFragment extends RxDialogFragment {
                     devicesBinding.IPAddressInput.setText(devices.getIp());
                     devicesBinding.portInput.setText(devices.getPort());
                     testBoolean[0] = devices.isOn();
+                    testBoolean[1] = devices.isOpen();
                 })
         );
 
@@ -197,7 +200,8 @@ public class DialogFragment extends RxDialogFragment {
                         devicesBinding.IPAddressInput.getText().toString(),
                         devicesBinding.portInput.getText().toString(),
                         "",
-                        testBoolean[0]);
+                        testBoolean[0],
+                        testBoolean[1]);
 
                 device.setId(mode);
 

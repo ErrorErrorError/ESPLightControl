@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.errorerrorerror.esplightcontrol.EspApp;
 import com.errorerrorerror.esplightcontrol.R;
@@ -15,7 +14,6 @@ import com.errorerrorerror.esplightcontrol.databinding.HomeFragmentBinding;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
-import com.errorerrorerror.esplightcontrol.utils.DisplayUtils;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
@@ -43,12 +41,11 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
     //ViewModel Injector
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-
     private DevicesCollectionViewModel collectionViewModel;
+
     //Utils
     private RecyclerDeviceAdapter adapter;
     private HomeFragmentBinding homeBinding;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,7 +110,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
     public void onEditDeviceClicked(long id) {
         FragmentTransaction ft = checkDialog();
 
-        androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance("Edit Device", "Edit the device",
+        androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance("Edit Device", "Change Device Settings",
                 "Cancel",
                 "Edit",
                 id);
@@ -148,19 +145,19 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
                 RecyclerView.VERTICAL, true);
         linearLayoutManager.setStackFromEnd(true);
         homeBinding.recyclerviewAddDevice.setLayoutManager(linearLayoutManager);
-
+        homeBinding.noDeviceConnectedText.setVisibility(View.GONE);
         //Custom Height so the remove item animation works on every device screen
-        ViewGroup.LayoutParams params = homeBinding.recyclerviewAddDevice.getLayoutParams();
-        DisplayUtils displayUtils = new DisplayUtils(params,
-                getContext());
-        homeBinding.recyclerviewAddDevice.setLayoutParams(displayUtils.getRecyclerViewHeight());
-        homeBinding.recyclerviewAddDevice.setLayoutManager(linearLayoutManager);
+      // ViewGroup.LayoutParams params = homeBinding.recyclerviewAddDevice.getLayoutParams();
+       // DisplayUtils displayUtils = new DisplayUtils(params,
+       //         getContext());
+        //homeBinding.recyclerviewAddDevice.setLayoutParams(displayUtils.getRecyclerViewHeight());
+        //homeBinding.recyclerviewAddDevice.setLayoutManager(linearLayoutManager);
 
         //Set No Device Connected text based on height
-        int textHeight = (int) (params.height / 2.1);
-        LinearLayout.LayoutParams textL = (LinearLayout.LayoutParams) homeBinding.noDeviceConnectedText.getLayoutParams();
-        textL.setMargins(0, textHeight, 0, 0);
-        homeBinding.noDeviceConnectedText.setLayoutParams(textL);
+        //int textHeight = (int) (params.height / 2.1);
+        //LinearLayout.LayoutParams textL = (LinearLayout.LayoutParams) homeBinding.noDeviceConnectedText.getLayoutParams();
+        //textL.setMargins(0, textHeight, 0, 0);
+        //homeBinding.noDeviceConnectedText.setLayoutParams(textL);
 
         //Gains performance
         homeBinding.recyclerviewAddDevice.setHasFixedSize(true);
@@ -185,9 +182,9 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
                             Log.d(Constants.HOME_TAG, "devicesListeners: " + Thread.currentThread().getName());
 
                             if (devices.isEmpty()) {
-                                homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
+                               // homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
                             } else {
-                                homeBinding.noDeviceConnectedText.setVisibility(View.GONE);
+                                //homeBinding.noDeviceConnectedText.setVisibility(View.GONE);
                             }
 
                         },
@@ -228,7 +225,8 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
             return;
         }
 
-        collectionViewModel.addDisposable(collectionViewModel.setSwitch(bool, adapter.getCurrentList().get(position).getId())
+        collectionViewModel.addDisposable(
+                collectionViewModel.setSwitch(bool, adapter.getCurrentList().get(position).getId())
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

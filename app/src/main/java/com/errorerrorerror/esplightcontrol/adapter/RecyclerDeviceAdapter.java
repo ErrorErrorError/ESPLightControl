@@ -61,12 +61,12 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
         Devices device = getItem(position);
         holder.bind(device);
 
-
         holder.binding.connectionSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> onClickedSwitch.OnSwitched(isChecked, holder.getAdapterPosition(), null));
         
         /*holder.binding.connectionSwitch.setOnStateChangeListener((progress, state, jtb) ->
                 onClickedSwitch.OnSwitched(jtb.isChecked(), holder.getAdapterPosition(), jtb));
         */
+
         holder.binding.swipeLayout.setOnIconClickListener(new OnIconClickListener() {
             @Override
             public void onLeftIconClick() {

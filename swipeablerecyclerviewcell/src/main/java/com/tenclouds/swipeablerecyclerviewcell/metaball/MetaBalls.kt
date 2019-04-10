@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -39,7 +38,6 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
     private lateinit var rightView: ImageView
     private lateinit var leftView: ImageView
 
-    //private var blobConnectorData: ConnectorHolder? = null
     private var transitionDistance = 0.0f
     private var leftCircle = Circle()
     private var rightCircle = Circle()
@@ -48,7 +46,6 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
     var deleteView = NONE_VIEW_TO_DELETE
 
-    //private val connectorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
 
     var rightViewColor: Int by Delegates.observable(
             ContextCompat.getColor(context, R.color.redDelete))
@@ -156,11 +153,12 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
         startingRevealedParentX = 0f
     }
 
-    private fun clickAnimator(circle: Circle, viewColor: Int) =
+    private fun clickAnimator(circle: Circle, viewColor: Int, icon: View) =
             valueAnimatorOfFloat(1f, maxViewScale, 1f,
                     updateListener = {
                         circle.radius = calculatedSelectorRadius * it
                         circle.paint.color = viewColor.blend(Color.WHITE, it - 1f)
+                        calculateViewScale(it, icon)
                         invalidate()
                     }).setDuration(300)
 
@@ -179,10 +177,10 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
         rightView.setOnClickListener {
             var delay = 0L
             if (deleteView == RIGHT_VIEW_TO_DELETE) {
-                deleteAnimation(rightCircle, rightViewColor)
+                deleteAnimation(rightCircle, rightViewColor, rightView)
                 delay = 300L
             } else {
-                clickAnimation(rightCircle, rightViewColor)
+                clickAnimation(rightCircle, rightViewColor, rightView)
             }
             postDelayed({
                 (parent as? SwipeRevealLayout)?.onIconClickListener?.onRightIconClick()
@@ -192,10 +190,10 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
         leftView.setOnClickListener {
             var delay = 0L
             if (deleteView == LEFT_VIEW_TO_DELETE) {
-                deleteAnimation(leftCircle, leftViewColor)
+                deleteAnimation(leftCircle, leftViewColor, leftView)
                 delay = 300L
             } else {
-                clickAnimation(leftCircle, leftViewColor)
+                clickAnimation(leftCircle, leftViewColor, leftView)
             }
             postDelayed({
                 (parent as? SwipeRevealLayout)?.onIconClickListener?.onLeftIconClick()
@@ -208,19 +206,19 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
         calculateViewPosition(rightView, originPoint)
     }
 
-    private fun deleteAnimation(circle: Circle, color: Int) {
+    private fun deleteAnimation(circle: Circle, color: Int, icon: View) {
         AnimatorSet()
                 .apply {
                     playSequentially(
-                            clickAnimator(circle, color),
+                            clickAnimator(circle, color, icon),
                             deleteAnimator()
                     )
                 }
                 .start()
     }
 
-    private fun clickAnimation(circle: Circle, color: Int) {
-        clickAnimator(circle, color)
+    private fun clickAnimation(circle: Circle, color: Int, icon: View) {
+        clickAnimator(circle, color, icon)
                 .start()
     }
 
@@ -239,15 +237,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
                 rightCircle.radius,
                 rightCircle.paint
         )
-/*
-        blobConnectorData?.let {
-            canvas.drawConnector(
-                    movementProgress,
-                    it,
-                    connectorPaint
-            )
-        }
-*/
+
         canvas.drawCircle(
                 destinationPoint.x,
                 destinationPoint.y,
@@ -272,7 +262,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
 
         //Log.d(TAG, "progress: $progress")
-        calculateViewAlpha(progress, leftView)
+        //calculateViewAlpha(progress, leftView)
         calculateViewAlpha(progress, rightView)
 
         //calculateViewScale(progress, leftView)
@@ -321,67 +311,4 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
             scaleX = progress
         }
     }
-/*
-    private fun connectorPaintAlpha(progress: Float): Int {
-        val startWhenProgress = 0.85f
-        val diffRangeLimitOne = 1 - startWhenProgress
-        return if (progress in 0.0f..startWhenProgress) 255
-        else 255 - ((progress - startWhenProgress) * 1.div(diffRangeLimitOne) * 255).toInt()
-    }
-
-    private fun calculateBlobConnector(originRadius: Float, origin: Point, destination: Point)
-            : ConnectorHolder {
-        val v = 0.4f
-        val handleLenRate = 2.4f
-        val distanceBetweenCircles = getDistance(origin, destination)
-
-        // Get the radius sum
-        val radiusSum = originRadius * 2
-
-        val arc = if (distanceBetweenCircles < radiusSum) {
-            acos((originRadius * originRadius + distanceBetweenCircles * distanceBetweenCircles
-                    - originRadius * originRadius)
-                    / (2f * originRadius * distanceBetweenCircles))
-        } else {
-            0.0f
-        }
-
-        // Get the difference of the two centres
-        val diffPoint = Point(
-                destination.x - origin.x,
-                destination.y - origin.y
-        )
-
-        val angle1 = atan2(diffPoint.y, diffPoint.x)
-        val angle2 = acos((originRadius - originRadius) / distanceBetweenCircles)
-
-        val angle1a = angle1 + arc + (angle2 - arc) * v
-        val angle1b = angle1 - arc - (angle2 - arc) * v
-        val angle2a = (angle1 + Math.PI - arc - (Math.PI - arc - angle2) * v).toFloat()
-        val angle2b = (angle1 - Math.PI + arc + (Math.PI - arc - angle2) * v).toFloat()
-
-        val p1aTemp = getVectorFrom(angle1a, originRadius)
-        val p1bTemp = getVectorFrom(angle1b, originRadius)
-        val p2aTemp = getVectorFrom(angle2a, originRadius)
-        val p2bTemp = getVectorFrom(angle2b, originRadius)
-
-        val p1a = Point(p1aTemp.x + origin.x, p1aTemp.y + origin.y)
-        val p1b = Point(p1bTemp.x + origin.x, p1bTemp.y + origin.y)
-        val p2a = Point(p2aTemp.x + destination.x, p2aTemp.y + destination.y)
-        val p2b = Point(p2bTemp.x + destination.x, p2bTemp.y + destination.y)
-        // Define handle length by the distance between both ends of the curve to draw
-        val diffp1p2 = Point(p1a.x - p2a.x, p1a.y - p2a.y)
-
-        val minDist = min(v * handleLenRate, getVectorLength(diffp1p2.x, diffp1p2.y) / radiusSum)
-        val radius = originRadius * minDist
-        val pi2 = (PI / 2).toFloat()
-
-        val segment1 = getVectorFrom(angle1a - pi2, radius)
-        val segment2 = getVectorFrom(angle2a + pi2, radius)
-        val segment3 = getVectorFrom(angle2b - pi2, radius)
-        val segment4 = getVectorFrom(angle1b + pi2, radius)
-
-        return ConnectorHolder(p1a, p2a, p1b, p2b, segment1, segment2, segment3, segment4)
-    }
-*/
 }

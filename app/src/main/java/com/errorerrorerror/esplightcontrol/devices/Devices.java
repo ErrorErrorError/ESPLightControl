@@ -29,7 +29,10 @@ public class Devices {
     @ColumnInfo(name = "device_on")
     private Boolean on;
 
+    //This is just for Swiping items
     @Ignore
+    private boolean open;
+
     public Devices() {
     }
 
@@ -43,12 +46,13 @@ public class Devices {
         this.on = on;
     }
 
-    public Devices(String device, String ip, String port, String connectivity, Boolean on) {
+    public Devices(String device, String ip, String port, String connectivity, Boolean on, boolean opened) {
         this.device = device;
         this.ip = ip;
         this.port = port;
         this.connectivity = connectivity;
         this.on = on;
+        this.open = opened;
     }
 
     //Setters and
@@ -100,6 +104,14 @@ public class Devices {
 
     public void setConnectivity(String connectivity) {
         this.connectivity = connectivity;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 
     @NonNull

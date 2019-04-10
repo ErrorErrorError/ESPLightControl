@@ -3,9 +3,6 @@ package com.tenclouds.swipeablerecyclerviewcell.swipereveal
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
-import androidx.core.content.ContextCompat
-import androidx.core.view.GestureDetectorCompat
-import androidx.core.view.ViewCompat
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -14,6 +11,9 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.ViewCompat
 import com.tenclouds.swipeablerecyclerviewcell.R
 import com.tenclouds.swipeablerecyclerviewcell.metaball.MetaBalls
 import com.tenclouds.swipeablerecyclerviewcell.metaball.NONE_VIEW_TO_DELETE
@@ -474,6 +474,8 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
 
         ViewCompat.postInvalidateOnAnimation(this)
     }
+
+
 
     /**
      * Close the panel to hide the secondary view

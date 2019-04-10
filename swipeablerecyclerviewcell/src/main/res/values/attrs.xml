@@ -7,7 +7,6 @@
         </attr>
 
         <attr name="opened" format="boolean" />
-
         <attr name="leftIconBgColor" format="color" />
         <attr name="rightIconBgColor" format="color" />
         <attr name="connectorColor" format="color" />

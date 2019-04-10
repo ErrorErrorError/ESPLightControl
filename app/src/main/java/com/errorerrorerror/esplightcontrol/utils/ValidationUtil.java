@@ -1,8 +1,5 @@
 package com.errorerrorerror.esplightcontrol.utils;
 
-import android.content.Context;
-import android.content.res.ColorStateList;
-
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.google.android.material.textfield.TextInputLayout;
@@ -14,8 +11,7 @@ public class ValidationUtil {
 
     //private static final String TAG = "ValidationUtil";
     private final List<Devices> devicesList;
-    private final Context context;
-
+    private int colorAccent;
     //Port Regex
     private static final String portRegex = "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
 
@@ -27,9 +23,9 @@ public class ValidationUtil {
     //IpV6 regex
     private final String ipV6Regex = "(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))";
 
-    public ValidationUtil(List<Devices> devicesList, Context context) {
+    public ValidationUtil(List<Devices> devicesList, int colorAccent) {
         this.devicesList = devicesList;
-        this.context = context;
+        this.colorAccent = colorAccent;
     }
 
     //Testing User Input Device name Add
@@ -263,14 +259,12 @@ public class ValidationUtil {
         if (passed) {
             test.setErrorEnabled(false);
             test.setEndIconVisible(false);
-            test.setBoxStrokeColor(context.getResources().getColor(R.color.colorAccent));
+            test.setBoxStrokeColor(colorAccent);
             test.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
-            test.setDefaultHintTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent)));
 
         } else {
             test.setErrorEnabled(true);
             test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
-            test.setEndIconTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.redDelete)));
             test.setEndIconVisible(true);
             test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
         }

@@ -7,12 +7,13 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/windowColorLight</item>
-        <item name="materialCardViewStyle">@color/windowColorLight</item>
         <item name="baseBackgroundColor">@color/windowColorLight</item>
         <item name="contentColor">@color/contentColorLight</item>
         <item name="contentElevation">0dp</item>
-        <item name="textColorInverse">?android:attr/textColorPrimaryInverse</item>
-        <item name="colorHighlight">@color/contentHightlightLight</item>
+        <item name="textColorInverse">#FFF</item>
+        <item name="iconColor">@color/colorPrimary</item>
+        <item name="colorHighlight">@color/windowColorLight</item>
+        <item name="innerBox">#F7F7F7</item>
     </style>
 
     <style name="AppTheme.DarkMode" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -25,9 +26,10 @@
         <item name="baseBackgroundColor">@color/windowColorDark</item>
         <item name="contentColor">@color/contentColorDark</item>
         <item name="contentElevation">0dp</item>
-        <item name="textColorInverse">?android:attr/textColorSecondaryInverse</item>
+        <item name="textColorInverse">#FFF</item>
+        <item name="iconColor">@color/colorPrimary</item>
         <item name="colorHighlight">@color/contentColorDark</item>
-
+        <item name="innerBox">@color/contentColorDark</item>
     </style>
 
     <style name="Custom.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -37,9 +39,10 @@
         <item name="boxCornerRadiusTopStart">10dp</item>
         <item name="boxStrokeColor">@color/colorAccent</item>
         <item name="boxStrokeWidth">.5dp</item>
-        <item name="boxBackgroundColor">?contentColor</item>
+        <item name="boxBackgroundColor">?innerBox</item>
         <item name="boxBackgroundMode">outline</item>
         <item name="errorTextColor">@color/redDelete</item>
+        <item name="endIconTint">@color/redDelete</item>
     </style>
 
     <style name="Custom.MaterialCardView" parent="Base.CardView">
@@ -52,10 +55,9 @@
     <style name="RecyclerviewItems.CardView" parent="Base.CardView">
         <item name="cardCornerRadius">@dimen/corner_radius</item>
         <item name="cardElevation">?contentElevation</item>
-        <item name="cardUseCompatPadding">true</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_height">130dp</item>
-        <item name="android:layout_width">411dp</item>
+        <item name="android:layout_height">95dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:backgroundTint">?contentColor</item>
     </style>
 

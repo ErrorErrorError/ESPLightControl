@@ -5,13 +5,13 @@
     <color name="colorAccent">#6d6ae6</color>
     <color name="gradientColorStart">#43CBFF</color>
     <color name="gradientColorEnd">#9708CC</color>
-    <color name="redDelete">#9a3543</color>
+    <color name="redDelete">#FF1744</color>
     <color name="grayBoi">#7D7D7D</color>
     <color name="lightBulbColorLight">#ff9800</color>
 
-    <color name="windowColorLight">#F2F2F2</color>
-    <color name="contentColorLight">#FCFCFC</color>
-    <color name="contentHightlightLight">#e0e0e0</color>
+    <color name="windowColorLight">#FCFCFC</color>
+    <color name="contentColorLight">#EFEFEF</color>
+    <color name="contentHightlightLight">#f0f0f0</color>
 
     <color name="windowColorDark">#080808</color>
     <color name="contentColorDark">#1C1C1C</color>

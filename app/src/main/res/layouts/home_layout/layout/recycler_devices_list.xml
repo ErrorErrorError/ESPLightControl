@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -13,41 +13,40 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-13dp">
+        android:layout_marginBottom="15dp">
 
         <com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout
             android:id="@+id/swipe_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:dragFromEdge="right"
             app:iconsDistance="12dp"
             app:iconsPadding="12dp"
             app:iconsSize="40dp"
+            app:opened="@{device.open}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:leftIcon="@drawable/ic_microcontroller_icon_smaller"
-            app:leftIconBgColor="?colorHighlight"
+            app:leftIcon="@drawable/ic_edit_icon"
+            app:leftIconBgColor="?contentColor"
             app:revealedViewBackground="@android:color/transparent"
             app:revealedViewMarginEnd="20dp"
-            app:revealedViewMarginStart="0dp"
-            app:rightIcon="@drawable/ic_delete"
+            app:revealedViewMarginStart="20dp"
+            app:rightIcon="@drawable/ic_trash_icon"
             app:rightIconBgColor="@color/redDelete">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewCustomRow"
                 style="@style/RecyclerviewItems.CardView"
-                android:clickable="false"
-                android:clipChildren="false"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardPreventCornerOverlap="true">
+                android:clickable="false">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="395dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:layout_editor_absoluteX="8dp">
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <ImageView
                         android:id="@+id/imageViewRecycler"
@@ -114,10 +113,10 @@
                         android:checked="@{safeUnbox(device.isOn())}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.896"
+                        app:layout_constraintHorizontal_bias="0.9"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.506" />
+                        app:layout_constraintVertical_bias="0.555" />
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline"
