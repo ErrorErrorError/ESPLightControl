@@ -52,7 +52,7 @@
                 app:bt_icon="@drawable/home_icon"
                 app:bt_iconHeight="20dp"
                 app:bt_iconWidth="20dp"
-                app:bt_title="@string/home_tab"
+                app:bt_title="@string/devices_tab"
                 app:bt_titleSize="15sp" />
 
             <com.gauravk.bubblenavigation.BubbleToggleView

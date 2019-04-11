@@ -1,5 +1,7 @@
 package com.errorerrorerror.esplightcontrol.utils;
 
+import android.content.res.ColorStateList;
+
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.google.android.material.textfield.TextInputLayout;
@@ -12,6 +14,13 @@ public class ValidationUtil {
     //private static final String TAG = "ValidationUtil";
     private final List<Devices> devicesList;
     private int colorAccent;
+
+    private static final String UNUSED_IP = "Enter An Unused IP Address";
+    private static final String UNUSED_NAME = "Enter An Unused Device Name";
+    private static final String INVALID_NAME = "Enter A Valid Device Name";
+    private static final String INVALID_IP = "Enter A Valid IP Address";
+    private static final String INVALID_PORT = "Enter A Valid Port";
+
     //Port Regex
     private static final String portRegex = "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
 
@@ -56,6 +65,9 @@ public class ValidationUtil {
             isValid = false;
         }
 
+        return setColors(textInputLayoutName, isValid, isRepeated, 1);
+        //setColors(textInputLayoutName, );
+/*
         if (isValid && !isRepeated) {
             setColors(textInputLayoutName, true);
 
@@ -73,6 +85,7 @@ public class ValidationUtil {
 
             return false;
         }
+        */
     }
 
     //Testing User Input Device ip Add
@@ -100,41 +113,13 @@ public class ValidationUtil {
             }
         }
 
-        if (ipValid && !ipRepeated) {
-            setColors(textInputLayoutIP, true);
-
-            return true;
-        } else if (ipValid) {
-            setColors(textInputLayoutIP, false);
-            textInputLayoutIP.setError("Enter An Unused IP Address");
-
-            return false;
-        } else {
-            setColors(textInputLayoutIP, false);
-            textInputLayoutIP.setError("Enter A Valid IP Address");
-
-            return false;
-        }
-
+        return setColors(textInputLayoutIP, ipValid, ipRepeated, 2);
     }
 
     //Testing User Input Device port Add
     private boolean portValidationAdd(String port, TextInputLayout textInputLayoutPort) //validates port
     {
-        boolean portValid;
-
-        portValid = port.matches(portRegex);
-
-        if (!portValid) {
-            setColors(textInputLayoutPort, false);
-            textInputLayoutPort.setError("Enter A Valid Port");
-
-            return false;
-        } else {
-            setColors(textInputLayoutPort, true);
-
-            return true;
-        }
+        return setColors(textInputLayoutPort, port.matches(portRegex), false, 3);
 
     }
 
@@ -168,21 +153,8 @@ public class ValidationUtil {
             isValid = false;
         }
 
-        if (isValid && !isRepeated) {
-            setColors(textInputLayoutName, true);
-            return true;
+        return setColors(textInputLayoutName, isValid, isRepeated, 1);
 
-        } else if (isValid & isRepeated) {
-            setColors(textInputLayoutName, false);
-            textInputLayoutName.setError("Enter An Unused Device Name");
-
-            return false;
-        } else {
-            setColors(textInputLayoutName, false);
-            textInputLayoutName.setError("Enter A Valid Device Name");
-
-            return false;
-        }
     }
 
     //Testing User Input Device ip Edit
@@ -213,21 +185,7 @@ public class ValidationUtil {
             }
         }
 
-        if (ipValid && !ipRepeated) {
-            setColors(textInputLayoutIP, true);
-
-            return true;
-        } else if (ipValid) {
-            setColors(textInputLayoutIP, false);
-            textInputLayoutIP.setError("Enter An Unused IP Address");
-
-            return false;
-        } else {
-            setColors(textInputLayoutIP, false);
-            textInputLayoutIP.setError("Enter A Valid IP Address");
-
-            return false;
-        }
+        return setColors(textInputLayoutIP, ipValid, ipRepeated, 2);
     }
 
     public boolean testAllAdd(String name, String ip, String port, TextInputLayout textInputLayoutName, TextInputLayout textInputLayoutIP, TextInputLayout textInputLayoutPort) //tests if the input is valid
@@ -254,19 +212,82 @@ public class ValidationUtil {
     }
 
 
-    private void setColors(TextInputLayout test, boolean passed) {
+    private boolean setColors(TextInputLayout test, boolean valid, boolean repeated, int mode) {
+        test.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
+        if (valid && !repeated) {
+            if (test.isErrorEnabled()) {
+                test.setErrorEnabled(false);
+            }
 
-        if (passed) {
-            test.setErrorEnabled(false);
-            test.setEndIconVisible(false);
+            if (test.isEndIconVisible()) {
+                test.setEndIconVisible(false);
+            }
+
             test.setBoxStrokeColor(colorAccent);
-            test.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
+            test.setHintTextColor(ColorStateList.valueOf(colorAccent));
 
+        } else if (valid && repeated) {
+            if (mode == 1) {
+                if (!test.isErrorEnabled()) {
+                    test.setErrorEnabled(true);
+                    test.setError(UNUSED_NAME);
+                }
+
+                if (!test.isEndIconVisible()) {
+                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
+                    test.setEndIconVisible(true);
+                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                }
+            } else if (mode == 2) {
+                if (!test.isErrorEnabled()) {
+                    test.setErrorEnabled(true);
+                    test.setError(UNUSED_IP);
+                }
+
+                if (!test.isEndIconVisible()) {
+                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
+                    test.setEndIconVisible(true);
+                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                }
+            }
         } else {
-            test.setErrorEnabled(true);
-            test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
-            test.setEndIconVisible(true);
-            test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+            if (mode == 1) {
+                if (!test.isErrorEnabled()) {
+                    test.setErrorEnabled(true);
+                    test.setError(INVALID_NAME);
+                }
+
+                if (!test.isEndIconVisible()) {
+                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
+                    test.setEndIconVisible(true);
+                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                }
+            } else if (mode == 2) {
+                if (!test.isErrorEnabled()) {
+                    test.setErrorEnabled(true);
+                    test.setError(INVALID_IP);
+                }
+
+                if (!test.isEndIconVisible()) {
+                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
+                    test.setEndIconVisible(true);
+                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                }
+            } else if (mode == 3) {
+                if (!test.isErrorEnabled()) {
+                    test.setErrorEnabled(true);
+                    test.setError(INVALID_PORT);
+                }
+
+                if (!test.isEndIconVisible()) {
+                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
+                    test.setEndIconVisible(true);
+                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                }
+            }
+
         }
+
+        return valid && !repeated;
     }
 }

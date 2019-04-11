@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.errorerrorerror.esplightcontrol.EspApp;
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.adapter.RecyclerDeviceAdapter;
-import com.errorerrorerror.esplightcontrol.databinding.HomeFragmentBinding;
+import com.errorerrorerror.esplightcontrol.databinding.DevicesFragmentBinding;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
@@ -45,7 +45,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
 
     //Utils
     private RecyclerDeviceAdapter adapter;
-    private HomeFragmentBinding homeBinding;
+    private DevicesFragmentBinding homeBinding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
                 .get(DevicesCollectionViewModel.class);
 
         //Inflates view and databinding
-        homeBinding = HomeFragmentBinding.inflate(inflater, container, false);
+        homeBinding = DevicesFragmentBinding.inflate(inflater, container, false);
 
         return homeBinding.getRoot();
     }

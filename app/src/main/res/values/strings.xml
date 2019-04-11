@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ESP Light Controller</string>
     <string name="apps_add_device">Add\nDevice</string>
-    <string name="home_tab">Home</string>
+    <string name="devices_tab">Devices</string>
     <string name="light_tab">Light</string>
     <string name="mode_tab">Modes</string>
     <string name="presets_tab">Presets</string>

@@ -33,6 +33,7 @@
             app:revealedViewBackground="@android:color/transparent"
             app:revealedViewMarginEnd="20dp"
             app:revealedViewMarginStart="20dp"
+            android:layout_marginTop="-14dp"
             app:rightIcon="@drawable/ic_trash_icon"
             app:rightIconBgColor="@color/redDelete">
 

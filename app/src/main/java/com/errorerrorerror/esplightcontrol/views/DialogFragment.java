@@ -120,13 +120,6 @@ public class DialogFragment extends RxDialogFragment {
                         }));
     }
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(Constants.DIALOG_TAG, "onDestroy: ");
-    }
-
     private void addDevice() {
         collectionViewModel.addDisposable(RxView.clicks(devicesBinding.positiveButton)
                 .compose(bindToLifecycle())
@@ -227,7 +220,6 @@ public class DialogFragment extends RxDialogFragment {
         //Sets curved corners on dialog
         getDialog().getWindow().setLayout(
                 (int) getContext().getResources().getDisplayMetrics().density * 475,
-                Objects.requireNonNull(getDialog().getWindow()).getAttributes().height
-        );
+                Objects.requireNonNull(getDialog().getWindow()).getAttributes().height);
     }
 }

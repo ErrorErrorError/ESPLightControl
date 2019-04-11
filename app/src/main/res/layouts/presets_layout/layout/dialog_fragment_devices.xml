@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -95,25 +97,45 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="-8.5dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="-8.5dp"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/negativeButton"
-                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                style="?android:buttonBarButtonStyle"
                 android:layout_width="0dp"
-                android:layout_height="65dp"
-                android:layout_marginEnd="-8.5dp"
-                android:layout_weight="1" />
+                android:elevation="?contentElevation"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:stateListAnimator="@null"
+                android:outlineAmbientShadowColor="?backgroundHighlight"
+                android:outlineSpotShadowColor="?backgroundHighlight"
+                android:textColor="@color/buttonCancelText"
+                android:textSize="15sp"
+                app:backgroundTint="?backgroundHighlight"
+                android:layout_marginBottom="15dp"
+                app:cornerRadius="20dp"
+                tools:targetApi="p" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/positiveButton"
-                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                style="?android:buttonBarButtonStyle"
                 android:layout_width="0dp"
-                android:layout_height="65dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:elevation="?contentElevation"
+                android:outlineAmbientShadowColor="@color/colorAccent"
+                android:outlineSpotShadowColor="@color/colorAccent"
+                android:stateListAnimator="@null"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                app:backgroundTint="@color/colorAccent"
+                app:cornerRadius="20dp"
+                android:layout_marginBottom="15dp"
+                tools:targetApi="p" />
         </LinearLayout>
 
     </LinearLayout>

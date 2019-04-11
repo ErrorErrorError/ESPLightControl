@@ -7,4 +7,7 @@
     <attr name="colorHighlight" format="color|reference"/>
     <attr name="iconColor" format="color|reference"/>
     <attr name="innerBox" format="color|reference"/>
+    <attr name="backgroundHighlight" format="color|reference"/>
+    <attr name="dialogBackgroundColor" format="color|reference"/>
+    <attr name="borderInputColor" format="color|reference"/>
 </resources>
