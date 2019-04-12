@@ -1,5 +1,6 @@
 package com.errorerrorerror.esplightcontrol.views;
 
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.errorerrorerror.esplightcontrol.databinding.DevicesFragmentBinding;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
+import com.errorerrorerror.esplightcontrol.utils.DisplayUtils;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
@@ -88,7 +90,8 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
     private void addDeviceDialog() {
         FragmentTransaction ft = checkDialog();
 
-        androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance("Add Device", "Add a device name, ip, and the port.",
+        androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance(
+                "Add device",
                 "Cancel",
                 "Add",
                 Constants.ADD_DEVICE);
@@ -110,7 +113,8 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
     public void onEditDeviceClicked(long id) {
         FragmentTransaction ft = checkDialog();
 
-        androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance("Edit Device", "Change Device Settings",
+        androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance(
+                "Edit device",
                 "Cancel",
                 "Edit",
                 id);
@@ -131,6 +135,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
     }
 
     //if lower than 24 api, uses png
+
     private void setAddDeviceBackground() {
         if (Build.VERSION.SDK_INT < 24) {
             homeBinding.linearLayoutAdddevice.setBackgroundResource(R.drawable.cardview_background_gradient);
@@ -146,10 +151,11 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
         linearLayoutManager.setStackFromEnd(true);
         homeBinding.recyclerviewAddDevice.setLayoutManager(linearLayoutManager);
         homeBinding.noDeviceConnectedText.setVisibility(View.GONE);
+
         //Custom Height so the remove item animation works on every device screen
-      // ViewGroup.LayoutParams params = homeBinding.recyclerviewAddDevice.getLayoutParams();
-       // DisplayUtils displayUtils = new DisplayUtils(params,
-       //         getContext());
+        // ViewGroup.LayoutParams params = homeBinding.recyclerviewAddDevice.getLayoutParams();
+        // DisplayUtils displayUtils = new DisplayUtils(params,
+        //         getContext());
         //homeBinding.recyclerviewAddDevice.setLayoutParams(displayUtils.getRecyclerViewHeight());
         //homeBinding.recyclerviewAddDevice.setLayoutManager(linearLayoutManager);
 
@@ -161,6 +167,18 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
 
         //Gains performance
         homeBinding.recyclerviewAddDevice.setHasFixedSize(true);
+
+        homeBinding.recyclerviewAddDevice.addItemDecoration(new RecyclerView.ItemDecoration() {
+            private final int spaceHeight = (int) DisplayUtils.convertDpToPixel(25, Objects.requireNonNull(getContext()));
+            private final int top = (int) DisplayUtils.convertDpToPixel(5, Objects.requireNonNull(getContext()));
+
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                outRect.top = this.top;
+                outRect.bottom = this.spaceHeight;
+
+            }
+        });
 
         //Removes onChange Animation
         Objects.requireNonNull(homeBinding.recyclerviewAddDevice.getItemAnimator())
@@ -182,7 +200,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
                             Log.d(Constants.HOME_TAG, "devicesListeners: " + Thread.currentThread().getName());
 
                             if (devices.isEmpty()) {
-                               // homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
+                                // homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
                             } else {
                                 //homeBinding.noDeviceConnectedText.setVisibility(View.GONE);
                             }
@@ -227,10 +245,10 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
 
         collectionViewModel.addDisposable(
                 collectionViewModel.setSwitch(bool, adapter.getCurrentList().get(position).getId())
-                .compose(bindToLifecycle())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+                        .compose(bindToLifecycle())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe()
         );
     }
 

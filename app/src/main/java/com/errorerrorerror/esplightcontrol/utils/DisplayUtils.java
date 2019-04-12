@@ -2,6 +2,7 @@ package com.errorerrorerror.esplightcontrol.utils;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -57,4 +58,11 @@ public class DisplayUtils {
         return params;
     }
 
+    public static float convertDpToPixel(float dp, Context context) {
+        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public static float convertPixelsToDp(float px, Context context) {
+        return px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
 }

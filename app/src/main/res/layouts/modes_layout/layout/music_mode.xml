@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/musicModeCardView"
         style="@style/Custom.MaterialCardView"
         android:layout_width="match_parent"
@@ -36,5 +36,5 @@
             android:layout_gravity="center|end"
             android:layout_marginEnd="25dp" />
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

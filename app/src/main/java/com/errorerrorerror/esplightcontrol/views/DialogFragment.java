@@ -38,14 +38,12 @@ public class DialogFragment extends RxDialogFragment {
     private ValidationUtil validationUtil;
 
     static DialogFragment newInstance(String title,
-                                      String message,
                                       String negative,
                                       String positive,
                                       long mode) {
         DialogFragment f = new DialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
-        args.putString("message", message);
         args.putString("negative", negative);
         args.putString("positive", positive);
         args.putLong("mode", mode);
@@ -92,13 +90,11 @@ public class DialogFragment extends RxDialogFragment {
 
         assert getArguments() != null;
         String title = getArguments().getString("title");
-        String message = getArguments().getString("message");
         String negative = getArguments().getString("negative");
         String positive = getArguments().getString("positive");
         long mode = getArguments().getLong("mode");
 
         devicesBinding.addTitle.setText(title);
-        devicesBinding.addMessage.setText(message);
         devicesBinding.positiveButton.setText(positive);
         devicesBinding.negativeButton.setText(negative);
 

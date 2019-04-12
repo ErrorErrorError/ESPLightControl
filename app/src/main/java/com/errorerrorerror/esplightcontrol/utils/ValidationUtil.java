@@ -1,7 +1,5 @@
 package com.errorerrorerror.esplightcontrol.utils;
 
-import android.content.res.ColorStateList;
-
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.google.android.material.textfield.TextInputLayout;
@@ -224,7 +222,6 @@ public class ValidationUtil {
             }
 
             test.setBoxStrokeColor(colorAccent);
-            test.setHintTextColor(ColorStateList.valueOf(colorAccent));
 
         } else if (valid && repeated) {
             if (mode == 1) {

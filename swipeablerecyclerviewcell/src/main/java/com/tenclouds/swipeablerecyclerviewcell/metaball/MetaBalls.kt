@@ -224,7 +224,6 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
     override fun reveal(howMuchToReveal: Float) {
         movementProgress = howMuchToReveal
-
         calculateValuesDependingOnMovementProgress(movementProgress)
 
         invalidate()
@@ -254,19 +253,8 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
         destinationPoint.x = originPoint.x + transitionDistance * progress
 
-        //connectorPaint.alpha = connectorPaintAlpha(progress)
-
-        //blobConnectorData = calculateBlobConnector(leftCircle.radius, originPoint, destinationPoint)
-
         calculateViewPosition(leftView, destinationPoint)
-
-
-        //Log.d(TAG, "progress: $progress")
-        //calculateViewAlpha(progress, leftView)
         calculateViewAlpha(progress, rightView)
-
-        //calculateViewScale(progress, leftView)
-        //calculateViewScale(progress, rightView)
     }
 
     private fun calculateViewAlpha(progress: Float, view: View)
@@ -279,9 +267,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
     private fun calculateValuesForDeleteAnimation(progress: Float, startingX: Float) {
         originPoint.x = startingX + transitionDistance * progress
-        //connectorPaint.alpha = connectorPaintAlpha(progress)
         movementProgress = progress
-        //blobConnectorData = calculateBlobConnector(leftCircle.radius, originPoint, destinationPoint)
 
         calculateViewPosition(rightView, originPoint)
     }
