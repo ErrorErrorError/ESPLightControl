@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:minWidth="370dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/dialog_shape">
 
         <TextView
             android:id="@+id/add_title"
@@ -31,13 +31,16 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/deviceNameTextLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_gravity="center|top"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:clipToPadding="false"
             android:layout_height="75dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/deviceName"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:inputType="text"
                 android:maxLength="28"
@@ -69,36 +72,33 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="35dp"
-                android:layout_weight=".8"
+                android:layout_marginEnd="15dp"
+                android:layout_weight="1"
                 android:fontFamily="@font/somatic_round"
                 android:text="@string/Port"
                 android:textColor="@color/buttonCancelText" />
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:clipChildren="false">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ipAddressTextLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="75dp"
                 android:layout_marginStart="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
+                android:layout_height="75dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/IPAddressInput"
-                    android:layout_width="160dp"
+                    android:layout_width="170dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:elevation="?contentElevation"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:elevation="?contentElevation"
                     android:inputType="text"
                     android:maxLines="1"
                     android:outlineAmbientShadowColor="@color/colorAccent"
@@ -107,31 +107,29 @@
                     tools:targetApi="p" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/portTextLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="75dp"
-                android:layout_marginEnd="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="75dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/portInput"
-                    android:layout_width="118dp"
+                    android:layout_width="140dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:elevation="?contentElevation"
-                    android:inputType="number"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:elevation="?contentElevation"
+                    android:inputType="number"
                     android:maxLength="5"
                     android:outlineAmbientShadowColor="@color/colorAccent"
                     android:outlineSpotShadowColor="@color/colorAccent"
                     android:textSize="15sp"
                     tools:targetApi="p" />
             </com.google.android.material.textfield.TextInputLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -145,13 +143,13 @@
                 style="@style/ButtonShadowColor"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="35dp"
+                android:layout_marginStart="40dp"
                 android:outlineAmbientShadowColor="?backgroundHighlight"
                 android:outlineSpotShadowColor="?backgroundHighlight"
                 android:textColor="@color/buttonCancelText"
                 app:backgroundTint="?backgroundHighlight"
                 app:strokeColor="?borderInputColor"
-                app:strokeWidth="1dp"
+                app:strokeWidth=".5dp"
                 tools:targetApi="p" />
 
             <com.google.android.material.button.MaterialButton
@@ -159,8 +157,7 @@
                 style="@style/ButtonShadowColor"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="35dp"
+                android:layout_marginEnd="40dp"
                 android:outlineAmbientShadowColor="@color/colorAccent"
                 android:outlineSpotShadowColor="@color/colorAccent"
                 android:textColor="#FFFFFF"

@@ -1,10 +1,11 @@
 package com.errorerrorerror.esplightcontrol.views;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.CycleInterpolator;
 
 import com.errorerrorerror.esplightcontrol.EspApp;
@@ -14,6 +15,7 @@ import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
 import com.errorerrorerror.esplightcontrol.utils.ValidationUtil;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.trello.rxlifecycle3.components.support.RxDialogFragment;
 
@@ -23,7 +25,6 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,6 +37,10 @@ public class DialogFragment extends RxDialogFragment {
     private DialogFragmentDevicesBinding devicesBinding;
     private DevicesCollectionViewModel collectionViewModel;
     private ValidationUtil validationUtil;
+    private String title;
+    private String negative;
+    private String positive;
+    private long mode;
 
     static DialogFragment newInstance(String title,
                                       String negative,
@@ -68,37 +73,16 @@ public class DialogFragment extends RxDialogFragment {
         ((EspApp) Objects.requireNonNull(getActivity()).getApplication())
                 .getApplicationComponent()
                 .inject(this);
-    }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        devicesBinding = DialogFragmentDevicesBinding.inflate(inflater, container, false);
-        setCancelable(false);
-
-        return devicesBinding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        setBackground();
+        assert getArguments() != null;
+        title = getArguments().getString("title");
+        negative = getArguments().getString("negative");
+        positive = getArguments().getString("positive");
+        mode = getArguments().getLong("mode");
 
         collectionViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(DevicesCollectionViewModel.class);
 
-        assert getArguments() != null;
-        String title = getArguments().getString("title");
-        String negative = getArguments().getString("negative");
-        String positive = getArguments().getString("positive");
-        long mode = getArguments().getLong("mode");
-
-        devicesBinding.addTitle.setText(title);
-        devicesBinding.positiveButton.setText(positive);
-        devicesBinding.negativeButton.setText(negative);
-
-        devicesBinding.negativeButton.setOnClickListener(v -> dismiss());
         collectionViewModel.addDisposable(
                 collectionViewModel.getAllDevices()
                         .compose(bindToLifecycle())
@@ -114,6 +98,31 @@ public class DialogFragment extends RxDialogFragment {
                                 editDevice(mode);
                             }
                         }));
+
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        devicesBinding = DialogFragmentDevicesBinding.inflate(LayoutInflater.from(getContext()), null, false);
+        devicesBinding.positiveButton.setText(positive);
+        devicesBinding.negativeButton.setText(negative);
+        devicesBinding.addTitle.setText(title);
+        return new MaterialAlertDialogBuilder(Objects.requireNonNull(getContext()), DialogFragment.STYLE_NO_TITLE)
+                .setView(devicesBinding.getRoot()).show();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setBackground();
+        Objects.requireNonNull(getDialog()).setCancelable(false);
+
+        collectionViewModel.addDisposable(
+                RxView.clicks(devicesBinding.negativeButton)
+                .subscribe(test -> dismiss())
+
+        );
     }
 
     private void addDevice() {
@@ -128,7 +137,6 @@ public class DialogFragment extends RxDialogFragment {
             } else {
                 // Add input to Database if there is input
                 // dismiss the dialog
-
                 collectionViewModel.addDisposable(
                         collectionViewModel.insertEditDevice(new Devices(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
                                 Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
@@ -164,7 +172,6 @@ public class DialogFragment extends RxDialogFragment {
                 })
         );
 
-
         collectionViewModel.addDisposable(RxView.clicks(devicesBinding.positiveButton)
                 .compose(bindToLifecycle())
                 .subscribe(s -> {
@@ -196,15 +203,11 @@ public class DialogFragment extends RxDialogFragment {
         }));
     }
 
-    private void setBackground() {
-        //Sets background
-        Objects.requireNonNull(Objects.requireNonNull(getDialog())
-                .getWindow()).setBackgroundDrawable(ContextCompat
-                .getDrawable(Objects.requireNonNull(getContext()), R.drawable.dialog_shape));
 
-        //Sets curved corners on dialog
-        getDialog().getWindow().setLayout(
-                (int) getContext().getResources().getDisplayMetrics().density * 475,
-                Objects.requireNonNull(getDialog().getWindow()).getAttributes().height);
+
+    private void setBackground() {
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
     }
 }
