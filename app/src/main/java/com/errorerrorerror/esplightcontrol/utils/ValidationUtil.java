@@ -1,10 +1,11 @@
 package com.errorerrorerror.esplightcontrol.utils;
 
-import com.errorerrorerror.esplightcontrol.R;
+import com.errorerrorerror.esplightcontrol.databinding.DialogFragmentDevicesBinding;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class ValidationUtil {
@@ -186,27 +187,23 @@ public class ValidationUtil {
         return setColors(textInputLayoutIP, ipValid, ipRepeated, 2);
     }
 
-    public boolean testAllAdd(String name, String ip, String port, TextInputLayout textInputLayoutName, TextInputLayout textInputLayoutIP, TextInputLayout textInputLayoutPort) //tests if the input is valid
+    public boolean testAllAdd(DialogFragmentDevicesBinding devicesBinding) //tests if the input is valid
     {
-        boolean testReturn;
-        boolean nameTest = deviceNameValidationAdd(name, textInputLayoutName);
-        boolean ipTest = ipAddressValidationAdd(ip, textInputLayoutIP);
-        boolean portTest = portValidationAdd(port, textInputLayoutPort);
-        testReturn = nameTest && ipTest && portTest;
+        boolean nameTest = deviceNameValidationAdd(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(), devicesBinding.deviceNameTextLayout);
+        boolean ipTest = ipAddressValidationAdd(Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(), devicesBinding.ipAddressTextLayout);
+        boolean portTest = portValidationAdd(Objects.requireNonNull(devicesBinding.portInput.getText()).toString(), devicesBinding.portTextLayout);
 
-        return testReturn;
+        return nameTest && ipTest && portTest;
     }
 
     //Tests edit
-    public boolean testAllEdit(String name, String ip, String port, long id, TextInputLayout textInputLayoutName, TextInputLayout textInputLayoutIP, TextInputLayout textInputLayoutPort) //tests if the input is valid
+    public boolean testAllEdit(DialogFragmentDevicesBinding devicesBinding, long id) //tests if the input is valid
     {
-        boolean testReturn;
-        boolean nameTest = deviceNameValidationEdit(name, id, textInputLayoutName);
-        boolean ipTest = ipAddressValidationEdit(ip, id, textInputLayoutIP);
-        boolean portTest = portValidationAdd(port, textInputLayoutPort);
-        testReturn = nameTest && ipTest && portTest;
+        boolean nameTest = deviceNameValidationEdit(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(), id, devicesBinding.deviceNameTextLayout);
+        boolean ipTest = ipAddressValidationEdit(Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(), id, devicesBinding.ipAddressTextLayout);
+        boolean portTest = portValidationAdd(Objects.requireNonNull(devicesBinding.portInput.getText()).toString(), devicesBinding.portTextLayout);
 
-        return testReturn;
+        return nameTest && ipTest && portTest;
     }
 
 
@@ -221,30 +218,16 @@ public class ValidationUtil {
                 test.setEndIconVisible(false);
             }
 
-            test.setBoxStrokeColor(colorAccent);
-
         } else if (valid && repeated) {
             if (mode == 1) {
                 if (!test.isErrorEnabled()) {
                     test.setErrorEnabled(true);
                     test.setError(UNUSED_NAME);
                 }
-
-                if (!test.isEndIconVisible()) {
-                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
-                    test.setEndIconVisible(true);
-                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                }
             } else if (mode == 2) {
                 if (!test.isErrorEnabled()) {
                     test.setErrorEnabled(true);
                     test.setError(UNUSED_IP);
-                }
-
-                if (!test.isEndIconVisible()) {
-                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
-                    test.setEndIconVisible(true);
-                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 }
             }
         } else {
@@ -253,33 +236,15 @@ public class ValidationUtil {
                     test.setErrorEnabled(true);
                     test.setError(INVALID_NAME);
                 }
-
-                if (!test.isEndIconVisible()) {
-                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
-                    test.setEndIconVisible(true);
-                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                }
             } else if (mode == 2) {
                 if (!test.isErrorEnabled()) {
                     test.setErrorEnabled(true);
                     test.setError(INVALID_IP);
                 }
-
-                if (!test.isEndIconVisible()) {
-                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
-                    test.setEndIconVisible(true);
-                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                }
             } else if (mode == 3) {
                 if (!test.isErrorEnabled()) {
                     test.setErrorEnabled(true);
                     test.setError(INVALID_PORT);
-                }
-
-                if (!test.isEndIconVisible()) {
-                    test.setEndIconDrawable(R.drawable.ic_error_black_24dp);
-                    test.setEndIconVisible(true);
-                    test.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 }
             }
 

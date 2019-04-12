@@ -8,12 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/windowColorLight</item>
         <item name="baseBackgroundColor">@color/windowColorLight</item>
-        <item name="contentColor">@color/windowColorLightTest</item>
+        <item name="contentColor">@color/windowColorLight</item>
         <item name="contentElevation">10dp</item>
         <item name="textColorInverse">#FFF</item>
         <item name="iconColor">@color/colorPrimary</item>
         <item name="colorHighlight">@color/windowColorLight</item>
-        <item name="innerBox">#FFF</item>
+        <item name="innerBox">#FFFFFF</item>
         <item name="backgroundHighlight">@color/buttonCancelHighlight</item>
         <item name="dialogBackgroundColor">#fff</item>
         <item name="borderInputColor">#E9F0FF</item>
@@ -38,20 +38,20 @@
         <item name="innerBox">@color/contentColorDark</item>
         <item name="backgroundHighlight">@color/contentColorDark</item>
         <item name="dialogBackgroundColor">@color/windowColorDark</item>
-        <item name="borderInputColor">#000</item>
+        <item name="borderInputColor">?contentColor</item>
+        <item name="textInputStyle">
+            @style/Custom.TextInputLayout.OutlinedBox
+        </item>
     </style>
 
-    <style name="Custom.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+    <style name="Custom.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxCornerRadiusBottomEnd">10dp</item>
         <item name="boxCornerRadiusBottomStart">10dp</item>
         <item name="boxCornerRadiusTopEnd">10dp</item>
         <item name="boxCornerRadiusTopStart">10dp</item>
         <item name="boxStrokeColor">@color/color_border</item>
-        <item name="boxStrokeWidth">1dp</item>
         <item name="boxBackgroundColor">?innerBox</item>
-        <item name="boxBackgroundMode">outline</item>
         <item name="errorTextColor">@color/redDelete</item>
-        <item name="endIconTint">@color/redDelete</item>
         <item name="android:clipChildren">false</item>
         <item name="android:clipToPadding">false</item>
     </style>
@@ -65,7 +65,7 @@
         <item name="android:stateListAnimator">@null</item>
         <item name="cornerRadius">@dimen/buttonCorner</item>
     </style>
-    
+
     <style name="Custom.MaterialCardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">?contentElevation</item>
         <item name="cardCornerRadius">@dimen/corner_radius</item>

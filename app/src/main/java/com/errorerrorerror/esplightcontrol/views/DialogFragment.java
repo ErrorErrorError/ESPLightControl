@@ -121,12 +121,7 @@ public class DialogFragment extends RxDialogFragment {
                 .compose(bindToLifecycle())
                 .subscribe(unit -> {
             boolean test = validationUtil
-                    .testAllAdd(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
-                            Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
-                            Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
-                            devicesBinding.deviceNameTextLayout,
-                            devicesBinding.ipAddressTextLayout,
-                            devicesBinding.portTextLayout);
+                    .testAllAdd(devicesBinding);
 
             if (!test) {
                 shakeAnim();
@@ -135,9 +130,9 @@ public class DialogFragment extends RxDialogFragment {
                 // dismiss the dialog
 
                 collectionViewModel.addDisposable(
-                        collectionViewModel.insertEditDevice(new Devices(devicesBinding.deviceName.getText().toString(),
-                                devicesBinding.IPAddressInput.getText().toString(),
-                                devicesBinding.portInput.getText().toString(),
+                        collectionViewModel.insertEditDevice(new Devices(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
+                                Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
+                                Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
                                 "",
                                 true,
                                 false))
@@ -173,21 +168,15 @@ public class DialogFragment extends RxDialogFragment {
         collectionViewModel.addDisposable(RxView.clicks(devicesBinding.positiveButton)
                 .compose(bindToLifecycle())
                 .subscribe(s -> {
-            boolean test = validationUtil.testAllEdit(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
-                    Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
-                    Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
-                    mode,
-                    devicesBinding.deviceNameTextLayout,
-                    devicesBinding.ipAddressTextLayout,
-                    devicesBinding.portTextLayout);
+            boolean test = validationUtil.testAllEdit(devicesBinding, mode);
             if (!test) {
                 shakeAnim();
             } else {
                 // Edit input to Database if there is input
                 // dismiss the dialog
-                Devices device = new Devices(devicesBinding.deviceName.getText().toString(),
-                        devicesBinding.IPAddressInput.getText().toString(),
-                        devicesBinding.portInput.getText().toString(),
+                Devices device = new Devices(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
+                        Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
+                        Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
                         "",
                         testBoolean[0],
                         testBoolean[1]);

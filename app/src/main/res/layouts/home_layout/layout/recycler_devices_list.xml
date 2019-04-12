@@ -27,129 +27,139 @@
         app:rightIcon="@drawable/ic_trash_icon"
         app:rightIconBgColor="@color/redDelete">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewCustomRow"
-            style="@style/Custom.MaterialCardView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:layout_height="95dp"
-            android:clickable="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:targetApi="p">
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewCustomRow"
+                style="@style/Custom.MaterialCardView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="95dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:clickable="false"
+                android:padding="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <ImageView
-                    android:id="@+id/imageViewRecycler"
-                    android:layout_width="30dp"
-                    android:layout_height="86dp"
-                    android:layout_marginStart="24dp"
-                    android:contentDescription="@string/todo"
-                    android:scaleType="centerInside"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_microcontroller_icon_mini" />
-
-                <TextView
-                    android:id="@+id/deviceNameRecycler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="@{device.device}"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@id/connectionStatusRecycler"
-                    app:layout_constraintStart_toEndOf="@id/imageViewRecycler" />
-
-                <TextView
-                    android:id="@+id/connectionStatusRecycler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/connection"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/ipAddressRecycler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@{`Connectivity: ` + device.ip}"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@id/portRecycler"
-                    app:layout_constraintStart_toEndOf="@id/imageViewRecycler"
-                    app:layout_constraintTop_toBottomOf="@id/deviceNameRecycler" />
-
-
-                <TextView
-                    android:id="@+id/portRecycler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@{`Port: ` + device.port}"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toEndOf="@id/imageViewRecycler"
-                    app:layout_constraintTop_toBottomOf="@id/ipAddressRecycler" />
-
-                <Switch
-                    android:id="@+id/connectionSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="86dp"
-                    android:checked="@{safeUnbox(device.isOn())}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.9"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.555" />
-
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="20dp" />
-                <!--
-            <com.nightonke.jellytogglebutton.JellyToggleButton
-                android:id="@+id/connectionSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{safeUnbox(device.isOn())}"
-                app:jtbBackgroundMeasureRatioValue="2"
-                app:jtbBackgroundRadius="7dp"
-                app:jtbDuration="700"
-                app:jtbEaseType="ease_in_out_bounce"
-                app:jtbJelly="active_tremble_tail_slim_jim"
-                app:jtbLeftBackgroundColor="@android:color/darker_gray"
-                app:jtbLeftThumbColor="#ECECEC"
-                app:jtbRightBackgroundColor="#D8DCF9"
-                app:jtbRightThumbColor="@color/colorAccent"
-                app:jtbThumbRadius="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.917"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.493" /> -->
+                tools:targetApi="p">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imageViewRecycler"
+                        android:layout_width="30dp"
+                        android:layout_height="86dp"
+                        android:layout_marginStart="24dp"
+                        android:contentDescription="@string/todo"
+                        android:scaleType="centerInside"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_microcontroller_icon_mini" />
+
+                    <TextView
+                        android:id="@+id/deviceNameRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@{device.device}"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toTopOf="@id/connectionStatusRecycler"
+                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler" />
+
+                    <TextView
+                        android:id="@+id/connectionStatusRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/connection"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/ipAddressRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@{`Connectivity: ` + device.ip}"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@id/portRecycler"
+                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler"
+                        app:layout_constraintTop_toBottomOf="@id/deviceNameRecycler" />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/portRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@{`Port: ` + device.port}"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler"
+                        app:layout_constraintTop_toBottomOf="@id/ipAddressRecycler" />
+
+                    <Switch
+                        android:id="@+id/connectionSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="86dp"
+                        android:checked="@{safeUnbox(device.isOn())}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.9"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.555" />
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="20dp" />
+                    <!--
+                <com.nightonke.jellytogglebutton.JellyToggleButton
+                    android:id="@+id/connectionSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{safeUnbox(device.isOn())}"
+                    app:jtbBackgroundMeasureRatioValue="2"
+                    app:jtbBackgroundRadius="7dp"
+                    app:jtbDuration="700"
+                    app:jtbEaseType="ease_in_out_bounce"
+                    app:jtbJelly="active_tremble_tail_slim_jim"
+                    app:jtbLeftBackgroundColor="@android:color/darker_gray"
+                    app:jtbLeftThumbColor="#ECECEC"
+                    app:jtbRightBackgroundColor="#D8DCF9"
+                    app:jtbRightThumbColor="@color/colorAccent"
+                    app:jtbThumbRadius="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.917"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.493" /> -->
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
     </com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout>
 </layout>

@@ -28,10 +28,11 @@
             android:fontFamily="@font/somatic_round"
             android:textColor="@color/buttonCancelText"/>
 
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/deviceNameTextLayout"
-            android:layout_width="match_parent"
-            android:gravity="center|top"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center|top"
             android:layout_height="75dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -40,6 +41,8 @@
                 android:layout_height="50dp"
                 android:inputType="text"
                 android:maxLength="28"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:elevation="?contentElevation"
                 android:outlineAmbientShadowColor="@color/colorAccent"
                 android:outlineSpotShadowColor="@color/colorAccent"
@@ -51,6 +54,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -79,8 +83,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ipAddressTextLayout"
-                android:layout_width="230dp"
+                android:layout_width="wrap_content"
                 android:layout_height="75dp"
+                android:layout_marginStart="25dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -92,33 +97,37 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:elevation="?contentElevation"
-                    android:outlineAmbientShadowColor="@color/colorAccent"
-                    android:outlineSpotShadowColor="@color/colorAccent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:inputType="text"
                     android:maxLines="1"
+                    android:outlineAmbientShadowColor="@color/colorAccent"
+                    android:outlineSpotShadowColor="@color/colorAccent"
                     android:textSize="15sp"
                     tools:targetApi="p" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/portTextLayout"
-                android:layout_width="179dp"
+                android:layout_width="wrap_content"
                 android:layout_height="75dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="25dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/portInput"
-                    android:layout_width="111dp"
+                    android:layout_width="118dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:elevation="?contentElevation"
                     android:inputType="number"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:maxLength="5"
                     android:outlineAmbientShadowColor="@color/colorAccent"
                     android:outlineSpotShadowColor="@color/colorAccent"
-                    android:maxLength="5"
                     android:textSize="15sp"
                     tools:targetApi="p" />
             </com.google.android.material.textfield.TextInputLayout>

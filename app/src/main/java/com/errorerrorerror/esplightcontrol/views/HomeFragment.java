@@ -1,6 +1,5 @@
 package com.errorerrorerror.esplightcontrol.views;
 
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +14,6 @@ import com.errorerrorerror.esplightcontrol.databinding.DevicesFragmentBinding;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
 import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
-import com.errorerrorerror.esplightcontrol.utils.DisplayUtils;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
@@ -168,6 +166,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
         //Gains performance
         homeBinding.recyclerviewAddDevice.setHasFixedSize(true);
 
+        /*
         homeBinding.recyclerviewAddDevice.addItemDecoration(new RecyclerView.ItemDecoration() {
             private final int spaceHeight = (int) DisplayUtils.convertDpToPixel(25, Objects.requireNonNull(getContext()));
             private final int top = (int) DisplayUtils.convertDpToPixel(5, Objects.requireNonNull(getContext()));
@@ -179,6 +178,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
 
             }
         });
+        */
 
         //Removes onChange Animation
         Objects.requireNonNull(homeBinding.recyclerviewAddDevice.getItemAnimator())
