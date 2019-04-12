@@ -13,6 +13,7 @@ import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.databinding.DialogFragmentDevicesBinding;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
+import com.errorerrorerror.esplightcontrol.utils.DisplayUtils;
 import com.errorerrorerror.esplightcontrol.utils.ValidationUtil;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -208,6 +209,8 @@ public class DialogFragment extends RxDialogFragment {
     private void setBackground() {
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            getDialog().getWindow().setLayout((int) DisplayUtils.convertDpToPixel(375, Objects.requireNonNull(getContext())),
+                    (int) DisplayUtils.convertDpToPixel(375, Objects.requireNonNull(getContext())));
         }
     }
 }

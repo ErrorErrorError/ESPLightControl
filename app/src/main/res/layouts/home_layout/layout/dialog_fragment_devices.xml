@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/dialog_shape">
 
@@ -73,13 +73,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
-                android:layout_weight="1"
+                android:layout_weight=".85"
                 android:fontFamily="@font/somatic_round"
                 android:text="@string/Port"
                 android:textColor="@color/buttonCancelText" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -88,8 +88,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ipAddressTextLayout"
                 android:layout_width="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_height="75dp">
+                android:layout_height="75dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="25dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/IPAddressInput"
@@ -110,12 +111,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/portTextLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="75dp">
+                android:layout_width="140dp"
+                android:layout_height="75dp"
+                android:layout_marginEnd="25dp"
+                android:layout_toEndOf="@id/ipAddressTextLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/portInput"
-                    android:layout_width="140dp"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
@@ -129,7 +132,7 @@
                     tools:targetApi="p" />
             </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
