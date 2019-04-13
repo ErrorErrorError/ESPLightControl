@@ -36,7 +36,6 @@
             android:id="@+id/customBubbleBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottomNavHeight"
-            android:elevation="?contentElevation"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <com.gauravk.bubblenavigation.BubbleToggleView

@@ -10,4 +10,5 @@
     <attr name="backgroundHighlight" format="color|reference"/>
     <attr name="dialogBackgroundColor" format="color|reference"/>
     <attr name="borderInputColor" format="color|reference"/>
+    <attr name="colorToContent" format="color|reference"/>
 </resources>

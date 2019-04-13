@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -20,7 +19,7 @@
         app:iconsPadding="12dp"
         app:iconsSize="40dp"
         app:leftIcon="@drawable/ic_edit_icon"
-        app:leftIconBgColor="?contentColor"
+        app:leftIconBgColor="?colorToContent"
         app:revealedViewBackground="@android:color/transparent"
         app:revealedViewMarginEnd="20dp"
         app:revealedViewMarginStart="20dp"
@@ -47,9 +46,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:targetApi="p">
-
+                app:layout_constraintTop_toTopOf="parent">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

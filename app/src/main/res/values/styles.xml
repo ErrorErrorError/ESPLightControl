@@ -9,17 +9,21 @@
         <item name="android:windowBackground">@color/windowColorLight</item>
         <item name="baseBackgroundColor">@color/windowColorLight</item>
         <item name="contentColor">@color/windowColorLight</item>
-        <item name="contentElevation">10dp</item>
+        <item name="contentElevation">5dp</item>
         <item name="textColorInverse">#FFF</item>
         <item name="iconColor">@color/colorPrimary</item>
         <item name="colorHighlight">@color/windowColorLight</item>
+        <item name="colorToContent">@color/windowColorLightTest</item>
         <item name="innerBox">#FFFFFF</item>
         <item name="backgroundHighlight">@color/buttonCancelHighlight</item>
         <item name="dialogBackgroundColor">#fff</item>
         <item name="borderInputColor">#E9F0FF</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/colorPrimary</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/colorPrimary</item>
         <item name="textInputStyle">
             @style/Custom.TextInputLayout.OutlinedBox
         </item>
+
     </style>
 
     <style name="AppTheme.DarkMode" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -31,7 +35,7 @@
         <item name="materialCardViewStyle">@color/windowColorDark</item>
         <item name="baseBackgroundColor">@color/windowColorDark</item>
         <item name="contentColor">@color/contentColorDark</item>
-        <item name="contentElevation">0dp</item>
+        <item name="contentElevation">10dp</item>
         <item name="textColorInverse">#FFF</item>
         <item name="iconColor">@color/colorPrimary</item>
         <item name="colorHighlight">@color/contentColorDark</item>
@@ -39,6 +43,7 @@
         <item name="backgroundHighlight">@color/contentColorDark</item>
         <item name="dialogBackgroundColor">@color/windowColorDark</item>
         <item name="borderInputColor">?contentColor</item>
+        <item name="colorToContent">?contentColor</item>
         <item name="textInputStyle">
             @style/Custom.TextInputLayout.OutlinedBox
         </item>
@@ -59,19 +64,19 @@
     <style name="ButtonShadowColor" parent="Widget.MaterialComponents.Button">
         <item name="android:layout_height">52dp</item>
         <item name="android:layout_width">125dp</item>
-        <item name="android:elevation">?contentElevation</item>
         <item name="android:textSize">15sp</item>
         <item name="rippleColor">@null</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="cornerRadius">@dimen/buttonCorner</item>
+        <item name="android:elevation">?contentElevation</item>
     </style>
 
-    <style name="Custom.MaterialCardView" parent="Widget.MaterialComponents.CardView">
-        <item name="cardElevation">?contentElevation</item>
+    <style name="Custom.MaterialCardView" parent="Base.CardView">
         <item name="cardCornerRadius">@dimen/corner_radius</item>
         <item name="rippleColor">@color/colorPrimary</item>
         <item name="cardBackgroundColor">?contentColor</item>
-        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/colorPrimary</item>
-        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/colorPrimary</item>
+        <item name="cardElevation">?contentElevation</item>
+        <!--<item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/colorPrimary</item>-->
+        <!--<item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/colorPrimary</item>-->
     </style>
 </resources>
