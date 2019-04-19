@@ -1,19 +1,23 @@
 package com.errorerrorerror.esplightcontrol.adapter;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
-import com.errorerrorerror.esplightcontrol.databinding.RecyclerDevicesListBinding;
-import com.errorerrorerror.esplightcontrol.devices.Devices;
-import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
-import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
-import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnIconClickListener;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import static com.tenclouds.swipeablerecyclerviewcell.metaball.MetaBallsKt.RIGHT_VIEW_TO_DELETE;
+import com.errorerrorerror.esplightcontrol.databinding.RecyclerDevicesListBinding;
+import com.errorerrorerror.esplightcontrol.devices.Devices;
+import com.errorerrorerror.esplightcontrol.rxobservable.RxSwipeRevealLayout;
+import com.errorerrorerror.esplightcontrol.utils.Constants;
+import com.jakewharton.rxbinding3.widget.RxCompoundButton;
+import com.tenclouds.swipeablerecyclerviewcell.metaball.MetaBallsKt;
+
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolder> {
 
@@ -31,15 +35,14 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
                     return oldItem.equals(newItem);
                 }
             };
-
-    private final OnClickedDevice onClickedDevice;
-    private final OnClickedSwitch onClickedSwitch;
     private LayoutInflater layoutInflater;
+    private PublishSubject<Boolean> mSwitched = PublishSubject.create();
+    private PublishSubject<Long> mPosition = PublishSubject.create();
+    private PublishSubject<Devices> mDeviceDelete = PublishSubject.create();
+    private PublishSubject<Long> mPositionEdit = PublishSubject.create();
 
-    public RecyclerDeviceAdapter(OnClickedDevice onClickedDevice, OnClickedSwitch onClickedSwitch) {
+    public RecyclerDeviceAdapter() {
         super(DIFF_CALLBACK);
-        this.onClickedDevice = onClickedDevice;
-        this.onClickedSwitch = onClickedSwitch;
         setHasStableIds(true);
     }
 
@@ -55,31 +58,37 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
         return new DevicesViewHolder(binding);
     }
 
+
+    @SuppressLint("CheckResult")
     @Override
     public void onBindViewHolder(@NonNull DevicesViewHolder holder, int position) {
 
         Devices device = getItem(position);
         holder.bind(device);
 
-        holder.binding.connectionSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> onClickedSwitch.OnSwitched(isChecked, holder.getAdapterPosition(), null));
-        
+        RxCompoundButton.checkedChanges(holder.binding.connectionSwitch)
+                .subscribe(aBoolean -> {
+                    mSwitched.onNext(aBoolean);
+                    mPosition.onNext(holder.getItemId());
+                    Log.d(Constants.HOME_TAG, "onBindViewHolder: " + aBoolean + " " + holder.getItemId());
+                }, onError -> Log.e(Constants.HOME_TAG, "onBindViewHolder: ", onError));
+
         /*holder.binding.connectionSwitch.setOnStateChangeListener((progress, state, jtb) ->
-                onClickedSwitch.OnSwitched(jtb.isChecked(), holder.getAdapterPosition(), jtb));
+                onClickedSwitchListener.OnSwitched(jtb.isChecked(), holder.getAdapterPosition(), jtb));
         */
 
-        holder.binding.swipeLayout.setOnIconClickListener(new OnIconClickListener() {
-            @Override
-            public void onLeftIconClick() {
-                onClickedDevice.onEditDeviceClicked(device.getId());//Sends id of device to HomeFragment
-                holder.binding.swipeLayout.close(true);
-            }
+        RxSwipeRevealLayout.leftClickedIcon(holder.binding.swipeLayout, MetaBallsKt.NONE_VIEW_TO_DELETE)
+                .subscribe(o -> {
+                    mPositionEdit.onNext(holder.getItemId());
+                    holder.binding.swipeLayout.close(true);
+                    Log.d(Constants.HOME_TAG, "onBindViewHolder: " + holder.getItemId());
+                }, onError -> Log.e(Constants.HOME_TAG, "onBindViewHolder: ", onError ));
 
-            @Override
-            public void onRightIconClick() {
-                onClickedDevice.onRemoveDeviceClicked(holder.getAdapterPosition());
-            }
-        }, RIGHT_VIEW_TO_DELETE);
-
+        RxSwipeRevealLayout.rightClickedIcon(holder.binding.swipeLayout, MetaBallsKt.RIGHT_VIEW_TO_DELETE)
+                .subscribe(o -> {
+                            mDeviceDelete.onNext(getItem(holder.getAdapterPosition()));
+                            Log.d(Constants.HOME_TAG, "onBindViewHolder: " + getItem(holder.getAdapterPosition()));
+                }, onError -> Log.e(Constants.HOME_TAG, "onBindViewHolder: ", onError));
     }
 
     @Override
@@ -90,5 +99,28 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
     @Override
     protected Devices getItem(int position) {
         return getCurrentList().get(position);
+    }
+
+
+    public Observable<SwitchBoolInt> getListenerSwitch() {
+        return Observable.zip(mSwitched, mPosition, SwitchBoolInt::new);
+    }
+
+    public Observable<Devices> getDeleteDeviceObservable() {
+        return mDeviceDelete;
+    }
+
+    public Observable<Long> getEditDeviceObservable() {
+        return mPositionEdit;
+    }
+
+    public class SwitchBoolInt {
+        public Boolean bool;
+        public Long id;
+
+        SwitchBoolInt(Boolean bool, Long aLong) {
+            this.bool = bool;
+            this.id = aLong;
+        }
     }
 }

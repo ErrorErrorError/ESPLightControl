@@ -21,6 +21,7 @@
             android:layout_marginEnd="15dp"
             android:clickable="true"
             android:focusable="true">
+
             <LinearLayout
                 android:id="@+id/linearLayoutAdddevice"
                 android:layout_width="match_parent"
@@ -82,53 +83,53 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <RelativeLayout
-            android:id="@+id/relativeLayoutRV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/linearLayoutConnectedDevices"
+            <RelativeLayout
+                android:id="@+id/relativeLayoutRV"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="11dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/somatic_round"
-                    android:text="@string/Devices"
-                    android:textColor="#7D7D7D"
-                    android:textSize="21sp"
-                    android:textStyle="normal" />
-
-
-                <TextView
-                    android:id="@+id/noDeviceConnectedText"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/linearLayoutConnectedDevices"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/somatic_round"
-                    android:text="@string/NoConnected"
-                    android:textColor="#CECECE"
-                    android:textSize="20sp" />
-            </LinearLayout>
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="11dp"
+                    android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerviewAddDevice"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/linearLayoutConnectedDevices"
-                android:clipChildren="false"
-                android:fadingEdge="vertical"
-                android:overScrollMode="never" />
-        </RelativeLayout>
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/somatic_round"
+                        android:text="@string/Devices"
+                        android:textColor="#7D7D7D"
+                        android:textSize="21sp"
+                        android:textStyle="normal" />
+
+
+                    <TextView
+                        android:id="@+id/noDeviceConnectedText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="0dp"
+                        android:fontFamily="@font/somatic_round"
+                        android:text="@string/NoConnected"
+                        android:textColor="#CECECE"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerviewAddDevice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/linearLayoutConnectedDevices"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
+            </RelativeLayout>
     </LinearLayout>
 </layout>

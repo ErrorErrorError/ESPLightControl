@@ -8,6 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.animation.CycleInterpolator;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.errorerrorerror.esplightcontrol.EspApp;
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.databinding.DialogFragmentDevicesBinding;
@@ -24,10 +29,6 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -121,7 +122,7 @@ public class DialogFragment extends RxDialogFragment {
 
         collectionViewModel.addDisposable(
                 RxView.clicks(devicesBinding.negativeButton)
-                .subscribe(test -> dismiss())
+                        .subscribe(test -> dismiss())
 
         );
     }
@@ -130,31 +131,31 @@ public class DialogFragment extends RxDialogFragment {
         collectionViewModel.addDisposable(RxView.clicks(devicesBinding.positiveButton)
                 .compose(bindToLifecycle())
                 .subscribe(unit -> {
-            boolean test = validationUtil
-                    .testAllAdd(devicesBinding);
+                    boolean test = validationUtil
+                            .testAllAdd(devicesBinding);
 
-            if (!test) {
-                shakeAnim();
-            } else {
-                // Add input to Database if there is input
-                // dismiss the dialog
-                collectionViewModel.addDisposable(
-                        collectionViewModel.insertEditDevice(new Devices(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
-                                Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
-                                Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
-                                "",
-                                true,
-                                false))
-                                .compose(bindToLifecycle())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(() -> Log.d(Constants.DIALOG_TAG, "Added Device Successfully on thread: " + Thread.currentThread().getName()),
-                                        onError -> Log.e(Constants.DIALOG_TAG, "addDevice: ", onError))
-                );
-                dismiss();
-            }
+                    if (!test) {
+                        shakeAnim();
+                    } else {
+                        // Add input to Database if there is input
+                        // dismiss the dialog
+                        collectionViewModel.addDisposable(
+                                collectionViewModel.insertEditDevice(new Devices(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
+                                        Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
+                                        Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
+                                        "",
+                                        true,
+                                        false))
+                                        .compose(bindToLifecycle())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(() -> Log.d(Constants.DIALOG_TAG, "Added Device Successfully on thread: " + Thread.currentThread().getName()),
+                                                onError -> Log.e(Constants.DIALOG_TAG, "addDevice: ", onError))
+                        );
+                        dismiss();
+                    }
 
-        }));
+                }));
     }
 
     private void editDevice(long mode) {
@@ -176,35 +177,33 @@ public class DialogFragment extends RxDialogFragment {
         collectionViewModel.addDisposable(RxView.clicks(devicesBinding.positiveButton)
                 .compose(bindToLifecycle())
                 .subscribe(s -> {
-            boolean test = validationUtil.testAllEdit(devicesBinding, mode);
-            if (!test) {
-                shakeAnim();
-            } else {
-                // Edit input to Database if there is input
-                // dismiss the dialog
-                Devices device = new Devices(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
-                        Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
-                        Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
-                        "",
-                        testBoolean[0],
-                        testBoolean[1]);
+                    boolean test = validationUtil.testAllEdit(devicesBinding, mode);
+                    if (!test) {
+                        shakeAnim();
+                    } else {
+                        // Edit input to Database if there is input
+                        // dismiss the dialog
+                        Devices device = new Devices(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
+                                Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
+                                Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
+                                "",
+                                testBoolean[0],
+                                testBoolean[1]);
 
-                device.setId(mode);
+                        device.setId(mode);
 
-                collectionViewModel.addDisposable(
-                        collectionViewModel.insertEditDevice(device)
-                                .compose(bindToLifecycle())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe()
-                );
+                        collectionViewModel.addDisposable(
+                                collectionViewModel.insertEditDevice(device)
+                                        .compose(bindToLifecycle())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe()
+                        );
 
-                dismiss();
-            }
-        }));
+                        dismiss();
+                    }
+                }));
     }
-
-
 
     private void setBackground() {
         if (getDialog() != null && getDialog().getWindow() != null) {

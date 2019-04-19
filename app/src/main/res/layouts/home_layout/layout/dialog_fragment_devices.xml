@@ -50,34 +50,45 @@
                 android:textSize="15sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/ipAddText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="35dp"
-                android:layout_weight="1"
+                android:layout_marginEnd="271dp"
                 android:fontFamily="@font/somatic_round"
                 android:text="@string/IPAddress"
-                android:textColor="@color/buttonCancelText" />
+                android:textColor="@color/buttonCancelText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="28dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:layout_weight=".85"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="220dp"
+                android:layout_toEndOf="@+id/ipAddText"
                 android:fontFamily="@font/somatic_round"
                 android:text="@string/Port"
-                android:textColor="@color/buttonCancelText" />
-        </LinearLayout>
+                android:textColor="@color/buttonCancelText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipChildren="false"
             android:orientation="horizontal">
 
@@ -86,7 +97,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="75dp"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="25dp">
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="160dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/IPAddressInput"
@@ -106,8 +122,14 @@
                 android:id="@+id/portTextLayout"
                 android:layout_width="140dp"
                 android:layout_height="75dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="210dp"
                 android:layout_marginEnd="25dp"
-                android:layout_toEndOf="@id/ipAddressTextLayout">
+                android:layout_toEndOf="@+id/ipAddressTextLayout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/portInput"
@@ -121,8 +143,7 @@
                     android:maxLength="5"
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
-
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

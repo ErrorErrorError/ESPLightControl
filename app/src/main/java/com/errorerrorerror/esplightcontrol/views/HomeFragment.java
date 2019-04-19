@@ -1,28 +1,12 @@
 package com.errorerrorerror.esplightcontrol.views;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.errorerrorerror.esplightcontrol.EspApp;
-import com.errorerrorerror.esplightcontrol.R;
-import com.errorerrorerror.esplightcontrol.adapter.RecyclerDeviceAdapter;
-import com.errorerrorerror.esplightcontrol.databinding.DevicesFragmentBinding;
-import com.errorerrorerror.esplightcontrol.interfaces.OnClickedDevice;
-import com.errorerrorerror.esplightcontrol.interfaces.OnClickedSwitch;
-import com.errorerrorerror.esplightcontrol.utils.Constants;
-import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
-import com.jakewharton.rxbinding3.view.RxView;
-import com.nightonke.jellytogglebutton.JellyToggleButton;
-import com.trello.rxlifecycle3.components.support.RxFragment;
-
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,12 +16,28 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.errorerrorerror.esplightcontrol.EspApp;
+import com.errorerrorerror.esplightcontrol.R;
+import com.errorerrorerror.esplightcontrol.adapter.RecyclerDeviceAdapter;
+import com.errorerrorerror.esplightcontrol.databinding.DevicesFragmentBinding;
+import com.errorerrorerror.esplightcontrol.utils.Constants;
+import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
+import com.jakewharton.rxbinding3.view.RxView;
+import com.trello.rxlifecycle3.components.support.RxFragment;
+
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class HomeFragment extends RxFragment implements OnClickedDevice, OnClickedSwitch {
+public class HomeFragment extends RxFragment {
 
+    private static final String TAG = "HomeFragment";
     //ViewModel Injector
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -77,10 +77,51 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
         //Listens for devices
         devicesListeners();
 
+        //Add device button click listener
         collectionViewModel.addDisposable(RxView.clicks(homeBinding.addDeviceButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .compose(bindToLifecycle())
-                .subscribe(unit -> addDeviceDialog(), error -> Log.e(Constants.HOME_TAG, "addDialog: " + error.toString())));
+                .subscribe(unit -> addDeviceDialog(),
+                        error -> Log.e(Constants.HOME_TAG, "addDialog: " + error.toString())));
+
+        //Switch listener to change in room database
+        collectionViewModel.addDisposable(adapter.getListenerSwitch().subscribe(mergeCallback -> {
+            if (mergeCallback.id < 0) {
+                return;
+            }
+
+            collectionViewModel.addDisposable(
+                    collectionViewModel.setSwitch(mergeCallback.bool,
+                            mergeCallback.id)
+                            .compose(bindToLifecycle())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe()
+            );
+        }, onError -> Log.e(TAG, "onActivityCreated: ", onError)));
+
+        //Observes if there is a button that clicked Delete.
+        collectionViewModel.addDisposable(adapter.getDeleteDeviceObservable().subscribe(device -> {
+
+            //deletes the Item
+            collectionViewModel.addDisposable(collectionViewModel.deleteDevice(device)
+                    .compose(bindToLifecycle())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> Log.d(Constants.HOME_TAG, "onRemoveDeviceClicked: on Thread " + Thread.currentThread().getName()),
+                            onError -> Log.e(Constants.HOME_TAG, "onRemoveDeviceClicked: ", onError))
+            );
+        }, onError -> Log.e(TAG, "onActivityCreated: ", onError)));
+
+        //Check if the edit button is clicked
+        collectionViewModel.addDisposable(adapter.getEditDeviceObservable().subscribe(id -> {
+            FragmentTransaction ft = checkDialog();
+            androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance(
+                    "Edit device",
+                    "Cancel",
+                    "Edit",
+                    id);
+            newFragment.show(ft, "dialog");
+        }, onError -> Log.e(Constants.HOME_TAG, "onActivityCreated: ", onError)));
 
 
     }
@@ -108,19 +149,6 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
     }
 
     @Override
-    public void onEditDeviceClicked(long id) {
-        FragmentTransaction ft = checkDialog();
-
-        androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance(
-                "Edit device",
-                "Cancel",
-                "Edit",
-                id);
-        newFragment.show(ft, "dialog");
-
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -142,6 +170,7 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initRecyclerLayers() {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
@@ -179,15 +208,15 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
             }
         });
         */
-
         //Removes onChange Animation
         Objects.requireNonNull(homeBinding.recyclerviewAddDevice.getItemAnimator())
                 .setChangeDuration(0);
     }
 
+
     private void devicesListeners() {
 
-        adapter = new RecyclerDeviceAdapter(HomeFragment.this, HomeFragment.this);
+        adapter = new RecyclerDeviceAdapter();
         homeBinding.recyclerviewAddDevice.setAdapter(adapter);
 
         collectionViewModel.addDisposable(collectionViewModel.getAllDevices()
@@ -197,7 +226,6 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
                 .subscribe(
                         devices -> {
                             adapter.submitList(devices);
-                            Log.d(Constants.HOME_TAG, "devicesListeners: " + Thread.currentThread().getName());
 
                             if (devices.isEmpty()) {
                                 // homeBinding.noDeviceConnectedText.setVisibility(View.VISIBLE);
@@ -218,39 +246,10 @@ public class HomeFragment extends RxFragment implements OnClickedDevice, OnClick
                     Log.d(Constants.HOME_TAG, "onItemRangeInserted: " + positionStart);
                     homeBinding.recyclerviewAddDevice.smoothScrollToPosition(positionStart);
                 }
-
             }
         });
     }
 
-    @Override
-    public void onRemoveDeviceClicked(int position) {
-        if (position < 0) {
-            return;
-        }
-
-        collectionViewModel.addDisposable(collectionViewModel.deleteDevice(adapter.getCurrentList().get(position))
-                .compose(bindToLifecycle())
-                .subscribeOn(Schedulers.io())
-                .subscribe(() -> Log.d(Constants.HOME_TAG, "onRemoveDeviceClicked: on Thread " + Thread.currentThread().getName()),
-                        onError -> Log.e(Constants.HOME_TAG, "onRemoveDeviceClicked: ", onError))
-        );
-    }
-
-    @Override
-    public void OnSwitched(Boolean bool, int position, JellyToggleButton buttonView) {
-        if (position < 0) {
-            return;
-        }
-
-        collectionViewModel.addDisposable(
-                collectionViewModel.setSwitch(bool, adapter.getCurrentList().get(position).getId())
-                        .compose(bindToLifecycle())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
-        );
-    }
 
     @Override
     public void onDestroyView() {

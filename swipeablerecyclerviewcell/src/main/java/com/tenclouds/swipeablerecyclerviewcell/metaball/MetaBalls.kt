@@ -14,6 +14,7 @@ import com.tenclouds.swipeablerecyclerviewcell.R
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.AnimatedRevealView
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnDeleteListener
+import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnIconClickListener
 import com.tenclouds.swipeablerecyclerviewcell.utils.*
 import kotlin.math.abs
 import kotlin.math.max
@@ -43,8 +44,11 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
     private var rightCircle = Circle()
 
     private val maxViewScale = 1.2f
+    internal var test: OnIconClickListener? = null
 
-    var deleteView = NONE_VIEW_TO_DELETE
+
+    var deleteRightView = NONE_VIEW_TO_DELETE
+    var deleteLeftView = NONE_VIEW_TO_DELETE
 
 
     var rightViewColor: Int by Delegates.observable(
@@ -91,7 +95,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
     private fun init() {
         gravity = Gravity.CENTER
-        orientation = LinearLayout.HORIZONTAL
+        orientation = HORIZONTAL
 
         addRevealedViews()
     }
@@ -106,10 +110,10 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
         val startMargin = max(minMargin.toInt(), iconsMarginStart)
         val endMargin = max(minMargin.toInt(), iconsMarginEnd)
 
-        val leftLp = LinearLayout.LayoutParams(iconsSize, iconsSize)
+        val leftLp = LayoutParams(iconsSize, iconsSize)
                 .apply { setMargins(startMargin, 0, iconsDistance / 2, 0) }
 
-        val rightLp = LinearLayout.LayoutParams(iconsSize, iconsSize)
+        val rightLp = LayoutParams(iconsSize, iconsSize)
                 .apply { setMargins(iconsDistance / 2, 0, endMargin, 0) }
 
 
@@ -174,29 +178,31 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
 
     private fun configureClickListeners() {
+
         rightView.setOnClickListener {
             var delay = 0L
-            if (deleteView == RIGHT_VIEW_TO_DELETE) {
+            if (deleteRightView == RIGHT_VIEW_TO_DELETE || deleteRightView == LEFT_VIEW_TO_DELETE) {
                 deleteAnimation(rightCircle, rightViewColor, rightView)
                 delay = 300L
             } else {
                 clickAnimation(rightCircle, rightViewColor, rightView)
             }
             postDelayed({
-                (parent as? SwipeRevealLayout)?.onIconClickListener?.onRightIconClick()
+                (parent as? SwipeRevealLayout)?.onRightIconClicked?.onRightIconClicked()
             }, delay)
         }
 
         leftView.setOnClickListener {
             var delay = 0L
-            if (deleteView == LEFT_VIEW_TO_DELETE) {
+            if (deleteLeftView == RIGHT_VIEW_TO_DELETE || deleteLeftView == LEFT_VIEW_TO_DELETE) {
                 deleteAnimation(leftCircle, leftViewColor, leftView)
                 delay = 300L
             } else {
                 clickAnimation(leftCircle, leftViewColor, leftView)
             }
             postDelayed({
-                (parent as? SwipeRevealLayout)?.onIconClickListener?.onLeftIconClick()
+               // (test as? SwipeRevealLayout)?.onIconClickListener?.onLeftIconClick()
+                (parent as? SwipeRevealLayout)?.onLeftIconClicked?.onLeftIconClicked()
             }, delay)
         }
     }
@@ -257,8 +263,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
         calculateViewAlpha(progress, rightView)
     }
 
-    private fun calculateViewAlpha(progress: Float, view: View)
-    {
+    private fun calculateViewAlpha(progress: Float, view: View) {
         with(view)
         {
             alpha = progress

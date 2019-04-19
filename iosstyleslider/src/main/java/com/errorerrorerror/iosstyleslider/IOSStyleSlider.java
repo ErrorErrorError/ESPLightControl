@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
+
 import icepick.Icepick;
 import icepick.State;
 
@@ -25,7 +26,7 @@ import icepick.State;
 public class IOSStyleSlider extends View {
 
     /* Default Values */
-    private final static int DEFAULT_SLIDER_RADIUS = 75;
+    private final static int DEFAULT_SLIDER_RADIUS = 25;
     private final static int DEFAULT_SLIDER_COLOR = Color.parseColor("#7673E7");
     private final static int DEFAULT_BACKGROUND_SLIDER_COLOR = Color.parseColor("#efefef");
     private final static int DEFAULT_WIDTH = 100; //Wrapped Default
@@ -54,6 +55,9 @@ public class IOSStyleSlider extends View {
     private float desiredHeight; //Default Height if Wrapped
     private int mSliderMin = DEFAULT_MIN_VALUE;
     private int mSliderMax = DEFAULT_MAX_VALUE;
+    private static final float scale = 1.05f;
+    private static final long times = 200;
+
 
     public IOSStyleSlider(Context context) {
         super(context);
@@ -87,7 +91,7 @@ public class IOSStyleSlider extends View {
         //Attributes
         TypedArray ta = getContext().obtainStyledAttributes(set, R.styleable.IOSStyleSlider);
 
-        mSliderRadius = ta.getDimension(R.styleable.IOSStyleSlider_issCornerRadius, DEFAULT_SLIDER_RADIUS);
+        mSliderRadius = ta.getDimension(R.styleable.IOSStyleSlider_issCornerRadius, mSliderRadius);
         mSliderColor = ta.getColor(R.styleable.IOSStyleSlider_issColorSlider, mSliderColor);
         mSliderBackgroundColor = ta.getColor(R.styleable.IOSStyleSlider_issColorBackgroundSlider, mSliderBackgroundColor);
         setSliderMin(ta.getInteger(R.styleable.IOSStyleSlider_issSetMinValue, mSliderMin));
@@ -135,10 +139,10 @@ public class IOSStyleSlider extends View {
         int index = event.getActionIndex();
         int action = event.getActionMasked();
         int pointerId = event.getPointerId(index);
-
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                animate().translationZ(10);
+                animate().scaleX(scale).setDuration(times).start();
+                animate().scaleY(scale).setDuration(times).start();
                 if (mVelocityTracker == null) {
 
                     // Retrieve a new VelocityTracker object to watch the velocity
@@ -170,7 +174,8 @@ public class IOSStyleSlider extends View {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                animate().translationZ(0);
+                animate().scaleX(1f).setDuration(times).start();
+                animate().scaleY(1f).setDuration(times).start();
                 break;
             case MotionEvent.ACTION_CANCEL:
                 // Return a VelocityTracker object back to be re-used by others.

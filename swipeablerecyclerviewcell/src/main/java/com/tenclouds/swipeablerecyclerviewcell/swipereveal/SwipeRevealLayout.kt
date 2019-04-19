@@ -17,10 +17,7 @@ import androidx.core.view.ViewCompat
 import com.tenclouds.swipeablerecyclerviewcell.R
 import com.tenclouds.swipeablerecyclerviewcell.metaball.MetaBalls
 import com.tenclouds.swipeablerecyclerviewcell.metaball.NONE_VIEW_TO_DELETE
-import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnDeleteListener
-import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnIconClickListener
-import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnSwipeListener
-import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OpenCloseListener
+import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.*
 import com.tenclouds.swipeablerecyclerviewcell.utils.generateViewId
 
 /**
@@ -75,6 +72,8 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
 
     private var onSwipeListener: OnSwipeListener? = null
     internal var onIconClickListener: OnIconClickListener? = null
+    internal var onRightIconClicked: OnRightIconClicked? = null
+    internal var onLeftIconClicked: OnLeftIconClicked? = null
 
 
     fun setOnSwipeListener(l: OnSwipeListener) {
@@ -92,9 +91,48 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
         })
     }
 
+    fun setOnRightIconClickListener(l: OnRightIconClicked, sideToDelete: Int = NONE_VIEW_TO_DELETE) {
+        onRightIconClicked = l
+        metaBalls.deleteRightView = sideToDelete
+    }
+
+    fun setOnRightIconClickListener(
+            onRightIconClicked: () -> Unit = {},
+            sideToDelete: Int = NONE_VIEW_TO_DELETE
+    ) {
+        setOnRightIconClickListener(
+                OnRightIconClicked { onRightIconClicked() }, sideToDelete);
+    }
+
+    fun setOnLeftIconClickedListener(l: OnLeftIconClicked, sideToDelete: Int = NONE_VIEW_TO_DELETE) {
+        onLeftIconClicked = l
+        metaBalls.deleteLeftView = sideToDelete
+    }
+
+    fun setOnLeftIconClickedListener(
+            onLeftIconClicked: () -> Unit = {},
+            sideToDelete: Int = NONE_VIEW_TO_DELETE
+    ) {
+        setOnLeftIconClickedListener(
+                OnLeftIconClicked { onLeftIconClicked() }, sideToDelete);
+    }
+
     fun setOnIconClickListener(l: OnIconClickListener, sideToDelete: Int = NONE_VIEW_TO_DELETE) {
+
         onIconClickListener = l
-        metaBalls.deleteView = sideToDelete
+        metaBalls.deleteLeftView = sideToDelete
+    }
+
+    fun removeRightIconClickListener() {
+        onRightIconClicked = null
+    }
+
+    fun removeLeftIconClickListener() {
+        onLeftIconClicked = null
+    }
+
+    fun removeIconClickListener() {
+        onIconClickListener = null
     }
 
     fun setOnIconClickListener(
@@ -476,7 +514,6 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
     }
 
 
-
     /**
      * Close the panel to hide the secondary view
      */
@@ -655,4 +692,5 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
             rectMainClose.right - secondaryView.width / 2
         }
     }
+
 }
