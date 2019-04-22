@@ -1,8 +1,9 @@
 package com.errorerrorerror.esplightcontrol.adapter;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.errorerrorerror.esplightcontrol.databinding.RecyclerDevicesListBinding;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 class DevicesViewHolder extends RecyclerView.ViewHolder {

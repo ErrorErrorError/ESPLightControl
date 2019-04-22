@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase;
 /**
  * Singleton pattern
  */
-@Database(entities = {Devices.class}, version = 3)
+@Database(entities = {Devices.class}, version = 1)
 public abstract class DevicesDatabase extends RoomDatabase {
 
     public abstract DevicesDao getDevicesDao();

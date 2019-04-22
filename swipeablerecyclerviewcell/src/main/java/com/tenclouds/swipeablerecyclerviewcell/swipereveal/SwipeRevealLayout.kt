@@ -210,7 +210,6 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
 
             rightViewColor = revealedRightViewColor
             leftViewColor = revealedLeftViewColor
-            //connectorColor = revealedConnectorViewColor
 
             leftIconResId = leftIconRes
             rightIconResId = rightIconRes

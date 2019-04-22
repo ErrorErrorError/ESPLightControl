@@ -34,6 +34,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DialogFragment extends RxDialogFragment {
 
+    private static final String TAG = "DialogFragment";
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private DialogFragmentDevicesBinding devicesBinding;
@@ -99,7 +100,7 @@ public class DialogFragment extends RxDialogFragment {
                             } else {
                                 editDevice(mode);
                             }
-                        }));
+                        }, onError -> Log.e(TAG, "onCreate: ",onError )));
 
     }
 
@@ -145,7 +146,8 @@ public class DialogFragment extends RxDialogFragment {
                                         Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
                                         "",
                                         true,
-                                        false))
+                                        false,
+                                        100))
                                         .compose(bindToLifecycle())
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
@@ -161,17 +163,19 @@ public class DialogFragment extends RxDialogFragment {
     private void editDevice(long mode) {
 
         final boolean[] testBoolean = new boolean[2];
+        final int[] testInt = new int[1];
         collectionViewModel.addDisposable(collectionViewModel.getDeviceWithId(mode)
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(devices -> {
-                    devicesBinding.deviceName.setText(devices.getDevice());
+                    devicesBinding.deviceName.setText(devices.getDeviceName());
                     devicesBinding.IPAddressInput.setText(devices.getIp());
                     devicesBinding.portInput.setText(devices.getPort());
                     testBoolean[0] = devices.isOn();
                     testBoolean[1] = devices.isOpen();
-                })
+                    testInt[0] = devices.getBrightness();
+                }, onError -> Log.e(TAG, "editDevice: ",onError))
         );
 
         collectionViewModel.addDisposable(RxView.clicks(devicesBinding.positiveButton)
@@ -188,7 +192,8 @@ public class DialogFragment extends RxDialogFragment {
                                 Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
                                 "",
                                 testBoolean[0],
-                                testBoolean[1]);
+                                testBoolean[1],
+                                testInt[0]);
 
                         device.setId(mode);
 
@@ -197,12 +202,12 @@ public class DialogFragment extends RxDialogFragment {
                                         .compose(bindToLifecycle())
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe()
+                                        .subscribe(() -> Log.d(TAG, "editDevice: Edited Device Successfully"), onError -> Log.e(TAG, "editDevice: ", onError))
                         );
 
                         dismiss();
                     }
-                }));
+                }, onError -> Log.e(TAG, "editDevice: ", onError)));
     }
 
     private void setBackground() {

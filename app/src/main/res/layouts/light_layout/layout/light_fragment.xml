@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
+        android:id="@+id/lightLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <com.errorerrorerror.iosstyleslider.IOSStyleSlider
-            android:id="@+id/ledLight"
-            android:layout_width="140dp"
-            android:layout_height="340dp"
-            android:layout_marginEnd="200dp"
-            android:layout_marginBottom="100dp"
-            android:elevation="?contentElevation"
-            android:outlineAmbientShadowColor="@color/colorPrimary"
-            android:outlineSpotShadowColor="@color/colorPrimary"
-            app:issColorBackgroundSlider="?contentColor"
-            app:issCornerRadius="40dp"
-            tools:targetApi="p" />
+        android:orientation="horizontal">
+    
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lightRecyclerView"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
 </layout>

@@ -9,6 +9,22 @@
         <attr name="issSetMaxValue" format="integer|reference"/>
         <attr name="issSetMinValue" format="integer|reference"/>
         <attr name="issSetProgressBar" format="integer|reference"/>
+        <attr name="issText" format="string|reference"/>
+        <attr name="issTextAttrChanged"/>
+        <attr name="issSetProgressBarChanged"/>
+        <attr name="issIcon" format="reference"/>
+        <attr name="issIconTint" format="color|reference"/>
+        <attr name="issTextColor" format="color|reference"/>
+        <attr name="issTextSize" format="dimension"/>
+        <attr name="issIconSize" format="dimension"/>
+        <attr name="issIconTintMode" format="enum">
+            <enum name="add" value="12"/>
+            <enum name="multiply" value="13"/>
+            <enum name="screen" value="14"/>
+            <enum name="src_atop" value="9"/>
+            <enum name="src_in" value="5"/>
+            <enum name="src_over" value="7"/>
+        </attr>
     </declare-styleable>
 
 

@@ -2,11 +2,10 @@ package com.errorerrorerror.iosstyleslider;
 
 import android.graphics.Path;
 import android.graphics.PointF;
-import android.util.Log;
 
 class SliderPoints {
 
-    private static final String TAG = "sliderpoints";
+    //private static final String TAG = "sliderpoints";
     private float width;
     private float height;
     private float mSliderRadius;
@@ -57,16 +56,17 @@ class SliderPoints {
 
     private void sliderPoints() {
 
-        int range = max - min;
+        //int range = max - min;
         float val = height - (height * slider) / 100;
-
-
+        //Log.d("iosstyleslider", "sliderPoints: " + val);
+/*
         Log.d(TAG, "\nval2: " + val +
                 " \nheight: " + height +
                 " \nslider: " + slider +
                 " \nmax: " + max +
                 " \nmin: " + min +
                 " \nrange: " + range);
+
 
         mSliderP1.set(0, mSliderRadius + val);
         mSliderP2.set(mSliderRadius, val);
@@ -116,6 +116,52 @@ class SliderPoints {
                 mSliderP2ControlPointF.x, mSliderP2ControlPointF.y,
                 mSliderP2.x, mSliderP2.y);
         mSliderPath.close();
+        */
+
+        mSliderP1.set(0,  val);
+        //mSliderP2.set(0, val);
+        //mSliderP1ControlPointF.set(0, (((mSliderRadius * 9) / 10) / 2) + val);
+        //mSliderP2ControlPointF.set((((mSliderRadius * 9) / 10) / 2), val);
+
+        //mSliderP3.set((width - mSliderRadius), val);
+        mSliderP4.set(width,  val);
+       // mSliderP3ControlPointF.set(width - (((mSliderRadius * 9) / 10) / 2), val);
+       // mSliderP4ControlPointF.set(width, (((mSliderRadius * 9) / 10) / 2) + val);
+
+        //mSliderP5.set(width, (height - mSliderRadius));
+        mSliderP6.set((width), height);
+        //mSliderP5ControlPointF.set(width, (height - (((mSliderRadius * 9) / 10) / 2)));
+        //mSliderP6ControlPointF.set((width - ((mSliderRadius * 9 / 10) / 2)), height);
+
+        //mSliderP7.set(mSliderRadius, height);
+        mSliderP8.set(0, height);
+        //mSliderP7ControlPointF.set((((mSliderRadius * 9) / 10) / 2), height);
+        //mSliderP8ControlPointF.set(0, (height - (((mSliderRadius * 9) / 10) / 2)));
+
+
+        //Plots Slider
+        mSliderPath.reset();
+        mSliderPath.moveTo(mSliderP1.x, mSliderP1.y);
+        mSliderPath.lineTo(mSliderP4.x, mSliderP4.y);
+
+        mSliderPath.lineTo(mSliderP6.x, mSliderP6.y);
+        mSliderPath.lineTo(mSliderP8.x, mSliderP8.y);
+        mSliderPath.lineTo(mSliderP1.x, mSliderP1.y);
+
+
+        /*
+        mSliderPath.cubicTo(mSliderP5ControlPointF.x, mSliderP5ControlPointF.y,
+                mSliderP6ControlPointF.x, mSliderP6ControlPointF.y,
+                mSliderP6.x, mSliderP6.y);
+
+
+        mSliderPath.cubicTo(mSliderP7ControlPointF.x, mSliderP7ControlPointF.y,
+                mSliderP8ControlPointF.x, mSliderP8ControlPointF.y,
+                mSliderP8.x, mSliderP8.y);
+*/
+
+        mSliderPath.close();
+
     }
 
 

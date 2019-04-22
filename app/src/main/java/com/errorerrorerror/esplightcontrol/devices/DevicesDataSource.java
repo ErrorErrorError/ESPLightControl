@@ -47,4 +47,9 @@ public class DevicesDataSource implements DevicesRepository {
         devicesDao.insertEditDevice(device);
     }
 
+    @Override
+    public void setBrightnessLevel(int progress, long id) {
+        devicesDao.updateBrightnessLevel(progress, id);
+    }
+
 }

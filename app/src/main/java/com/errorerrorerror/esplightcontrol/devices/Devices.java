@@ -1,7 +1,6 @@
 package com.errorerrorerror.esplightcontrol.devices;
 
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -15,7 +14,7 @@ public class Devices {
     private long id;
 
     @ColumnInfo(name = "device_name")
-    private String device;
+    private String deviceName;
 
     @ColumnInfo(name = "device_ip")
     private String ip;
@@ -29,6 +28,9 @@ public class Devices {
     @ColumnInfo(name = "device_on")
     private Boolean on;
 
+    @ColumnInfo(name = "brightness_level")
+    private int brightness;
+
     //This is just for Swiping items
     @Ignore
     private boolean open;
@@ -37,22 +39,23 @@ public class Devices {
     }
 
     @Ignore
-    public Devices(long id, String device, String ip, String port, String connectivity, Boolean on) {
+    public Devices(long id, String deviceName, String ip, String port, String connectivity, Boolean on) {
         this.id = id;
-        this.device = device;
+        this.deviceName = deviceName;
         this.ip = ip;
         this.port = port;
         this.connectivity = connectivity;
         this.on = on;
     }
 
-    public Devices(String device, String ip, String port, String connectivity, Boolean on, boolean opened) {
-        this.device = device;
+    public Devices(String deviceName, String ip, String port, String connectivity, Boolean on, boolean opened, int brightness) {
+        this.deviceName = deviceName;
         this.ip = ip;
         this.port = port;
         this.connectivity = connectivity;
         this.on = on;
         this.open = opened;
+        this.brightness = brightness;
     }
 
     //Setters and
@@ -74,12 +77,12 @@ public class Devices {
         this.id = id;
     }
 
-    public String getDevice() {
-        return device;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setDevice(String device) {
-        this.device = device;
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 
     public String getIp() {
@@ -114,16 +117,25 @@ public class Devices {
         this.open = open;
     }
 
-    @NonNull
+    public int getBrightness() {
+        return brightness;
+    }
+
+    public void setBrightness(int brightness) {
+        this.brightness = brightness;
+    }
+
     @Override
     public String toString() {
         return "Devices{" +
                 "id=" + id +
-                ", device='" + device + '\'' +
+                ", deviceName='" + deviceName + '\'' +
                 ", ip='" + ip + '\'' +
                 ", port='" + port + '\'' +
                 ", connectivity='" + connectivity + '\'' +
                 ", on=" + on +
+                ", brightness=" + brightness +
+                ", open=" + open +
                 '}';
     }
 
@@ -141,7 +153,7 @@ public class Devices {
         Devices devices = (Devices) obj;
 
         return
-                this.getDevice().equals(devices.getDevice()) &&
+                this.getDeviceName().equals(devices.getDeviceName()) &&
                         this.getIp().equals(devices.getIp()) &&
                         this.getPort().equals(devices.getPort());
     }
@@ -150,10 +162,9 @@ public class Devices {
     public int hashCode() {
         int mult = 31;
         int hash = 17;
-        hash = mult * (hash + this.getDevice().hashCode());
+        hash = mult * (hash + this.getDeviceName().hashCode());
         hash = mult * (hash + this.getIp().hashCode());
         hash = mult * (hash + this.getPort().hashCode());
         return hash;
     }
-
 }

@@ -96,12 +96,6 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
         return getItem(position).getId();
     }
 
-    @Override
-    protected Devices getItem(int position) {
-        return getCurrentList().get(position);
-    }
-
-
     public Observable<SwitchBoolInt> getListenerSwitch() {
         return Observable.zip(mSwitched, mPosition, SwitchBoolInt::new);
     }

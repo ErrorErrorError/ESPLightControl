@@ -18,4 +18,5 @@ public interface DevicesRepository {
     void setSwitch(Boolean bool, long id);
     Single<Devices> getDevice(long id);
     void insertEditDevice(Devices device);
+    void setBrightnessLevel(int progress, long id);
 }

@@ -1,11 +1,12 @@
 package com.errorerrorerror.esplightcontrol.viewmodel;
 
+import androidx.lifecycle.ViewModel;
+
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.errorerrorerror.esplightcontrol.devices.DevicesDataSource;
 
 import java.util.List;
 
-import androidx.lifecycle.ViewModel;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
@@ -49,6 +50,11 @@ public class DevicesCollectionViewModel extends ViewModel {
         devicesDataSource.setConnectivity(connectivity, id);
     }
     */
+
+    public Completable updateBrightnessLevel(int progress, long id){
+        return Completable.fromAction(() ->
+                devicesDataSource.setBrightnessLevel(progress, id));
+    }
 
     public void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);

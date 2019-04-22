@@ -1,12 +1,13 @@
 package com.errorerrorerror.esplightcontrol.devices;
 
-import java.util.List;
-
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import java.util.List;
+
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
@@ -34,5 +35,7 @@ public interface DevicesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertEditDevice(Devices device);
 
+    @Query("UPDATE devices SET brightness_level = :progress WHERE id = :id")
+    void updateBrightnessLevel(int progress, long id);
 
 }

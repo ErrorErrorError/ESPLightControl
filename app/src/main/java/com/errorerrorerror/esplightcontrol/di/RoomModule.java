@@ -2,6 +2,9 @@ package com.errorerrorerror.esplightcontrol.di;
 
 import android.app.Application;
 
+import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Room;
+
 import com.errorerrorerror.esplightcontrol.devices.DevicesDao;
 import com.errorerrorerror.esplightcontrol.devices.DevicesDataSource;
 import com.errorerrorerror.esplightcontrol.devices.DevicesDatabase;
@@ -9,8 +12,6 @@ import com.errorerrorerror.esplightcontrol.viewmodel.DevicesViewModelFactory;
 
 import javax.inject.Singleton;
 
-import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
 import dagger.Module;
 import dagger.Provides;
 

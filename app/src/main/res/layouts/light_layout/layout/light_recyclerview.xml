@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="device"
+            type="com.errorerrorerror.esplightcontrol.devices.Devices" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.errorerrorerror.iosstyleslider.IOSStyleSlider
+            android:id="@+id/brightness"
+            android:layout_width="140dp"
+            android:layout_height="340dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:elevation="?contentElevation"
+            android:outlineAmbientShadowColor="@color/colorPrimary"
+            android:outlineSpotShadowColor="@color/colorPrimary"
+            app:issColorBackgroundSlider="?contentColor"
+            app:issCornerRadius="40dp"
+            app:issIconTint="#E5E5E5"
+            app:issIconTintMode="src_in"
+            app:issText="@{Integer.toString(device.brightness) + `%`}"
+            app:issTextSize="12sp"
+            app:issSetProgressBar="@{device.brightness}"
+            app:issTextColor="#E5E5E5"
+            tools:targetApi="p" />
+
+        <TextView
+            android:id="@+id/lightOnText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@{device.deviceName}"
+            android:textSize="20sp" />
+    </LinearLayout>
+</layout>

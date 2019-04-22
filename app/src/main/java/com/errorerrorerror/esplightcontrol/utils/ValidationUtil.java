@@ -39,75 +39,42 @@ public class ValidationUtil {
     //Testing User Input Device name Add
     private boolean deviceNameValidationAdd(String name, TextInputLayout textInputLayoutName) //Validates name and checks if the name is already used
     {
-        boolean isValid;
+        boolean isValid = false;
         boolean isRepeated = false;
 
         if (!name.isEmpty()) {
-
             isValid = true;
 
-            if (!devicesList.isEmpty()) {
-                for (int i = 0; i < devicesList.size(); i++) {
-                    String deviceMatch = devicesList.get(i).getDevice();
+            for (int i = 0; i < devicesList.size(); i++) {
+                String deviceMatch = devicesList.get(i).getDeviceName();
 
-                    if (!name.equals(deviceMatch)) {
-                        isRepeated = false;
-
-                    } else {
-                        isRepeated = true;
-                        break;
-                    }
+                if (name.equals(deviceMatch)) {
+                    isRepeated = true;
+                    break;
                 }
             }
-
-        } else {
-            isValid = false;
         }
 
         return setColors(textInputLayoutName, isValid, isRepeated, 1);
-        //setColors(textInputLayoutName, );
-/*
-        if (isValid && !isRepeated) {
-            setColors(textInputLayoutName, true);
-
-            return true;
-
-        } else if (isValid & isRepeated) {
-            setColors(textInputLayoutName, false);
-            textInputLayoutName.setError("Enter An Unused Device Name");
-
-            return false;
-
-        } else {
-            setColors(textInputLayoutName, false);
-            textInputLayoutName.setError("Enter A Valid Device Name");
-
-            return false;
-        }
-        */
     }
 
     //Testing User Input Device ip Add
     private boolean ipAddressValidationAdd(String ip, TextInputLayout textInputLayoutIP) //Validates ipAddress as either ipV4 or ipV6
     {
-        boolean ipValid;
+        boolean ipValid = false;
         boolean ipRepeated = false;
 
-        if (ip.matches(ipV4Regex)) {
+        if (ip.matches(ipV4Regex) || ip.matches(ipV6Regex)) {
             ipValid = true;
-        } else ipValid = ip.matches(ipV6Regex);
+        }
 
         if (ipValid) {
             for (int i = 0; i < devicesList.size(); i++) {
                 String ipMatch = devicesList.get(i).getIp();
 
-                if (ipMatch.isEmpty()) {
+                if (ip.equals(ipMatch)) {
+                    ipRepeated = true;
                     break;
-                } else {
-                    if (ip.equals(ipMatch)) {
-                        ipRepeated = true;
-                        break;
-                    }
                 }
             }
         }
@@ -119,37 +86,26 @@ public class ValidationUtil {
     private boolean portValidationAdd(String port, TextInputLayout textInputLayoutPort) //validates port
     {
         return setColors(textInputLayoutPort, port.matches(portRegex), false, 3);
-
     }
 
     //Testing User Input Device name Edit
     private boolean deviceNameValidationEdit(String name, long id, TextInputLayout textInputLayoutName) //Validates name and checks if the name is already used
     {
-        boolean isValid;
+        boolean isValid = false;
         boolean isRepeated = false;
 
         if (!name.isEmpty()) {
-
             isValid = true;
 
-            if (!devicesList.isEmpty()) {
-                for (int i = 0; i < devicesList.size(); i++) {
-
-                    if (devicesList.get(i).getId() != id) {
-                        String deviceMatch = devicesList.get(i).getDevice();
-                        if (!name.equals(deviceMatch)) {
-                            isRepeated = false;
-
-                        } else {
-                            isRepeated = true;
-                            break;
-                        }
+            for (int i = 0; i < devicesList.size(); i++) {
+                if (devicesList.get(i).getId() != id) {
+                    String deviceMatch = devicesList.get(i).getDeviceName();
+                    if (name.equals(deviceMatch)) {
+                        isRepeated = true;
+                        break;
                     }
                 }
             }
-
-        } else {
-            isValid = false;
         }
 
         return setColors(textInputLayoutName, isValid, isRepeated, 1);
@@ -159,28 +115,22 @@ public class ValidationUtil {
     //Testing User Input Device ip Edit
     private boolean ipAddressValidationEdit(String ip, long id, TextInputLayout textInputLayoutIP) //Validates ipAddress as either ipV4 or ipV6
     {
-        boolean ipValid;
+        boolean ipValid = false;
         boolean ipRepeated = false;
 
 
-        if (ip.matches(ipV4Regex)) {
+        if (ip.matches(ipV4Regex) || ip.matches(ipV6Regex)) {
             ipValid = true;
-        } else ipValid = ip.matches(ipV6Regex);
-
+        }
         if (ipValid) {
             for (int i = 0; i < devicesList.size(); i++) {
                 if (devicesList.get(i).getId() != id) {
                     String ipMatch = devicesList.get(i).getIp();
-                    if (ipMatch.isEmpty()) {
+                    if (ip.equals(ipMatch)) {
+                        ipRepeated = true;
                         break;
-                    } else {
-                        if (ip.equals(ipMatch)) {
-                            ipRepeated = true;
-                            break;
-                        }
                     }
                 }
-
             }
         }
 
@@ -218,34 +168,24 @@ public class ValidationUtil {
                 test.setEndIconVisible(false);
             }
 
-        } else if (valid && repeated) {
+        } else if (repeated) {
             if (mode == 1) {
-                if (!test.isErrorEnabled()) {
-                    test.setErrorEnabled(true);
-                    test.setError(UNUSED_NAME);
-                }
+                test.setErrorEnabled(true);
+                test.setError(UNUSED_NAME);
             } else if (mode == 2) {
-                if (!test.isErrorEnabled()) {
-                    test.setErrorEnabled(true);
-                    test.setError(UNUSED_IP);
-                }
+                test.setErrorEnabled(true);
+                test.setError(UNUSED_IP);
             }
         } else {
             if (mode == 1) {
-                if (!test.isErrorEnabled()) {
-                    test.setErrorEnabled(true);
-                    test.setError(INVALID_NAME);
-                }
+                test.setErrorEnabled(true);
+                test.setError(INVALID_NAME);
             } else if (mode == 2) {
-                if (!test.isErrorEnabled()) {
-                    test.setErrorEnabled(true);
-                    test.setError(INVALID_IP);
-                }
+                test.setErrorEnabled(true);
+                test.setError(INVALID_IP);
             } else if (mode == 3) {
-                if (!test.isErrorEnabled()) {
-                    test.setErrorEnabled(true);
-                    test.setError(INVALID_PORT);
-                }
+                test.setErrorEnabled(true);
+                test.setError(INVALID_PORT);
             }
 
         }
