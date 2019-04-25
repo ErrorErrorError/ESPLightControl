@@ -40,4 +40,8 @@ dependencies {
     implementation "frankiesardo:icepick:$icepick_version"
     annotationProcessor "frankiesardo:icepick-processor:$icepick_version"
 
+    def lottieVersion = "3.0.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+
 }

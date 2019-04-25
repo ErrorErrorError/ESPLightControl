@@ -95,8 +95,8 @@ public class LightFragment extends RxFragment {
                                 collectionViewModel.updateBrightnessLevel(progressId.progress, progressId.id)
                                         .compose(bindToLifecycle())
                                         .subscribeOn(Schedulers.io())
-                                        .subscribe(() -> Log.d(TAG, "accept: Successfully changed brightness!"),
-                                                onError -> Log.e(TAG, "accept: ", onError))
+                                        .subscribe(() -> { },
+                                                onError -> Log.e(TAG, "lightDevicesListeners: ", onError))
                         ))
         );
     }

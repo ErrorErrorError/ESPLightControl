@@ -2,21 +2,22 @@
 <resources>
     <declare-styleable name="IOSStyleSlider">
 
-        <attr name="issCornerRadius" format="dimension|reference"/>
-        <attr name="issColorSlider" format="color|reference"/>
-        <attr name="issColorBackgroundSlider" format="color|reference"/>
-        <attr name="issDisabled" format="boolean|reference"/>
-        <attr name="issSetMaxValue" format="integer|reference"/>
-        <attr name="issSetMinValue" format="integer|reference"/>
-        <attr name="issSetProgressBar" format="integer|reference"/>
-        <attr name="issText" format="string|reference"/>
+        <attr name="issCornerRadius" format="dimension"/>
+        <attr name="issColorSlider" format="color"/>
+        <attr name="issColorBackgroundSlider" format="color"/>
+        <attr name="issDisabled" format="boolean"/>
+        <attr name="issSetMaxValue" format="integer"/>
+        <attr name="issSetMinValue" format="integer"/>
+        <attr name="issProgress" format="integer"/>
+        <attr name="issText" format="string"/>
         <attr name="issTextAttrChanged"/>
-        <attr name="issSetProgressBarChanged"/>
+        <attr name="issProgressBarChanged"/>
         <attr name="issIcon" format="reference"/>
-        <attr name="issIconTint" format="color|reference"/>
-        <attr name="issTextColor" format="color|reference"/>
+        <attr name="issIconTint" format="color"/>
+        <attr name="issTextColor" format="color"/>
         <attr name="issTextSize" format="dimension"/>
         <attr name="issIconSize" format="dimension"/>
+        <attr name="issProgressStep" format="integer"/>
         <attr name="issIconTintMode" format="enum">
             <enum name="add" value="12"/>
             <enum name="multiply" value="13"/>
@@ -24,6 +25,12 @@
             <enum name="src_atop" value="9"/>
             <enum name="src_in" value="5"/>
             <enum name="src_over" value="7"/>
+        </attr>
+        <attr name="issShowIconText" format="enum">
+            <enum name="icon" value="0"/>
+            <enum name="text" value="1"/>
+            <enum name="textIcon" value="2"/>
+            <enum name="iconText" value="3"/>
         </attr>
     </declare-styleable>
 

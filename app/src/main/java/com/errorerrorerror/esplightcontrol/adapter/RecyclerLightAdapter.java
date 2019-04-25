@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
+import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.databinding.LightRecyclerviewBinding;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.errorerrorerror.esplightcontrol.rxobservable.RxIOSStyleSlider;
@@ -32,8 +33,8 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> 
                 }
             };
     private LayoutInflater layoutInflater;
-
     public RecyclerLightAdapter() {
+
         super(DIFF_CALLBACK);
         setHasStableIds(true);
     }
@@ -56,19 +57,21 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> 
     @SuppressLint("CheckResult")
     @Override
     public void onBindViewHolder(@NonNull LightViewHolder holder, int position) {
-
         Devices devices = getItem(position);
         holder.bind(devices);
+        holder.binding.brightness.getIconView().setAnimation(R.raw.brightness_animation);
+        holder.binding.brightness.getIconView().setProgress(
+                (float) holder.binding.getDevice().getBrightness() / 100);
 
-        RxIOSStyleSlider.progressChanged(holder.binding.brightness)
-                .subscribe(progress -> {
-                    if(progress != holder.binding.getDevice().getBrightness()) {
-                        holder.binding.getDevice().setBrightness(progress);
-                        holder.binding.brightness.setText(holder.binding.getDevice().getBrightness()+ "%");
-                        mProgress.onNext(progress);
-                        mId.onNext(holder.binding.getDevice().getId());
-                    }
-                });
+        RxIOSStyleSlider.progressChanged(holder.binding.brightness).subscribe(progress -> {
+            if (progress != holder.binding.getDevice().getBrightness()) {
+                holder.binding.getDevice().setBrightness(progress);
+                mProgress.onNext(progress);
+                mId.onNext(holder.binding.getDevice().getId());
+                holder.binding.brightness.setText(holder.binding.getDevice().getBrightness() + "%");
+                holder.binding.brightness.getIconView().setProgress((float) progress / 100);
+            }
+        });
     }
 
     @Override

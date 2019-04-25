@@ -38,6 +38,7 @@
             android:id="@+id/customBubbleBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottomNavHeight"
+            app:bnc_mode="spread"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <com.gauravk.bubblenavigation.BubbleToggleView
@@ -45,8 +46,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginEnd="30dp"
-                android:gravity="center"
                 app:bt_shape="@drawable/trasition_drawable_shape"
                 app:bt_colorActive="@color/colorAccent"
                 app:bt_colorInactive="@color/grayBoi"
@@ -60,8 +59,6 @@
                 android:id="@+id/modes_bubble"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:gravity="center"
                 app:bt_colorActive="@color/colorAccent"
                 app:bt_colorInactive="@color/grayBoi"
                 app:bt_icon="@drawable/modes_icon"
@@ -75,8 +72,6 @@
                 android:id="@+id/light_bubble"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:gravity="center"
                 app:bt_colorActive="@color/lightBulbColorLight"
                 app:bt_colorInactive="@color/grayBoi"
                 app:bt_icon="@drawable/lightbulb_icon"
@@ -90,8 +85,6 @@
                 android:id="@+id/presets_bubble"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:gravity="center"
                 app:bt_colorActive="@color/colorAccent"
                 app:bt_colorInactive="@color/grayBoi"
                 app:bt_icon="@drawable/ic_presets_icon"

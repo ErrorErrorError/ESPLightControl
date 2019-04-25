@@ -27,11 +27,13 @@
             android:outlineSpotShadowColor="@color/colorPrimary"
             app:issColorBackgroundSlider="?contentColor"
             app:issCornerRadius="40dp"
-            app:issIconTint="#E5E5E5"
             app:issIconTintMode="src_in"
+            app:issIconTint="#E5E5E5"
             app:issText="@{Integer.toString(device.brightness) + `%`}"
             app:issTextSize="12sp"
-            app:issSetProgressBar="@{device.brightness}"
+            app:issIconSize="45dp"
+            app:issShowIconText="iconText"
+            app:issProgress="@{device.brightness}"
             app:issTextColor="#E5E5E5"
             tools:targetApi="p" />
 

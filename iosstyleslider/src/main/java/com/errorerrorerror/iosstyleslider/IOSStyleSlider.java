@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -19,15 +18,15 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewOutlineProvider;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+
+import com.airbnb.lottie.LottieAnimationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +41,9 @@ public class IOSStyleSlider extends LinearLayout {
 
     private final static int DEFAULT_SLIDER_COLOR = Color.parseColor("#7673E7");
     private final static int DEFAULT_BACKGROUND_SLIDER_COLOR = Color.parseColor("#efefef");
-    private final static int DEFAULT_WIDTH = 100; //Wrapped Default
-    private final static int DEFAULT_HEIGHT = 250; //Wrapped default
     private final static int DEFAULT_MIN_VALUE = 0;
     private final static int DEFAULT_MAX_VALUE = 100;
-    private final static int DEFAULT_PROGRESS = 80;
-    private final static String DEFAULT_TEXT = "Test";
+    private final static int DEFAULT_PROGRESS = 80; //Default progress on a 0 - 100 scale
     private static final String TAG = "iosstyleslider";
 
     @State
@@ -58,26 +54,23 @@ public class IOSStyleSlider extends LinearLayout {
     private RectF mSliderBackgroundF;
     private int mSliderRadius;
     private SliderPoints sliderPoints;
-    private boolean mDisableSlider = false;
-    private VelocityTracker mVelocityTracker;
-    private ImageView iconView;
+    //private boolean mDisableSlider = false;
+    private LottieAnimationView iconView;
     private PorterDuff.Mode mIconTintMode = null;
     private boolean hasIconTintMode = false;
     private TextView textView;
+    private int iconResource;
     private int iconTint = 0;
     private boolean hasIconTint = false;
     private List<OnProgressChangedListener> onProgressChangedListener;
-    private List<OnStateChangedListener> onStateChangedListener;
-    private Drawable iconSource;
-    private IOSStyleStates mState = null;
+    //private IOSStyleStates mState = null;
     private int textColor = 0;
     private int iconSize = 0;
     private int textSize = 0;
     private GestureDetector gestureDetector;
-    private GestureDetector.SimpleOnGestureListener gestureListener;
-    private int minDistRequestDisallowParent = 0;
+    private int showIconText;
 
-    private boolean isScrolling = false;
+    //private boolean isScrolling = false;
 
     //Users Can Change these values
     private int mSliderColor = DEFAULT_SLIDER_COLOR;
@@ -85,21 +78,32 @@ public class IOSStyleSlider extends LinearLayout {
     private int mSliderMin = DEFAULT_MIN_VALUE;
     private int mSliderMax = DEFAULT_MAX_VALUE;
     private static final float scale = 1.04f;
-    private static final long times = 200;
     private String mText;
 
+/*
     public enum IOSStyleStates {
         IDLE,
         SLIDING,
         DISABLED
     }
-
-    public interface OnProgressChangedListener {
-        void onProgressChanged(int progress);
+*/
+    public enum IOSStyleView {
+        icon,
+        text,
+        textIcon,
+        iconText
     }
 
-    public interface OnStateChangedListener {
-        void onStateChanged(IOSStyleStates IOSStyleStates, int progress);
+    public interface OnProgressChangedListener {
+        /*
+         * Detects changes on progress
+         */
+        void onProgressChanged(IOSStyleSlider slider, int progress);
+
+        void onStartTrackingTouch(IOSStyleSlider slider);
+
+        void onStopTrackingTouch(IOSStyleSlider slider);
+
     }
 
     public IOSStyleSlider(Context context) {
@@ -123,12 +127,6 @@ public class IOSStyleSlider extends LinearLayout {
         }
     }
 
-    public void removeStateChangedListener(OnStateChangedListener listener) {
-        if (this.onStateChangedListener != null) {
-            this.onStateChangedListener.remove(listener);
-        }
-    }
-
     public void removeTextChangedListener(TextWatcher listener) {
         if (textView != null) {
             this.textView.removeTextChangedListener(listener);
@@ -142,13 +140,13 @@ public class IOSStyleSlider extends LinearLayout {
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
         onProgressChangedListener = null;
-        onStateChangedListener = null;
+        setWeightSum(.5f);
 
         mPaint = new Paint();
         mSliderBackgroundF = new RectF();
         mSliderPath = new Path();
         sliderPoints = new SliderPoints();
-        mState = IOSStyleStates.IDLE;
+        //mState = IOSStyleStates.IDLE;
 
 
         //Attributes
@@ -158,7 +156,7 @@ public class IOSStyleSlider extends LinearLayout {
         mSliderBackgroundColor = ta.getColor(R.styleable.IOSStyleSlider_issColorBackgroundSlider, mSliderBackgroundColor);
         setSliderMin(ta.getInteger(R.styleable.IOSStyleSlider_issSetMinValue, mSliderMin));
         setSlidertMax(ta.getInteger(R.styleable.IOSStyleSlider_issSetMaxValue, mSliderMax));
-        setSliderProgress(ta.getInt(R.styleable.IOSStyleSlider_issSetProgressBar, (int) mSliderProgress));
+        setSliderProgress(ta.getInt(R.styleable.IOSStyleSlider_issProgress, (int) mSliderProgress));
 
         if (ta.hasValue(R.styleable.IOSStyleSlider_issIconTint)) {
             iconTint = ta.getColor(R.styleable.IOSStyleSlider_issIconTint, ContextCompat.getColor(getContext(), R.color.iconColor));
@@ -174,6 +172,8 @@ public class IOSStyleSlider extends LinearLayout {
             hasIconTintMode = true;
         }
 
+        iconResource = ta.getResourceId(R.styleable.IOSStyleSlider_issIcon, R.drawable.ic_brightness_icon);
+
         textColor = ta.getColor(R.styleable.IOSStyleSlider_issTextColor, ContextCompat.getColor(getContext(), R.color.textColor));
         iconSize = ta.getDimensionPixelSize(R.styleable.IOSStyleSlider_issIconSize, getResources().getDimensionPixelSize(R.dimen.iconSize));
 
@@ -183,7 +183,7 @@ public class IOSStyleSlider extends LinearLayout {
             mText = ta.getText(R.styleable.IOSStyleSlider_issText).toString();
         }
 
-        iconSource = (ta.getDrawable(R.styleable.IOSStyleSlider_issIcon) != null) ? ta.getDrawable(R.styleable.IOSStyleSlider_issIcon) : ContextCompat.getDrawable(getContext(), R.drawable.ic_brightness_icon);
+        showIconText = ta.getInteger(R.styleable.IOSStyleSlider_issShowIconText, 3);
 
 
         setMinimumWidth(getResources().getDimensionPixelSize(R.dimen.minWidth));
@@ -208,18 +208,6 @@ public class IOSStyleSlider extends LinearLayout {
         this.textView.addTextChangedListener(textChangedListener);
     }
 
-
-    public void addOnStateChanged(OnStateChangedListener stateChangedListener) {
-        if (this.onStateChangedListener == null) {
-            onStateChangedListener = new ArrayList<>();
-        }
-        this.onStateChangedListener.add(stateChangedListener);
-    }
-
-    public List<OnStateChangedListener> getOnStateChanged() {
-        return onStateChangedListener;
-    }
-
     public boolean hasIconTintMode() {
         return hasIconTintMode;
     }
@@ -234,21 +222,41 @@ public class IOSStyleSlider extends LinearLayout {
         iconView.setImageTintMode(mIconTintMode);
     }
 
+    public LottieAnimationView getIconView() {
+        return this.iconView;
+    }
+
     private void addViews() {
-        iconView = new ImageView(getContext());
-        textView = new TextView(getContext());
+        if (showIconText == IOSStyleView.icon.ordinal()) {
+            addIconView();
+        } else if (showIconText == IOSStyleView.text.ordinal()) {
+            addTextView();
+        } else if (showIconText == IOSStyleView.textIcon.ordinal()) {
+            addTextView();
+            addIconView();
+        } else if(showIconText == IOSStyleView.iconText.ordinal()){
+            addIconView();
+            addTextView();
+        }
+    }
+
+    private void addIconView() {
+        iconView = new LottieAnimationView(getContext());
 
         if (hasIconTintMode()) {
             iconView.setImageTintMode(mIconTintMode);
         }
 
-        iconView.setImageDrawable(iconSource);
+        iconView.setImageResource(iconResource);
         if (hasIconTint()) {
             iconView.setImageTintList(ColorStateList.valueOf(iconTint));
         }
+        addView(iconView);
+    }
 
+    private void addTextView() {
+        textView = new TextView(getContext());
 
-        iconView.setId(generateViewId());
         textView.setGravity(Gravity.CENTER);
         if (mText != null) {
             textView.setText(mText);
@@ -257,7 +265,6 @@ public class IOSStyleSlider extends LinearLayout {
         textView.setTextColor(textColor);
         textView.setId(generateViewId());
 
-        addView(iconView);
         addView(textView);
     }
 
@@ -265,11 +272,9 @@ public class IOSStyleSlider extends LinearLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-            isScrolling = false;
+            onStopTrackingTouch();
             getParent().requestDisallowInterceptTouchEvent(false);
-            animate().scaleX(1.0f).setDuration(200).start();
-            animate().scaleY(1.0f).setDuration(200).start();
-
+            animateView(1.0f, 200);
         }
 
         if (this.gestureDetector.onTouchEvent(event)) {
@@ -280,6 +285,27 @@ public class IOSStyleSlider extends LinearLayout {
         return super.onTouchEvent(event);
     }
 
+    public void animateView(float scale, int duration) {
+        animate().scaleX(scale).setDuration(duration).start();
+        animate().scaleY(scale).setDuration(duration).start();
+    }
+
+    void onStartTrackingTouch() {
+        if (onProgressChangedListener != null) {
+            for (int i = 0; i < onProgressChangedListener.size(); i++) {
+                onProgressChangedListener.get(i).onStartTrackingTouch(this);
+            }
+        }
+    }
+
+    void onStopTrackingTouch() {
+        if (onProgressChangedListener != null) {
+            for (int i = 0; i < onProgressChangedListener.size(); i++) {
+                onProgressChangedListener.get(i).onStopTrackingTouch(this);
+            }
+        }
+    }
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -287,18 +313,18 @@ public class IOSStyleSlider extends LinearLayout {
     }
 
     private void setupGestureDetectors() {
-        gestureListener = new GestureDetector.SimpleOnGestureListener() {
+        //This allows for other gestures to occur
+        GestureDetector.SimpleOnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
             //This allows for other gestures to occur
             @Override
             public boolean onDown(MotionEvent e) {
-                animate().scaleX(scale).setDuration(200).start();
-                animate().scaleY(scale).setDuration(200).start();
+                animateView(scale, 200);
                 return true;
             }
 
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                isScrolling = true;
+                onStartTrackingTouch();
                 setSliderProgress(calculateDistance(distanceY));
                 getParent().requestDisallowInterceptTouchEvent(true);
                 return true;
@@ -306,6 +332,9 @@ public class IOSStyleSlider extends LinearLayout {
         };
 
         gestureDetector = new GestureDetector(getContext(), gestureListener);
+
+        //Disable this to have a long click and be able to scroll
+        gestureDetector.setIsLongpressEnabled(false);
     }
 
 
@@ -369,39 +398,31 @@ public class IOSStyleSlider extends LinearLayout {
         setClipToOutline(true);
     }
 
-    public void addOnProgressState(IOSStyleStates state) {
-        this.mState = state;
-
-        if (onStateChangedListener != null) {
-            for (int i = 0; i < onStateChangedListener.size(); i++) {
-                onStateChangedListener.get(i).onStateChanged(state, (int) this.mSliderProgress);
-            }
-        }
-    }
-
     @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         int desiredWidth = getSuggestedMinimumWidth() + getPaddingLeft() + getPaddingRight();
         int desiredHeight = getSuggestedMinimumHeight() + getPaddingTop() + getPaddingBottom();
-
-
         setMeasuredDimension(measureDimension(desiredWidth, widthMeasureSpec),
                 measureDimension(desiredHeight, heightMeasureSpec));
 
         for (int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
-
-            if (child instanceof ImageView) {
+            final View child = getChildAt(i);
+            if (child instanceof LottieAnimationView) {
                 child.getLayoutParams().width = iconSize;
             } else if (child instanceof TextView) {
                 child.getLayoutParams().width = getMeasuredWidth();
             }
-            child.getLayoutParams().height = getMeasuredHeight() / 2;
+            child.getLayoutParams().height = getMeasuredHeight() / getChildCount();
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
         }
     }
 
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+    }
 
     private int measureDimension(int desiredSize, int measureSpec) {
         int specMode = MeasureSpec.getMode(measureSpec);
@@ -452,7 +473,7 @@ public class IOSStyleSlider extends LinearLayout {
 
         if (onProgressChangedListener != null) {
             for (int i = 0; i < onProgressChangedListener.size(); i++) {
-                onProgressChangedListener.get(i).onProgressChanged((int) value);
+                onProgressChangedListener.get(i).onProgressChanged(this, (int) mSliderProgress);
             }
         }
         invalidate();

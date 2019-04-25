@@ -30,7 +30,7 @@ public class IOSStyleSliderBindingAdapters {
     }
 
 
-    @BindingAdapter("issSetProgressBar")
+    @BindingAdapter("issProgress")
     public static void setProgressBar(IOSStyleSlider view, int progress) {
         if (progress != view.getSliderProgress()) {
             view.setSliderProgress(progress);
@@ -59,13 +59,23 @@ public class IOSStyleSliderBindingAdapters {
         }
     }
 
-    @BindingAdapter(value = "issSetProgressBarAttrChanged")
+    @BindingAdapter(value = "issProgressAttrChanged")
     public static void setProgressListener(IOSStyleSlider view, final InverseBindingListener listener){
         if(listener != null){
             view.addOnProgressChanged(new IOSStyleSlider.OnProgressChangedListener() {
                 @Override
-                public void onProgressChanged(int progress) {
+                public void onProgressChanged(IOSStyleSlider slider, int progress) {
                     listener.onChange();
+                }
+
+                @Override
+                public void onStartTrackingTouch(IOSStyleSlider slider) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(IOSStyleSlider slider) {
+
                 }
             });
         }

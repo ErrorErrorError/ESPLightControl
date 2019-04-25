@@ -69,6 +69,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
 
+
     //Wave
     implementation 'com.scwang.wave:MultiWaveHeader:1.0.0-alpha-1'
 
@@ -101,7 +102,6 @@ dependencies {
     //RxAndroid
     def rx_android_version = "2.1.1"
     implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
-    implementation 'com.github.bobekos:reactivelivedata:1.0.5'
 
     //RxLifeCycles
 
@@ -125,12 +125,25 @@ dependencies {
 
 
     //Dagger core & Dagger Android
-    def dagger_version = "2.20"
+    def dagger_version = "2.22.1"
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     implementation "com.google.dagger:dagger-android:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+
+
+
+    /* AutoValue */
+    def auto_value_version = "1.6.2"
+    compileOnly "com.google.auto.value:auto-value:$auto_value_version"
+    api             "com.google.auto.value:auto-value-annotations:$auto_value_version"
+    annotationProcessor "com.google.auto.value:auto-value:$auto_value_version"
+
+    //Lottie
+    def lottieVersion = "3.0.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
 
     //JellyToggle
     implementation project(':jellytogglebutton')

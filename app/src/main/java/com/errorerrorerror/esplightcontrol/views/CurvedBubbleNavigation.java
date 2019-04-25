@@ -11,11 +11,11 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.errorerrorerror.esplightcontrol.R;
-import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
+import com.gauravk.bubblenavigation.BubbleNavigationConstraintView;
 
 import java.util.Objects;
 
-public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
+public class CurvedBubbleNavigation extends BubbleNavigationConstraintView {
     private static final Point mFirstCurveStartPoint = new Point();
     private static final Point mFirstCurveEndPoint = new Point();
     private static final Point mSecondCurveStartPoint = new Point();
@@ -45,7 +45,7 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
     }
 
     private void init() {
-        setPadding(0,CURVE_RADIUS,0,0);
+        setPadding(0, CURVE_RADIUS, 0 , 0);
         mPath = new Path();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -61,56 +61,16 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        // get width and height of navigation bar
-        // Navigation bar bounds (width & height)
-        int mNavigationBarWidth = getMeasuredWidth() - getPaddingRight();
-        int mNavigationBarHeight = getMeasuredHeight() - getPaddingBottom();
-
-        /*
-        // the coordinates (x,y) of the start point before curve
-        mFirstCurveStartPoint.set(0, CURVE_RADIUS);
-        // the coordinates (x,y) of the end point after curve
-        mFirstCurveEndPoint.set(CURVE_RADIUS, 0);
-        // same thing for the second curve
-        mSecondCurveStartPoint.set((mNavigationBarWidth - CURVE_RADIUS), 0);
-        mSecondCurveEndPoint.set(mNavigationBarWidth, CURVE_RADIUS);
-
-
-        //Had to multiply by 9 then divide by 10 to find the point it needs to add up to .90. Then from there divide by 2.
-        // the coordinates (x,y)  of the 1st control point on a cubic curve
-        mFirstCurveControlPoint1.set(0, (((CURVE_RADIUS * 9) / 10) / 2));
-        // the coordinates (x,y)  of the 2nd control point on a cubic curve
-        mFirstCurveControlPoint2.set((((CURVE_RADIUS * 9) / 10) / 2), 0);
-
-        mSecondCurveControlPoint1.set(mNavigationBarWidth - mFirstCurveControlPoint1.y, 0);
-        mSecondCurveControlPoint2.set(mNavigationBarWidth, mFirstCurveControlPoint1.y);
-
-          //point calculation
-        mPath.reset();
-
-        //There is a padding for the shadows, this prevent it from clipping on a custom view
-        int padding = (int) getElevation();
-
-        mPath.moveTo(CURVE_RADIUS, padding);
-        mPath.lineTo(mSecondCurveStartPoint.x, mSecondCurveStartPoint.y + padding);
-
-        mPath.cubicTo(mSecondCurveControlPoint1.x, mSecondCurveControlPoint1.y + padding,
-                mSecondCurveControlPoint2.x, mSecondCurveControlPoint2.y + padding,
-                mSecondCurveEndPoint.x, mSecondCurveEndPoint.y + padding);
-
-
-        mPath.lineTo(mNavigationBarWidth, mNavigationBarHeight + padding);
-        mPath.lineTo(0, mNavigationBarHeight + padding);
-        mPath.lineTo(0, CURVE_RADIUS + padding);
-
-        mPath.cubicTo(mFirstCurveControlPoint1.x, mFirstCurveControlPoint1.y + padding,
-                mFirstCurveControlPoint2.x, mFirstCurveControlPoint2.y + padding,
-                mFirstCurveEndPoint.x, mFirstCurveEndPoint.y + padding);
-        mPath.close();
-
         canvas.drawPath(mPath, mPaint);
-        */
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        int mNavigationBarWidth = getWidth();
+        int mNavigationBarHeight = getHeight();
+
         // the coordinates (x,y) of the start point before curve
         mFirstCurveStartPoint.set(0, 0);
         // the coordinates (x,y) of the end point after curve
@@ -118,7 +78,6 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
         // same thing for the second curve
         mSecondCurveStartPoint.set((mNavigationBarWidth - CURVE_RADIUS), CURVE_RADIUS);
         mSecondCurveEndPoint.set(mNavigationBarWidth, 0);
-
 
         //Had to multiply by 9 then divide by 10 to find the point it needs to add up to .90. Then from there divide by 2.
         // the coordinates (x,y)  of the 1st control point on a cubic curve
@@ -133,12 +92,12 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
         mPath.reset();
 
         //There is a padding for the shadows, this prevent it from clipping on a custom view
-        int padding = (int) getElevation();
+        //int padding = (int) getElevation();
         mPath.moveTo(mFirstCurveEndPoint.x, mFirstCurveEndPoint.y);
-        mPath.lineTo(mSecondCurveStartPoint.x, mSecondCurveStartPoint.y );
+        mPath.lineTo(mSecondCurveStartPoint.x, mSecondCurveStartPoint.y);
 
-        mPath.cubicTo(mSecondCurveControlPoint1.x, mSecondCurveControlPoint1.y ,
-                mSecondCurveControlPoint2.x, mSecondCurveControlPoint2.y ,
+        mPath.cubicTo(mSecondCurveControlPoint1.x, mSecondCurveControlPoint1.y,
+                mSecondCurveControlPoint2.x, mSecondCurveControlPoint2.y,
                 mSecondCurveEndPoint.x, mSecondCurveEndPoint.y);
 
 
@@ -146,23 +105,11 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
         mPath.lineTo(0, mNavigationBarHeight);
         mPath.lineTo(0, 0);
 
-        mPath.cubicTo(mFirstCurveControlPoint1.x, mFirstCurveControlPoint1.y ,
+        mPath.cubicTo(mFirstCurveControlPoint1.x, mFirstCurveControlPoint1.y,
                 mFirstCurveControlPoint2.x, mFirstCurveControlPoint2.y,
                 mFirstCurveEndPoint.x, mFirstCurveEndPoint.y);
         mPath.close();
-
-        canvas.drawPath(mPath, mPaint);
     }
-
-
-    @Override
-    protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec + CURVE_RADIUS/2);
-    }
-
-
-
 }
 
 

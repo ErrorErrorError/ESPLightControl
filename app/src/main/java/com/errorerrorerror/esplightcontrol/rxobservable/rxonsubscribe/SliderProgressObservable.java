@@ -10,10 +10,11 @@ import io.reactivex.android.MainThreadDisposable;
 
 import static com.jakewharton.rxbinding3.internal.Preconditions.checkMainThread;
 
-public final class ProgressChangedOnSubscribe  extends InitialValueObservable<Integer> {
-    final IOSStyleSlider view;
+public class SliderProgressObservable extends InitialValueObservable<Integer> {
 
-    public ProgressChangedOnSubscribe(IOSStyleSlider view){
+    private final IOSStyleSlider view;
+
+    public SliderProgressObservable(IOSStyleSlider view){
         this.view = view;
     }
 
@@ -29,31 +30,38 @@ public final class ProgressChangedOnSubscribe  extends InitialValueObservable<In
         }
 
         Listener listener = new Listener(view, observer);
-        observer.onSubscribe(listener);
         view.addOnProgressChanged(listener);
+        observer.onSubscribe(listener);
     }
 
-    private static final class Listener extends MainThreadDisposable implements IOSStyleSlider.OnProgressChangedListener {
+    private static class Listener extends MainThreadDisposable implements IOSStyleSlider.OnProgressChangedListener{
 
         private final IOSStyleSlider view;
         private final Observer<? super Integer> observer;
 
-        Listener(IOSStyleSlider view, Observer<? super Integer> observer) {
+        Listener(IOSStyleSlider view, Observer<? super Integer> observer){
             this.view = view;
             this.observer = observer;
+        }
+
+        @Override
+        public void onProgressChanged(IOSStyleSlider slider, int progress) {
+            observer.onNext(progress);
+        }
+
+        @Override
+        public void onStartTrackingTouch(IOSStyleSlider slider) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(IOSStyleSlider slider) {
+
         }
 
         @Override
         protected void onDispose() {
             view.removeProgressChangedListener(this);
         }
-
-        @Override
-        public void onProgressChanged(int progress) {
-            if(!isDisposed()){
-                observer.onNext(progress);
-            }
-        }
     }
-
 }
