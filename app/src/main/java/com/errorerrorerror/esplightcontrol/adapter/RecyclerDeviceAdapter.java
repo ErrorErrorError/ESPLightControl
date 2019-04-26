@@ -21,7 +21,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
-public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolder> implements BindableAdapter{
+public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolder> implements BindableAdapter {
 
     private static final DiffUtil.ItemCallback<Devices> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Devices>() {
@@ -72,24 +72,20 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
                 .subscribe(aBoolean -> {
                     mSwitched.onNext(aBoolean);
                     mPosition.onNext(holder.getItemId());
-                    Log.d(Constants.HOME_TAG, "onBindViewHolder: " + aBoolean + " " + holder.getItemId());
+                    //Log.d(Constants.HOME_TAG, "onBindViewHolder: " + aBoolean + " " + holder.getItemId());
                 }, onError -> Log.e(Constants.HOME_TAG, "onBindViewHolder: ", onError));
-
-        /*holder.binding.connectionSwitch.setOnStateChangeListener((progress, state, jtb) ->
-                onClickedSwitchListener.OnSwitched(jtb.isChecked(), holder.getAdapterPosition(), jtb));
-        */
 
         RxSwipeRevealLayout.leftClickedIcon(holder.binding.swipeLayout, MetaBallsKt.NONE_VIEW_TO_DELETE)
                 .subscribe(o -> {
                     mPositionEdit.onNext(holder.getItemId());
                     holder.binding.swipeLayout.close(true);
                     Log.d(Constants.HOME_TAG, "onBindViewHolder: " + holder.getItemId());
-                }, onError -> Log.e(Constants.HOME_TAG, "onBindViewHolder: ", onError ));
+                }, onError -> Log.e(Constants.HOME_TAG, "onBindViewHolder: ", onError));
 
         RxSwipeRevealLayout.rightClickedIcon(holder.binding.swipeLayout, MetaBallsKt.RIGHT_VIEW_TO_DELETE)
                 .subscribe(o -> {
-                            mDeviceDelete.onNext(getItem(holder.getAdapterPosition()));
-                            Log.d(Constants.HOME_TAG, "onBindViewHolder: " + getItem(holder.getAdapterPosition()));
+                    mDeviceDelete.onNext(getItem(holder.getAdapterPosition()));
+                    Log.d(Constants.HOME_TAG, "onBindViewHolder: " + getItem(holder.getAdapterPosition()));
                 }, onError -> Log.e(Constants.HOME_TAG, "onBindViewHolder: ", onError));
     }
 

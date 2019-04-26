@@ -136,7 +136,7 @@
                     android:layout_height="match_parent"
                     android:layout_below="@+id/linearLayoutConnectedDevices"
                     android:overScrollMode="never"
-                    app:data="@{viewModel.getLiveData}"
+                    app:data="@{viewModel.getAllDevices}"
                     android:scrollbars="none" />
             </RelativeLayout>
     </LinearLayout>

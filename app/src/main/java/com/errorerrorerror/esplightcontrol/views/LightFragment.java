@@ -32,7 +32,7 @@ public class LightFragment extends RxFragment {
     ViewModelProvider.Factory viewModelFactory;
     private DevicesCollectionViewModel collectionViewModel;
 
-    private LightFragmentBinding lightFragmentBinding;
+    private LightFragmentBinding binding;
     private RecyclerLightAdapter recyclerLightAdapter;
 
     @Override
@@ -53,11 +53,11 @@ public class LightFragment extends RxFragment {
         collectionViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(DevicesCollectionViewModel.class);
 
-        lightFragmentBinding = LightFragmentBinding.inflate(inflater, container, false);
-        lightFragmentBinding.setViewmodel(collectionViewModel);
-        lightFragmentBinding.setLifecycleOwner(getViewLifecycleOwner());
+        binding = LightFragmentBinding.inflate(inflater, container, false);
+        binding.setViewmodel(collectionViewModel);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
-        return lightFragmentBinding.getRoot();
+        return binding.getRoot();
     }
 
     @Override
@@ -73,11 +73,23 @@ public class LightFragment extends RxFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
                 RecyclerView.HORIZONTAL, true);
         linearLayoutManager.setStackFromEnd(true);
-        lightFragmentBinding.lightRecyclerView.setLayoutManager(linearLayoutManager);
-        lightFragmentBinding.lightRecyclerView.setHasFixedSize(true);
+        binding.lightRecyclerView.setLayoutManager(linearLayoutManager);
+        binding.lightRecyclerView.setHasFixedSize(true);
         recyclerLightAdapter = new RecyclerLightAdapter();
-        lightFragmentBinding.lightRecyclerView.setAdapter(recyclerLightAdapter);
-        lightFragmentBinding.lightRecyclerView.setItemAnimator(null);
+        binding.lightRecyclerView.setAdapter(recyclerLightAdapter);
+        binding.lightRecyclerView.setItemAnimator(null);
+
+        Objects.requireNonNull(binding.lightRecyclerView.getAdapter())
+                .registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                if (positionStart > 0) {
+                    //Log.d(Constants.HOME_TAG, "onItemRangeInserted: " + positionStart);
+                    binding.lightRecyclerView.smoothScrollToPosition(positionStart);
+                }
+            }
+        });
+
     }
 
     private void progressChanged() {

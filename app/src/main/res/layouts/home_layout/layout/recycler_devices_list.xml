@@ -47,6 +47,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -131,29 +132,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         app:layout_constraintGuide_begin="20dp" />
-                    <!--
-                <com.nightonke.jellytogglebutton.JellyToggleButton
-                    android:id="@+id/connectionSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="@{safeUnbox(deviceName.getOn())}"
-                    app:jtbBackgroundMeasureRatioValue="2"
-                    app:jtbBackgroundRadius="7dp"
-                    app:jtbDuration="700"
-                    app:jtbEaseType="ease_in_out_bounce"
-                    app:jtbJelly="active_tremble_tail_slim_jim"
-                    app:jtbLeftBackgroundColor="@android:color/darker_gray"
-                    app:jtbLeftThumbColor="#ECECEC"
-                    app:jtbRightBackgroundColor="#D8DCF9"
-                    app:jtbRightThumbColor="@color/colorAccent"
-                    app:jtbThumbRadius="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.917"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.493" /> -->
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
