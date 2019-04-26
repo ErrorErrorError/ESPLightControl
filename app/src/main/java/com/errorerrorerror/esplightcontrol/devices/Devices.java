@@ -61,7 +61,7 @@ public class Devices {
     //Setters and
 
 
-    public Boolean isOn() {
+    public Boolean getOn() {
         return on;
     }
 
@@ -166,5 +166,13 @@ public class Devices {
         hash = mult * (hash + this.getIp().hashCode());
         hash = mult * (hash + this.getPort().hashCode());
         return hash;
+    }
+
+    public String getBrightnessPercentage(){
+        return String.valueOf(brightness);
+    }
+
+    public void setBrightnessPercentage(String percentage){
+        brightness = Integer.valueOf(percentage);
     }
 }

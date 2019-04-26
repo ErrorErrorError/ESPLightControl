@@ -2,6 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel" />
+    </data>
+
     <LinearLayout
         android:id="@+id/homeFrag"
         android:layout_width="match_parent"
@@ -130,6 +136,7 @@
                     android:layout_height="match_parent"
                     android:layout_below="@+id/linearLayoutConnectedDevices"
                     android:overScrollMode="never"
+                    app:data="@{viewModel.getLiveData}"
                     android:scrollbars="none" />
             </RelativeLayout>
     </LinearLayout>

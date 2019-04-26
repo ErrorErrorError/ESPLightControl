@@ -1,5 +1,11 @@
 package com.errorerrorerror.esplightcontrol.viewmodel;
 
+import androidx.databinding.Bindable;
+import androidx.databinding.Observable;
+import androidx.databinding.ObservableField;
+import androidx.databinding.PropertyChangeRegistry;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.ViewModel;
 
 import com.errorerrorerror.esplightcontrol.devices.Devices;
@@ -13,14 +19,20 @@ import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public class DevicesCollectionViewModel extends ViewModel {
-
+public class DevicesCollectionViewModel extends ViewModel implements Observable{
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private DevicesDataSource devicesDataSource;
+    private PropertyChangeRegistry callbacks = new PropertyChangeRegistry();
 
     DevicesCollectionViewModel(DevicesDataSource devicesDataSource) {
         this.devicesDataSource = devicesDataSource;
     }
+
+    @Bindable
+    public LiveData<List<Devices>> getLiveData(){
+        return LiveDataReactiveStreams.fromPublisher(devicesDataSource.getAllDevices());
+    }
+
 
     public Flowable<List<Devices>> getAllDevices() {
         return devicesDataSource.getAllDevices();
@@ -65,4 +77,26 @@ public class DevicesCollectionViewModel extends ViewModel {
         super.onCleared();
         compositeDisposable.dispose();
     }
+
+    public final ObservableField<List<Devices>> devicesXML = new ObservableField<>();
+
+    @Override
+    public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        callbacks.add(callback);
+    }
+
+    @Override
+    public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        callbacks.remove(callback);
+    }
+
+    void notifyChange() {
+        callbacks.notifyCallbacks(this, 0, null);
+    }
+
+    void notifyPropertyChanged(int fieldId) {
+        callbacks.notifyCallbacks(this, fieldId, null);
+    }
+
+
 }

@@ -66,7 +66,7 @@ public class HomeFragment extends RxFragment {
 
         //Inflates view and databinding
         homeBinding = DevicesFragmentBinding.inflate(inflater, container, false);
-
+        homeBinding.setViewModel(collectionViewModel);
         return homeBinding.getRoot();
     }
 
@@ -218,7 +218,7 @@ public class HomeFragment extends RxFragment {
 
         adapter = new RecyclerDeviceAdapter();
         homeBinding.recyclerviewAddDevice.setAdapter(adapter);
-
+/*
         collectionViewModel.addDisposable(collectionViewModel.getAllDevices()
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
@@ -237,7 +237,7 @@ public class HomeFragment extends RxFragment {
                         onError -> Log.e(Constants.HOME_TAG, "devicesListeners: " + onError)
                 )
         );
-
+*/
         //Scroll to top on new item
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override

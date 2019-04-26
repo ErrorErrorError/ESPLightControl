@@ -20,6 +20,7 @@
         <item name="borderInputColor">#E9F0FF</item>
         <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/colorPrimary</item>
         <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/colorPrimary</item>
+        <item name="sliderBackground">@color/windowColorLight</item>
         <item name="textInputStyle">
             @style/Custom.TextInputLayout.OutlinedBox
         </item>
@@ -44,6 +45,7 @@
         <item name="dialogBackgroundColor">@color/windowColorDark</item>
         <item name="borderInputColor">?contentColor</item>
         <item name="colorToContent">?contentColor</item>
+        <item name="sliderBackground">?contentColor</item>
         <item name="textInputStyle">
             @style/Custom.TextInputLayout.OutlinedBox
         </item>

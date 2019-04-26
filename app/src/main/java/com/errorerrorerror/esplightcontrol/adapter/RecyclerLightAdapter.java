@@ -13,10 +13,12 @@ import com.errorerrorerror.esplightcontrol.databinding.LightRecyclerviewBinding;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
 import com.errorerrorerror.esplightcontrol.rxobservable.RxIOSStyleSlider;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
-public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> {
+public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> implements BindableAdapter{
 
     private static final DiffUtil.ItemCallback<Devices> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Devices>() {
@@ -29,7 +31,7 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> 
                 @Override
                 public boolean areContentsTheSame(@NonNull Devices oldItem,
                                                   @NonNull Devices newItem) {
-                    return oldItem.equals(newItem);
+                    return oldItem.equals(newItem) && oldItem.getOn().equals(newItem.getOn());
                 }
             };
     private LayoutInflater layoutInflater;
@@ -59,6 +61,22 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> 
     public void onBindViewHolder(@NonNull LightViewHolder holder, int position) {
         Devices devices = getItem(position);
         holder.bind(devices);
+
+        holder.binding.brightness.getIconView().setAnimation(R.raw.brightness_animation);
+        holder.binding.brightness.getIconView().setProgress(
+                (float) holder.binding.getDevice().getBrightness() / 100);
+
+        RxIOSStyleSlider.progressChanged(holder.binding.brightness).subscribe(progress -> {
+                    if (progress != holder.binding.getDevice().getBrightness()) {
+                        holder.binding.getDevice().setBrightness(progress);
+                        mProgress.onNext(progress);
+                        mId.onNext(holder.binding.getDevice().getId());
+                        holder.binding.brightness.setText(holder.binding.getDevice().getBrightness() + "%");
+                        holder.binding.brightness.getIconView().setProgress((float) progress / 100);
+                    }
+                });
+
+        /*
         holder.binding.brightness.getIconView().setAnimation(R.raw.brightness_animation);
         holder.binding.brightness.getIconView().setProgress(
                 (float) holder.binding.getDevice().getBrightness() / 100);
@@ -72,6 +90,7 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> 
                 holder.binding.brightness.getIconView().setProgress((float) progress / 100);
             }
         });
+        */
     }
 
     @Override
@@ -81,6 +100,11 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> 
 
     public Observable<ProgressId> getProgressObserver() {
         return Observable.zip(mProgress, mId, ProgressId::new);
+    }
+
+    @Override
+    public void setData(List<Devices> data) {
+        submitList(data);
     }
 
     public class ProgressId {

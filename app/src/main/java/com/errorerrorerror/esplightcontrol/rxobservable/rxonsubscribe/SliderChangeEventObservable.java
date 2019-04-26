@@ -75,6 +75,11 @@ public final class SliderChangeEventObservable extends InitialValueObservable<Sl
                 observer.onNext(SliderEndChangeEvent.create(slider));
             }
         }
+
+        @Override
+        public void onSliderEnabled(boolean enabled) {
+
+        }
     }
 
 }

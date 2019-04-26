@@ -14,10 +14,10 @@
             android:id="@+id/viewPager"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false"
             android:layout_marginTop="110dp"
             android:layout_marginBottom="85dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,11 +34,10 @@
 
 
         <com.errorerrorerror.esplightcontrol.views.CurvedBubbleNavigation
-            android:backgroundTint="?baseBackgroundColor"
             android:id="@+id/customBubbleBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottomNavHeight"
-            app:bnc_mode="spread"
+            android:backgroundTint="?baseBackgroundColor"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <com.gauravk.bubblenavigation.BubbleToggleView
@@ -46,12 +45,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:bt_shape="@drawable/trasition_drawable_shape"
+                android:layout_marginEnd="30dp"
                 app:bt_colorActive="@color/colorAccent"
                 app:bt_colorInactive="@color/grayBoi"
                 app:bt_icon="@drawable/home_icon"
                 app:bt_iconHeight="20dp"
                 app:bt_iconWidth="20dp"
+                app:bt_shape="@drawable/trasition_drawable_shape"
                 app:bt_title="@string/devices_tab"
                 app:bt_titleSize="15sp" />
 
@@ -59,32 +59,35 @@
                 android:id="@+id/modes_bubble"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
                 app:bt_colorActive="@color/colorAccent"
                 app:bt_colorInactive="@color/grayBoi"
                 app:bt_icon="@drawable/modes_icon"
                 app:bt_iconHeight="20dp"
                 app:bt_iconWidth="20dp"
-                app:bt_title="@string/mode_tab"
                 app:bt_shape="@drawable/trasition_drawable_shape"
+                app:bt_title="@string/mode_tab"
                 app:bt_titleSize="15sp" />
 
             <com.gauravk.bubblenavigation.BubbleToggleView
                 android:id="@+id/light_bubble"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
                 app:bt_colorActive="@color/lightBulbColorLight"
                 app:bt_colorInactive="@color/grayBoi"
                 app:bt_icon="@drawable/lightbulb_icon"
                 app:bt_iconHeight="20dp"
                 app:bt_iconWidth="20dp"
-                app:bt_title="@string/light_tab"
                 app:bt_shape="@drawable/trasition_drawable_shape"
+                app:bt_title="@string/light_tab"
                 app:bt_titleSize="15sp" />
 
             <com.gauravk.bubblenavigation.BubbleToggleView
                 android:id="@+id/presets_bubble"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
                 app:bt_colorActive="@color/colorAccent"
                 app:bt_colorInactive="@color/grayBoi"
                 app:bt_icon="@drawable/ic_presets_icon"

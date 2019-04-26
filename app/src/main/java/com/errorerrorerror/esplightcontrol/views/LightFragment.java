@@ -23,7 +23,6 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class LightFragment extends RxFragment {
@@ -55,6 +54,8 @@ public class LightFragment extends RxFragment {
                 .get(DevicesCollectionViewModel.class);
 
         lightFragmentBinding = LightFragmentBinding.inflate(inflater, container, false);
+        lightFragmentBinding.setViewmodel(collectionViewModel);
+        lightFragmentBinding.setLifecycleOwner(getViewLifecycleOwner());
 
         return lightFragmentBinding.getRoot();
     }
@@ -65,7 +66,7 @@ public class LightFragment extends RxFragment {
 
         setupRecyclerView();
 
-        lightDevicesListeners();
+        progressChanged();
     }
 
     private void setupRecyclerView() {
@@ -74,21 +75,12 @@ public class LightFragment extends RxFragment {
         linearLayoutManager.setStackFromEnd(true);
         lightFragmentBinding.lightRecyclerView.setLayoutManager(linearLayoutManager);
         lightFragmentBinding.lightRecyclerView.setHasFixedSize(true);
-    }
-
-    private void lightDevicesListeners() {
-
         recyclerLightAdapter = new RecyclerLightAdapter();
         lightFragmentBinding.lightRecyclerView.setAdapter(recyclerLightAdapter);
+        lightFragmentBinding.lightRecyclerView.setItemAnimator(null);
+    }
 
-        collectionViewModel.addDisposable(collectionViewModel.getAllDevices()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(devicesList ->
-                                recyclerLightAdapter.submitList(devicesList)
-                        , onError -> Log.e(TAG, "lightDevicesListeners: ", onError))
-        );
-
+    private void progressChanged() {
         collectionViewModel.addDisposable(
                 recyclerLightAdapter.getProgressObserver()
                         .subscribe(progressId -> collectionViewModel.addDisposable(
@@ -99,5 +91,7 @@ public class LightFragment extends RxFragment {
                                                 onError -> Log.e(TAG, "lightDevicesListeners: ", onError))
                         ))
         );
+
+
     }
 }

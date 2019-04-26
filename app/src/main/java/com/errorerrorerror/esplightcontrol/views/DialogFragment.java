@@ -172,7 +172,7 @@ public class DialogFragment extends RxDialogFragment {
                     devicesBinding.deviceName.setText(devices.getDeviceName());
                     devicesBinding.IPAddressInput.setText(devices.getIp());
                     devicesBinding.portInput.setText(devices.getPort());
-                    testBoolean[0] = devices.isOn();
+                    testBoolean[0] = devices.getOn();
                     testBoolean[1] = devices.isOpen();
                     testInt[0] = devices.getBrightness();
                 }, onError -> Log.e(TAG, "editDevice: ",onError))

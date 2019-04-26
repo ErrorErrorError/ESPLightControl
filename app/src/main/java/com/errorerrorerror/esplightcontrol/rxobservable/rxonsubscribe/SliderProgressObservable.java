@@ -60,6 +60,11 @@ public class SliderProgressObservable extends InitialValueObservable<Integer> {
         }
 
         @Override
+        public void onSliderEnabled(boolean enabled) {
+
+        }
+
+        @Override
         protected void onDispose() {
             view.removeProgressChangedListener(this);
         }

@@ -23,6 +23,7 @@ import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
@@ -45,6 +46,7 @@ public class IOSStyleSlider extends LinearLayout {
     private final static int DEFAULT_MAX_VALUE = 100;
     private final static int DEFAULT_PROGRESS = 80; //Default progress on a 0 - 100 scale
     private static final String TAG = "iosstyleslider";
+    private static final float DEFAULT_BORDER_STROKE = 10f;
 
     @State
     float mSliderProgress = DEFAULT_PROGRESS;
@@ -54,7 +56,7 @@ public class IOSStyleSlider extends LinearLayout {
     private RectF mSliderBackgroundF;
     private int mSliderRadius;
     private SliderPoints sliderPoints;
-    //private boolean mDisableSlider = false;
+    private boolean mSliderEnabled;
     private LottieAnimationView iconView;
     private PorterDuff.Mode mIconTintMode = null;
     private boolean hasIconTintMode = false;
@@ -63,30 +65,22 @@ public class IOSStyleSlider extends LinearLayout {
     private int iconTint = 0;
     private boolean hasIconTint = false;
     private List<OnProgressChangedListener> onProgressChangedListener;
-    //private IOSStyleStates mState = null;
     private int textColor = 0;
     private int iconSize = 0;
     private int textSize = 0;
     private GestureDetector gestureDetector;
     private int showIconText;
 
-    //private boolean isScrolling = false;
-
     //Users Can Change these values
     private int mSliderColor = DEFAULT_SLIDER_COLOR;
     private int mSliderBackgroundColor = DEFAULT_BACKGROUND_SLIDER_COLOR;
+    private int mSliderBackgroundColorDisabled = 0;
+    private int mSliderColorDisabled = 0;
     private int mSliderMin = DEFAULT_MIN_VALUE;
     private int mSliderMax = DEFAULT_MAX_VALUE;
     private static final float scale = 1.04f;
     private String mText;
 
-/*
-    public enum IOSStyleStates {
-        IDLE,
-        SLIDING,
-        DISABLED
-    }
-*/
     public enum IOSStyleView {
         icon,
         text,
@@ -103,6 +97,8 @@ public class IOSStyleSlider extends LinearLayout {
         void onStartTrackingTouch(IOSStyleSlider slider);
 
         void onStopTrackingTouch(IOSStyleSlider slider);
+
+        void onSliderEnabled(boolean enabled);
 
     }
 
@@ -179,6 +175,10 @@ public class IOSStyleSlider extends LinearLayout {
 
         textSize = ta.getDimensionPixelSize(R.styleable.IOSStyleSlider_issTextSize, getResources().getDimensionPixelSize(R.dimen.textSize));
 
+        mSliderEnabled = ta.getBoolean(R.styleable.IOSStyleSlider_issSliderEnabled, true);
+        mSliderColorDisabled = ta.getColor(R.styleable.IOSStyleSlider_issSliderColorDisabled, 0);
+        mSliderBackgroundColorDisabled = ta.getColor(R.styleable.IOSStyleSlider_issColorBackgroundSliderDisabled, 0);
+
         if (ta.hasValue(R.styleable.IOSStyleSlider_issText)) {
             mText = ta.getText(R.styleable.IOSStyleSlider_issText).toString();
         }
@@ -240,6 +240,32 @@ public class IOSStyleSlider extends LinearLayout {
         }
     }
 
+    public void enableSlider(boolean enable){
+        if(mSliderEnabled != enable){
+            mSliderEnabled = enable;
+            invalidate();
+            if(onProgressChangedListener != null) {
+                for (int i = 0; i < onProgressChangedListener.size(); i++) {
+                    onProgressChangedListener.get(i).onSliderEnabled(mSliderEnabled);
+                }
+            }
+        }
+    }
+
+    public void setDisabledSliderColor(@ColorInt int color){
+        if(mSliderColorDisabled != color){
+            mSliderColorDisabled = color;
+            invalidate();
+        }
+    }
+
+    public void setDisabledSliderBackgroundColor(@ColorInt int color){
+        if(mSliderBackgroundColorDisabled != color){
+            mSliderBackgroundColorDisabled = color;
+            invalidate();
+        }
+    }
+
     private void addIconView() {
         iconView = new LottieAnimationView(getContext());
 
@@ -271,18 +297,22 @@ public class IOSStyleSlider extends LinearLayout {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-            onStopTrackingTouch();
-            getParent().requestDisallowInterceptTouchEvent(false);
-            animateView(1.0f, 200);
-        }
+        if(mSliderEnabled) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                onStopTrackingTouch();
+                getParent().requestDisallowInterceptTouchEvent(false);
+                animateView(1.0f, 200);
+            }
 
-        if (this.gestureDetector.onTouchEvent(event)) {
-            Log.d(TAG, "onTouchEvent: ");
-            return true;
+            if (this.gestureDetector.onTouchEvent(event)) {
+                Log.d(TAG, "onTouchEvent: ");
+                return true;
+            } else {
+                return super.onTouchEvent(event);
+            }
+        } else {
+            return false;
         }
-
-        return super.onTouchEvent(event);
     }
 
     public void animateView(float scale, int duration) {
@@ -347,17 +377,33 @@ public class IOSStyleSlider extends LinearLayout {
         super.onDraw(canvas);
 
         //Slider Background
+        drawBackgroundSlider(canvas);
+        //Slider
+        drawSlider(canvas);
+    }
+
+    private void drawBackgroundSlider(Canvas canvas){
         mPaint.reset();
         mPaint.setAntiAlias(true);
         mPaint.setColor(mSliderBackgroundColor);
+        if(!mSliderEnabled && mSliderBackgroundColorDisabled != 0) {
+            mPaint.setColor(mSliderBackgroundColorDisabled);
+        }
+        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mSliderBackgroundF.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
         canvas.drawRoundRect(mSliderBackgroundF, getSliderRadius(), getSliderRadius(), mPaint);
+    }
 
-        //Slider
+    public boolean isSliderEnabled() {
+        return mSliderEnabled;
+    }
+
+    private void drawSlider(Canvas canvas){
         mSliderPath.reset();
-        mPaint.setAntiAlias(true);
         mPaint.setColor(mSliderColor);
-        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        if(!mSliderEnabled && mSliderColorDisabled != 0){
+            mPaint.setColor(mSliderColorDisabled);
+        }
         sliderPoints.setSliderSize(getMeasuredWidth(),
                 getMeasuredHeight(),
                 mSliderRadius,

@@ -86,6 +86,10 @@ dependencies {
     def lifecycle_version = "2.1.0-alpha04"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "android.arch.lifecycle:reactivestreams:1.1.1"
+
+    implementation 'com.minimize.android:rxrecycler-adapter:1.1.1'
+
 
     //Room Dependencies
     def room_version = "2.1.0-alpha06"
@@ -113,7 +117,6 @@ dependencies {
     implementation "com.trello.rxlifecycle3:rxlifecycle-android-lifecycle:$rx_lifecycle_version"
 
 
-
     //RxBindings
     def rx_binding_version = "3.0.0-alpha2"
     implementation "com.jakewharton.rxbinding3:rxbinding:$rx_binding_version"
@@ -133,11 +136,10 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
 
-
     /* AutoValue */
     def auto_value_version = "1.6.2"
     compileOnly "com.google.auto.value:auto-value:$auto_value_version"
-    api             "com.google.auto.value:auto-value-annotations:$auto_value_version"
+    api "com.google.auto.value:auto-value-annotations:$auto_value_version"
     annotationProcessor "com.google.auto.value:auto-value:$auto_value_version"
 
     //Lottie
@@ -154,5 +156,8 @@ dependencies {
 
 repositories {
     mavenCentral()
-    maven { url "https://kotlin.bintray.com/kotlinx/" }
+    maven {
+        url "https://kotlin.bintray.com/kotlinx/"
+
+    }
 }

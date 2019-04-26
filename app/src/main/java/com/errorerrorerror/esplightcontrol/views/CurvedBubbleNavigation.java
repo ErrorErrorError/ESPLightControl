@@ -11,11 +11,11 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.errorerrorerror.esplightcontrol.R;
-import com.gauravk.bubblenavigation.BubbleNavigationConstraintView;
+import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
 
 import java.util.Objects;
 
-public class CurvedBubbleNavigation extends BubbleNavigationConstraintView {
+public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
     private static final Point mFirstCurveStartPoint = new Point();
     private static final Point mFirstCurveEndPoint = new Point();
     private static final Point mSecondCurveStartPoint = new Point();

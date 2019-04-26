@@ -18,23 +18,26 @@
 
         <com.errorerrorerror.iosstyleslider.IOSStyleSlider
             android:id="@+id/brightness"
-            android:layout_width="140dp"
-            android:layout_height="340dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
+            android:layout_width="155dp"
+
+            android:layout_height="360dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="20dp"
             android:elevation="?contentElevation"
             android:outlineAmbientShadowColor="@color/colorPrimary"
             android:outlineSpotShadowColor="@color/colorPrimary"
-            app:issColorBackgroundSlider="?contentColor"
-            app:issCornerRadius="40dp"
-            app:issIconTintMode="src_in"
+            app:issColorBackgroundSlider="?sliderBackground"
+            app:issSliderColorDisabled="#C3C3E6"
+            app:issCornerRadius="50dp"
+            app:issIconSize="50dp"
             app:issIconTint="#E5E5E5"
-            app:issText="@{Integer.toString(device.brightness) + `%`}"
-            app:issTextSize="12sp"
-            app:issIconSize="45dp"
-            app:issShowIconText="iconText"
+            app:issIconTintMode="src_in"
             app:issProgress="@{device.brightness}"
+            app:issShowIconText="iconText"
+            app:issSliderEnabled="@{device.on}"
+            app:issText="@{device.brightness +`%`}"
             app:issTextColor="#E5E5E5"
+            app:issTextSize="12sp"
             tools:targetApi="p" />
 
         <TextView

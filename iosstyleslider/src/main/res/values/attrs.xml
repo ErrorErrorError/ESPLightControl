@@ -5,19 +5,22 @@
         <attr name="issCornerRadius" format="dimension"/>
         <attr name="issColorSlider" format="color"/>
         <attr name="issColorBackgroundSlider" format="color"/>
-        <attr name="issDisabled" format="boolean"/>
         <attr name="issSetMaxValue" format="integer"/>
         <attr name="issSetMinValue" format="integer"/>
         <attr name="issProgress" format="integer"/>
         <attr name="issText" format="string"/>
         <attr name="issTextAttrChanged"/>
         <attr name="issProgressBarChanged"/>
+        <attr name="isSliderEnabledAttrChanged"/>
         <attr name="issIcon" format="reference"/>
         <attr name="issIconTint" format="color"/>
         <attr name="issTextColor" format="color"/>
         <attr name="issTextSize" format="dimension"/>
         <attr name="issIconSize" format="dimension"/>
         <attr name="issProgressStep" format="integer"/>
+        <attr name="issSliderEnabled" format="boolean"/>
+        <attr name="issSliderColorDisabled" format="color"/>
+        <attr name="issColorBackgroundSliderDisabled" format="color"/>
         <attr name="issIconTintMode" format="enum">
             <enum name="add" value="12"/>
             <enum name="multiply" value="13"/>

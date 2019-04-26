@@ -52,6 +52,11 @@ public class SliderOnStartObservable extends Observable<IOSStyleSlider> {
         }
 
         @Override
+        public void onSliderEnabled(boolean enabled) {
+
+        }
+
+        @Override
         protected void onDispose() {
             view.removeProgressChangedListener(this);
         }

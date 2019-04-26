@@ -16,10 +16,12 @@ import com.errorerrorerror.esplightcontrol.utils.Constants;
 import com.jakewharton.rxbinding3.widget.RxCompoundButton;
 import com.tenclouds.swipeablerecyclerviewcell.metaball.MetaBallsKt;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
-public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolder> {
+public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolder> implements BindableAdapter{
 
     private static final DiffUtil.ItemCallback<Devices> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Devices>() {
@@ -106,6 +108,11 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DevicesViewHolde
 
     public Observable<Long> getEditDeviceObservable() {
         return mPositionEdit;
+    }
+
+    @Override
+    public void setData(List<Devices> data) {
+        submitList(data);
     }
 
     public class SwitchBoolInt {
