@@ -54,7 +54,7 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
             setLayerType(View.LAYER_TYPE_SOFTWARE, mPaint);
         }
 
-        //mPaint.setShadowLayer(getElevation(), 0, 0, Color.rgb(221, 221, 221)); // This set's color shadow to grey
+        //Paint.setShadowLayer(getElevation(), 0, 0, Color.rgb(221, 221, 221)); // This set's color shadow to grey
         setBackgroundColor(Color.TRANSPARENT);
     }
 

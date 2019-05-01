@@ -18,7 +18,7 @@
         <item name="backgroundHighlight">@color/buttonCancelHighlight</item>
         <item name="dialogBackgroundColor">#fff</item>
         <item name="borderInputColor">#E9F0FF</item>
-        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/colorPrimary</item>
+       <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/colorPrimary</item>
         <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/colorPrimary</item>
         <item name="sliderBackground">@color/windowColorLight</item>
         <item name="textInputStyle">
@@ -74,12 +74,20 @@
 
     </style>
 
+    <style name="TextViewLiveData" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:fontFamily">@font/somatic_round</item>
+        <item name="android:textColor">#CECECE</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/noDevices</item>
+    </style>
+
     <style name="Custom.MaterialCardView" parent="Base.CardView">
         <item name="cardCornerRadius">@dimen/corner_radius</item>
         <item name="rippleColor">@color/colorPrimary</item>
         <item name="cardBackgroundColor">?contentColor</item>
         <item name="cardElevation">?contentElevation</item>
-        <!--<item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/colorPrimary</item>-->
-        <!--<item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/colorPrimary</item>-->
     </style>
 </resources>

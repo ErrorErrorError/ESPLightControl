@@ -1,11 +1,8 @@
 package com.errorerrorerror.esplightcontrol.viewmodel;
 
-import androidx.databinding.Bindable;
 import androidx.databinding.Observable;
 import androidx.databinding.ObservableField;
 import androidx.databinding.PropertyChangeRegistry;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.ViewModel;
 
 import com.errorerrorerror.esplightcontrol.devices.Devices;
@@ -27,12 +24,6 @@ public class DevicesCollectionViewModel extends ViewModel implements Observable{
     DevicesCollectionViewModel(DevicesDataSource devicesDataSource) {
         this.devicesDataSource = devicesDataSource;
     }
-
-    @Bindable
-    public LiveData<List<Devices>> getLiveData(){
-        return LiveDataReactiveStreams.fromPublisher(devicesDataSource.getAllDevices());
-    }
-
 
     public Flowable<List<Devices>> getAllDevices() {
         return devicesDataSource.getAllDevices();

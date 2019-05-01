@@ -1,9 +1,9 @@
-package com.errorerrorerror.esplightcontrol;
+package com.errorerrorerror.esplightcontrol.utils;
 
 import android.annotation.SuppressLint;
+import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.errorerrorerror.esplightcontrol.adapter.BindableAdapter;
@@ -28,12 +28,22 @@ public class BindingUtils {
         }
     }
 
-    @SuppressWarnings("ignore")
+    @SuppressLint("CheckResult")
     @BindingAdapter("app:data")
-    public static void setRecyclerViewProperties(RecyclerView recyclerView, LiveData<List<Devices>> data) {
-        if (recyclerView.getAdapter() instanceof BindableAdapter) {
-            data.observeForever(devices -> ((BindableAdapter) recyclerView.getAdapter()).setData(devices));
-        }
+    public static void dataTextView(TextView view, Flowable<List<Devices>> data) {
+        data.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(devices -> {
+                    if (devices.isEmpty()) {
+                        view.animate().alpha(1f)
+                                .setDuration(500)
+                                .start();
+                    } else {
+                        view.animate().alpha(0f)
+                                .start();
+                    }
+
+                });
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.Objects;
 public class ValidationUtil {
 
     //private static final String TAG = "ValidationUtil";
-    private final List<Devices> devicesList;
+    private List<Devices> devicesList;
     private int colorAccent;
 
     private static final String UNUSED_IP = "Enter An Unused IP Address";
@@ -31,8 +31,20 @@ public class ValidationUtil {
     //IpV6 regex
     private final String ipV6Regex = "(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))";
 
-    public ValidationUtil(List<Devices> devicesList, int colorAccent) {
+    public ValidationUtil() {
+    }
+
+    /*
+        public ValidationUtil(List<Devices> devicesList, int colorAccent) {
+            this.devicesList = devicesList;
+            this.colorAccent = colorAccent;
+        }
+    */
+    public void updateDeviceList(List<Devices> devicesList) {
         this.devicesList = devicesList;
+    }
+
+    public void setColorError(int colorAccent){
         this.colorAccent = colorAccent;
     }
 

@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="homeView"
+            type="com.errorerrorerror.esplightcontrol.views.HomeFragment" />
         <variable
             name="device"
             type="com.errorerrorerror.esplightcontrol.devices.Devices" />
@@ -22,6 +24,8 @@
         app:leftIconBgColor="?colorToContent"
         app:revealedViewBackground="@android:color/transparent"
         app:revealedViewMarginEnd="20dp"
+        app:onRightIconClicked="@{(swipereveal) -> homeView.removeDevice(device)}"
+        app:onLeftIconClicked="@{(swipereveal) -> homeView.editDevice(swipereveal, device.getId())}"
         app:revealedViewMarginStart="20dp"
         app:rightIcon="@drawable/ic_trash_icon"
         app:rightIconBgColor="@color/redDelete">
@@ -117,6 +121,7 @@
                         android:id="@+id/connectionSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="86dp"
+                        android:onCheckedChanged="@{(switch, checked) -> homeView.setSwitch(checked, device.getId())}"
                         android:checked="@{safeUnbox(device.getOn())}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -124,7 +129,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.555" />
-
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline5"

@@ -199,5 +199,6 @@ class SliderPoints {
 
     public void setSliderValue(int slider) {
         this.slider = slider;
+        sliderPoints();
     }
 }

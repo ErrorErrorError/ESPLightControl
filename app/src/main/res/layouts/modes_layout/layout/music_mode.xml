@@ -1,34 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/musicModeCardView"
-        style="@style/Custom.MaterialCardView"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:stateListAnimator="@animator/anim_raise">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="95dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|start"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="1dp"
-                android:fontFamily="@font/somatic_round"
-                android:text="@string/MusicModeText"
-                android:textSize="20sp" />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/MusicModeText"/>
 </layout>

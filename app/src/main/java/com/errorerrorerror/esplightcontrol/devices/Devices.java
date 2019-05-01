@@ -155,7 +155,8 @@ public class Devices {
         return
                 this.getDeviceName().equals(devices.getDeviceName()) &&
                         this.getIp().equals(devices.getIp()) &&
-                        this.getPort().equals(devices.getPort());
+                        this.getPort().equals(devices.getPort()) &&
+                        this.getBrightness() == devices.getBrightness();
     }
 
     @Override
@@ -165,14 +166,7 @@ public class Devices {
         hash = mult * (hash + this.getDeviceName().hashCode());
         hash = mult * (hash + this.getIp().hashCode());
         hash = mult * (hash + this.getPort().hashCode());
+        hash = mult * (hash + this.getBrightness());
         return hash;
-    }
-
-    public String getBrightnessPercentage(){
-        return String.valueOf(brightness);
-    }
-
-    public void setBrightnessPercentage(String percentage){
-        brightness = Integer.valueOf(percentage);
     }
 }

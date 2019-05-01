@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="lightView"
+            type="com.errorerrorerror.esplightcontrol.views.LightFragment" />
+
+        <variable
             name="device"
             type="com.errorerrorerror.esplightcontrol.devices.Devices" />
     </data>
@@ -19,23 +23,25 @@
         <com.errorerrorerror.iosstyleslider.IOSStyleSlider
             android:id="@+id/brightness"
             android:layout_width="155dp"
-
             android:layout_height="360dp"
             android:layout_marginStart="30dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="30dp"
             android:elevation="?contentElevation"
             android:outlineAmbientShadowColor="@color/colorPrimary"
             android:outlineSpotShadowColor="@color/colorPrimary"
             app:issColorBackgroundSlider="?sliderBackground"
-            app:issSliderColorDisabled="#C3C3E6"
             app:issCornerRadius="50dp"
             app:issIconSize="50dp"
             app:issIconTint="#E5E5E5"
+            app:issProgressInitialValue="@{device.brightness}"
+            app:issOnProgressChanged="@{(slider, progress) -> lightView.progressChanged(progress, device.getId())}"
             app:issIconTintMode="src_in"
-            app:issProgress="@{device.brightness}"
             app:issShowIconText="iconText"
+            app:issText="@{device.brightness + `%`}"
+            app:issAnimatedIcon="@raw/brightness_animation"
+            app:issAnimatedIconProgress="@{(float) device.brightness/100}"
+            app:issSliderColorDisabled="#C3C3E6"
             app:issSliderEnabled="@{device.on}"
-            app:issText="@{device.brightness +`%`}"
             app:issTextColor="#E5E5E5"
             app:issTextSize="12sp"
             tools:targetApi="p" />

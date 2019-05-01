@@ -2,50 +2,96 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/modeFrag"
+    <LinearLayout
+        android:id="@+id/linearLayoutModes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|top"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/musicModeCardView"
+            style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="95dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:stateListAnimator="@animator/anim_raise">
 
-            <include
-                layout="@layout/music_mode"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="20dp" />
-
-            <include
-                layout="@layout/waves_mode"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="20dp" />
-
-            <include
-                layout="@layout/solid_mode"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="20dp" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_gravity="center|start"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/somatic_round"
+                android:text="@string/MusicModeText"
+                android:textSize="20sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/wavesModeCardView"
+            style="@style/Custom.MaterialCardView"
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:stateListAnimator="@animator/anim_raise">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/somatic_round"
+                android:text="@string/WavesModeText"
+                android:textSize="20sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/solidModeCardView"
+            style="@style/Custom.MaterialCardView"
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            android:layout_gravity="top|center"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:stateListAnimator="@animator/anim_raise">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/somatic_round"
+                android:text="@string/SolidModeText"
+                android:textSize="20sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 </layout>

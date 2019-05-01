@@ -10,6 +10,7 @@ import android.view.animation.CycleInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -39,7 +40,7 @@ public class DialogFragment extends RxDialogFragment {
     ViewModelProvider.Factory viewModelFactory;
     private DialogFragmentDevicesBinding devicesBinding;
     private DevicesCollectionViewModel collectionViewModel;
-    private ValidationUtil validationUtil;
+    private ValidationUtil validationUtil = new ValidationUtil();;
     private String title;
     private String negative;
     private String positive;
@@ -85,7 +86,7 @@ public class DialogFragment extends RxDialogFragment {
 
         collectionViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(DevicesCollectionViewModel.class);
-
+/*
         collectionViewModel.addDisposable(
                 collectionViewModel.getAllDevices()
                         .compose(bindToLifecycle())
@@ -102,6 +103,7 @@ public class DialogFragment extends RxDialogFragment {
                             }
                         }, onError -> Log.e(TAG, "onCreate: ",onError )));
 
+                        */
     }
 
     @NonNull
@@ -124,8 +126,25 @@ public class DialogFragment extends RxDialogFragment {
         collectionViewModel.addDisposable(
                 RxView.clicks(devicesBinding.negativeButton)
                         .subscribe(test -> dismiss())
-
         );
+
+        validationUtil.setColorError(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.redDelete));
+
+        collectionViewModel.addDisposable(
+                collectionViewModel.getAllDevices()
+                        .compose(bindToLifecycle())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(devicesList -> {
+                                validationUtil.updateDeviceList(devicesList);
+                            if (mode == -2) {
+                                addDevice();
+                            } else {
+                                editDevice(mode);
+                            }
+                        }, onError -> Log.e(TAG, "onCreate: ",onError )));
+
+
     }
 
     private void addDevice() {
@@ -175,7 +194,7 @@ public class DialogFragment extends RxDialogFragment {
                     testBoolean[0] = devices.getOn();
                     testBoolean[1] = devices.isOpen();
                     testInt[0] = devices.getBrightness();
-                }, onError -> Log.e(TAG, "editDevice: ",onError))
+                }, onError -> Log.e(TAG, "editDevice: ", onError))
         );
 
         collectionViewModel.addDisposable(RxView.clicks(devicesBinding.positiveButton)

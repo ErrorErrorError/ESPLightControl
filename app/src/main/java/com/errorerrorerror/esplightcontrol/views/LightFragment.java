@@ -54,7 +54,7 @@ public class LightFragment extends RxFragment {
                 .get(DevicesCollectionViewModel.class);
 
         binding = LightFragmentBinding.inflate(inflater, container, false);
-        binding.setViewmodel(collectionViewModel);
+        binding.setViewModel(collectionViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
 
         return binding.getRoot();
@@ -66,7 +66,8 @@ public class LightFragment extends RxFragment {
 
         setupRecyclerView();
 
-        progressChanged();
+        //progressChanged();
+
     }
 
     private void setupRecyclerView() {
@@ -75,35 +76,29 @@ public class LightFragment extends RxFragment {
         linearLayoutManager.setStackFromEnd(true);
         binding.lightRecyclerView.setLayoutManager(linearLayoutManager);
         binding.lightRecyclerView.setHasFixedSize(true);
-        recyclerLightAdapter = new RecyclerLightAdapter();
+        recyclerLightAdapter = new RecyclerLightAdapter(this);
         binding.lightRecyclerView.setAdapter(recyclerLightAdapter);
         binding.lightRecyclerView.setItemAnimator(null);
 
         Objects.requireNonNull(binding.lightRecyclerView.getAdapter())
                 .registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                if (positionStart > 0) {
-                    //Log.d(Constants.HOME_TAG, "onItemRangeInserted: " + positionStart);
-                    binding.lightRecyclerView.smoothScrollToPosition(positionStart);
-                }
-            }
-        });
+                    @Override
+                    public void onItemRangeInserted(int positionStart, int itemCount) {
+                        if (positionStart > 0) {
+                            binding.lightRecyclerView.smoothScrollToPosition(positionStart);
+                        }
+                    }
+                });
 
     }
 
-    private void progressChanged() {
-        collectionViewModel.addDisposable(
-                recyclerLightAdapter.getProgressObserver()
-                        .subscribe(progressId -> collectionViewModel.addDisposable(
-                                collectionViewModel.updateBrightnessLevel(progressId.progress, progressId.id)
-                                        .compose(bindToLifecycle())
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe(() -> { },
-                                                onError -> Log.e(TAG, "lightDevicesListeners: ", onError))
-                        ))
-        );
-
-
+    /*
+    This changes the value from the room's progress with the corresponding slider
+     */
+    public void progressChanged(int progress, long id){
+        collectionViewModel.addDisposable(collectionViewModel.updateBrightnessLevel(progress, id)
+                .compose(bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {} , onError -> Log.e(TAG, "progressChanged: ", onError)));
     }
 }

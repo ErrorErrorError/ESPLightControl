@@ -1,6 +1,5 @@
 package com.errorerrorerror.esplightcontrol.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,17 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.databinding.LightRecyclerviewBinding;
 import com.errorerrorerror.esplightcontrol.devices.Devices;
-import com.errorerrorerror.esplightcontrol.rxobservable.RxIOSStyleSlider;
+import com.errorerrorerror.esplightcontrol.views.LightFragment;
 
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
-
-public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> implements BindableAdapter{
+public class RecyclerLightAdapter extends ListAdapter<Devices, DeviceViewHolder> implements BindableAdapter{
 
     private static final DiffUtil.ItemCallback<Devices> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Devices>() {
@@ -31,66 +26,33 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> 
                 @Override
                 public boolean areContentsTheSame(@NonNull Devices oldItem,
                                                   @NonNull Devices newItem) {
-                    return oldItem.equals(newItem) && oldItem.getOn().equals(newItem.getOn());
+                    return oldItem.equals(newItem);
                 }
             };
     private LayoutInflater layoutInflater;
-    public RecyclerLightAdapter() {
-
+    private LightFragment view;
+    public RecyclerLightAdapter(LightFragment view) {
         super(DIFF_CALLBACK);
+        this.view = view;
         setHasStableIds(true);
     }
 
     @NonNull
     @Override
-    public LightViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DeviceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
         final LightRecyclerviewBinding binding =
                 LightRecyclerviewBinding.inflate(layoutInflater, parent, false);
+        binding.setLightView(view);
 
-        return new LightViewHolder(binding);
+        return new DeviceViewHolder(binding);
     }
 
-    private PublishSubject<Integer> mProgress = PublishSubject.create();
-    private PublishSubject<Long> mId = PublishSubject.create();
-
-    @SuppressLint("CheckResult")
     @Override
-    public void onBindViewHolder(@NonNull LightViewHolder holder, int position) {
-        Devices devices = getItem(position);
-        holder.bind(devices);
-
-        holder.binding.brightness.getIconView().setAnimation(R.raw.brightness_animation);
-        holder.binding.brightness.getIconView().setProgress(
-                (float) holder.binding.getDevice().getBrightness() / 100);
-
-        RxIOSStyleSlider.progressChanged(holder.binding.brightness).subscribe(progress -> {
-                    if (progress != holder.binding.getDevice().getBrightness()) {
-                        holder.binding.getDevice().setBrightness(progress);
-                        mProgress.onNext(progress);
-                        mId.onNext(holder.binding.getDevice().getId());
-                        holder.binding.brightness.setText(holder.binding.getDevice().getBrightness() + "%");
-                        holder.binding.brightness.getIconView().setProgress((float) progress / 100);
-                    }
-                });
-
-        /*
-        holder.binding.brightness.getIconView().setAnimation(R.raw.brightness_animation);
-        holder.binding.brightness.getIconView().setProgress(
-                (float) holder.binding.getDevice().getBrightness() / 100);
-
-        RxIOSStyleSlider.progressChanged(holder.binding.brightness).subscribe(progress -> {
-            if (progress != holder.binding.getDevice().getBrightness()) {
-                holder.binding.getDevice().setBrightness(progress);
-                mProgress.onNext(progress);
-                mId.onNext(holder.binding.getDevice().getId());
-                holder.binding.brightness.setText(holder.binding.getDevice().getBrightness() + "%");
-                holder.binding.brightness.getIconView().setProgress((float) progress / 100);
-            }
-        });
-        */
+    public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
+        holder.bind(getItem(position));
     }
 
     @Override
@@ -98,22 +60,8 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, LightViewHolder> 
         return getItem(position).getId();
     }
 
-    public Observable<ProgressId> getProgressObserver() {
-        return Observable.zip(mProgress, mId, ProgressId::new);
-    }
-
     @Override
     public void setData(List<Devices> data) {
         submitList(data);
-    }
-
-    public class ProgressId {
-        public long id;
-        public int progress;
-
-        ProgressId(int progress, long id) {
-            this.id = id;
-            this.progress = progress;
-        }
     }
 }

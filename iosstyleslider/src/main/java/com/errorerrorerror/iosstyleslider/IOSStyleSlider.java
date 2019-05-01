@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
 import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -80,6 +81,10 @@ public class IOSStyleSlider extends LinearLayout {
     private int mSliderMax = DEFAULT_MAX_VALUE;
     private static final float scale = 1.04f;
     private String mText;
+    private int mProgressInitialValue = -1;
+    private boolean hasSetInitialVal = false;
+    private int animatedIconResId = 0;
+    private float animatedIconProgress = -1;
 
     public enum IOSStyleView {
         icon,
@@ -97,9 +102,6 @@ public class IOSStyleSlider extends LinearLayout {
         void onStartTrackingTouch(IOSStyleSlider slider);
 
         void onStopTrackingTouch(IOSStyleSlider slider);
-
-        void onSliderEnabled(boolean enabled);
-
     }
 
     public IOSStyleSlider(Context context) {
@@ -152,7 +154,20 @@ public class IOSStyleSlider extends LinearLayout {
         mSliderBackgroundColor = ta.getColor(R.styleable.IOSStyleSlider_issColorBackgroundSlider, mSliderBackgroundColor);
         setSliderMin(ta.getInteger(R.styleable.IOSStyleSlider_issSetMinValue, mSliderMin));
         setSlidertMax(ta.getInteger(R.styleable.IOSStyleSlider_issSetMaxValue, mSliderMax));
-        setSliderProgress(ta.getInt(R.styleable.IOSStyleSlider_issProgress, (int) mSliderProgress));
+
+        if(ta.hasValue(R.styleable.IOSStyleSlider_issAnimatedIcon)){
+            animatedIconResId = ta.getResourceId(R.styleable.IOSStyleSlider_issAnimatedIcon, 0);
+        }
+
+        if(ta.hasValue(R.styleable.IOSStyleSlider_issAnimatedIconProgress)){
+            animatedIconProgress = ta.getFloat(R.styleable.IOSStyleSlider_issAnimatedIconProgress, -1);
+        }
+
+        if(ta.hasValue(R.styleable.IOSStyleSlider_issProgressInitialValue)){
+            mProgressInitialValue = ta.getInt(R.styleable.IOSStyleSlider_issProgressInitialValue, (int) mSliderProgress);
+        } else {
+            setSliderProgress(ta.getInt(R.styleable.IOSStyleSlider_issProgress, (int) mSliderProgress));
+        }
 
         if (ta.hasValue(R.styleable.IOSStyleSlider_issIconTint)) {
             iconTint = ta.getColor(R.styleable.IOSStyleSlider_issIconTint, ContextCompat.getColor(getContext(), R.color.iconColor));
@@ -222,10 +237,6 @@ public class IOSStyleSlider extends LinearLayout {
         iconView.setImageTintMode(mIconTintMode);
     }
 
-    public LottieAnimationView getIconView() {
-        return this.iconView;
-    }
-
     private void addViews() {
         if (showIconText == IOSStyleView.icon.ordinal()) {
             addIconView();
@@ -240,15 +251,36 @@ public class IOSStyleSlider extends LinearLayout {
         }
     }
 
+    public void setAnimatedIcon(@RawRes int res){
+        iconView.setAnimation(res);
+        if(res != animatedIconResId){
+            animatedIconResId = res;
+        }
+    }
+
+    public void setAnimatedIconProgress(float progress){
+        iconView.setProgress(progress);
+        if(animatedIconProgress != progress) {
+            animatedIconProgress = progress;
+        }
+    }
+
+    public int getAnimatedIconResId() {
+        return animatedIconResId;
+    }
+
+    public void setAnimatedIconResId(int animatedIconResId) {
+        this.animatedIconResId = animatedIconResId;
+    }
+
+    public float getAnimatedIconProgress() {
+        return animatedIconProgress;
+    }
+
     public void enableSlider(boolean enable){
         if(mSliderEnabled != enable){
             mSliderEnabled = enable;
             invalidate();
-            if(onProgressChangedListener != null) {
-                for (int i = 0; i < onProgressChangedListener.size(); i++) {
-                    onProgressChangedListener.get(i).onSliderEnabled(mSliderEnabled);
-                }
-            }
         }
     }
 
@@ -277,6 +309,15 @@ public class IOSStyleSlider extends LinearLayout {
         if (hasIconTint()) {
             iconView.setImageTintList(ColorStateList.valueOf(iconTint));
         }
+
+        if(animatedIconResId != 0){
+            iconView.setAnimation(animatedIconResId);
+        }
+
+        if(animatedIconProgress != -1){
+            iconView.setProgress(animatedIconProgress);
+        }
+
         addView(iconView);
     }
 
@@ -404,12 +445,19 @@ public class IOSStyleSlider extends LinearLayout {
         if(!mSliderEnabled && mSliderColorDisabled != 0){
             mPaint.setColor(mSliderColorDisabled);
         }
+
+        if(!hasSetInitialVal && mProgressInitialValue >= 0){
+            mSliderProgress = mProgressInitialValue;
+            hasSetInitialVal = true;
+        }
+
         sliderPoints.setSliderSize(getMeasuredWidth(),
                 getMeasuredHeight(),
                 mSliderRadius,
                 mSliderProgress,
                 getSliderMin(),
                 getSliderMax());
+
         mSliderPath.set(sliderPoints.getSliderPath());
         canvas.drawPath(mSliderPath, mPaint);
     }
@@ -511,7 +559,6 @@ public class IOSStyleSlider extends LinearLayout {
         } else if (value < mSliderMin) {
             value = mSliderMin;
         }
-        //Log.d(TAG, "setSliderProgress: " + value);
 
         if (value != mSliderProgress) {
             this.mSliderProgress = value;
@@ -551,5 +598,13 @@ public class IOSStyleSlider extends LinearLayout {
         public void getOutline(View view, Outline outline) {
             outline.setRoundRect(0, 0, width, height, cornerRadius);
         }
+    }
+
+    public void setProgressInitialValue(int initialProgress){
+        this.mProgressInitialValue = initialProgress;
+    }
+
+    public boolean hasSetInitialVal(){
+        return hasSetInitialVal;
     }
 }

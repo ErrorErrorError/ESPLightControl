@@ -10,7 +10,8 @@
         <attr name="leftIconBgColor" format="color" />
         <attr name="rightIconBgColor" format="color" />
         <attr name="connectorColor" format="color" />
-
+        <attr name="onRightIconClicked"/>
+        <attr name="onLeftIconClicked"/>
         <attr name="leftIcon" format="reference" />
         <attr name="rightIcon" format="reference" />
 

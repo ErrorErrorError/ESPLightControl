@@ -3,22 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel" />
     </data>
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/lightLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-
+        <TextView
+            style="@style/TextViewLiveData"
+            app:data="@{viewModel.getAllDevices()}"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lightRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            app:data="@{viewmodel.getAllDevices()}"
+            app:data="@{viewModel.getAllDevices()}"
             android:overScrollMode="never" />
-    </LinearLayout>
+    </FrameLayout>
 
 </layout>

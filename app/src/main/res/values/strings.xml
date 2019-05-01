@@ -9,7 +9,7 @@
     <string name="DeviceName">Device Name</string>
     <string name="IPAddress">IP Address</string>
     <string name="Port">Port</string>
-    <string name="NoConnected">No Device Connected</string>
+    <string name="noDevices">No Devices</string>
     <string name="MusicModeText">Music Mode</string>
     <string name="WavesModeText">Waves Mode</string>
     <string name="SolidModeText">Solid Mode</string>

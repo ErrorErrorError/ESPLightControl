@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel" />
@@ -19,12 +20,12 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/addDeviceButton"
-            android:layout_marginTop="20dp"
             style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/addDeviceButtonHeight"
             android:layout_gravity="top|center"
             android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="15dp"
             android:clickable="true"
             android:focusable="true">
@@ -91,53 +92,40 @@
         </com.google.android.material.card.MaterialCardView>
 
 
-            <RelativeLayout
-                android:id="@+id/relativeLayoutRV"
+        <FrameLayout
+            android:id="@+id/linearLayoutConnectedDevices"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutConnectedDevices"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="11dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/somatic_round"
-                        android:text="@string/Devices"
-                        android:textColor="#7D7D7D"
-                        android:textSize="21sp"
-                        android:textStyle="normal" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/somatic_round"
+                android:text="@string/Devices"
+                android:textColor="#7D7D7D"
+                android:textSize="21sp"
+                android:textStyle="normal" />
 
 
-                    <TextView
-                        android:id="@+id/noDeviceConnectedText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="0dp"
-                        android:fontFamily="@font/somatic_round"
-                        android:text="@string/NoConnected"
-                        android:textColor="#CECECE"
-                        android:textSize="20sp" />
-                </LinearLayout>
+            <TextView
+                android:id="@+id/noDeviceConnectedText"
+                style="@style/TextViewLiveData"
+                app:data="@{viewModel.getAllDevices()}" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerviewAddDevice"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/linearLayoutConnectedDevices"
-                    android:overScrollMode="never"
-                    app:data="@{viewModel.getAllDevices}"
-                    android:scrollbars="none" />
-            </RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewAddDevice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:data="@{viewModel.getAllDevices()}" />
+        </FrameLayout>
     </LinearLayout>
 </layout>

@@ -12,7 +12,7 @@ import androidx.databinding.InverseBindingMethods;
 @InverseBindingMethods({
         @InverseBindingMethod(
                 type = IOSStyleSlider.class,
-                attribute = "issSetProgressBar",
+                attribute = "issProgress",
                 method = "getSliderProgress"),
 
         @InverseBindingMethod(
@@ -23,7 +23,6 @@ import androidx.databinding.InverseBindingMethods;
         @InverseBindingMethod(
                 type = IOSStyleSlider.class,
                 attribute = "issSliderEnabled",
-                event = "issSliderEnabledAttrChanged",
                 method = "isSliderEnabled"
         )
 })
@@ -44,14 +43,24 @@ public class IOSStyleSliderBindingAdapters {
         }
     }
 
-    @BindingConversion
-    public static String convertIntToString(int num){
-        return String.valueOf(num);
+    @BindingAdapter("issAnimatedIconProgress")
+    public static void setAnimatedIconProgress(IOSStyleSlider view, float progressIcon){
+        if(view.getAnimatedIconProgress() != progressIcon){
+            view.setAnimatedIconProgress(progressIcon);
+        }
+    }
+
+    @BindingAdapter("issProgressInitialValue")
+    public static void setInitialProgress(IOSStyleSlider view, int initialProgress){
+        if(!view.hasSetInitialVal()){
+            view.setProgressInitialValue(initialProgress);
+            view.mSliderProgress = initialProgress;
+        }
     }
 
     @BindingConversion
-    public static int convertStringToInt(String num){
-        return Integer.valueOf(num);
+    public static String convertIntToString(int num) {
+        return String.valueOf(num);
     }
 
 
@@ -62,37 +71,13 @@ public class IOSStyleSliderBindingAdapters {
         }
     }
 
-    @BindingAdapter(value = "isSliderEnabledAttrChanged")
-    public static void setSliderEnabledListener(IOSStyleSlider view, final InverseBindingListener listener){
-        if(listener != null){
-            view.addOnProgressChanged(new IOSStyleSlider.OnProgressChangedListener() {
-                @Override
-                public void onProgressChanged(IOSStyleSlider slider, int progress) {
-
-                }
-
-                @Override
-                public void onStartTrackingTouch(IOSStyleSlider slider) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(IOSStyleSlider slider) {
-
-                }
-
-                @Override
-                public void onSliderEnabled(boolean enabled) {
-                    listener.onChange();
-                }
-            });
-        }
-
-    }
-
-    @BindingAdapter(value = "issTextAttrChanged")
-    public static void setTextListener(IOSStyleSlider view, final InverseBindingListener listener) {
-        if (listener != null) {
+    @BindingAdapter(value = {"issText", "issTextAttrChanged"})
+    public static void setTextListener(IOSStyleSlider view,
+                                       final TextWatcher watcher,
+                                       final InverseBindingListener listener) {
+        if (watcher == null && listener == null) {
+            view.addTextChangedListener(null);
+        } else {
             view.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -112,31 +97,55 @@ public class IOSStyleSliderBindingAdapters {
         }
     }
 
-    @BindingAdapter(value = "issProgressAttrChanged")
-    public static void setProgressListener(IOSStyleSlider view, final InverseBindingListener listener) {
-        if (listener != null) {
+
+    @BindingAdapter(value = {"issOnStartTrackingTouch", "issOnStopTrackingTouch",
+            "issOnProgressChanged", "issProgressAttrChanged"}, requireAll = false)
+    public static void setOnProgressChangeListeners(final IOSStyleSlider view,
+                                                    final OnStartTrackingTouch start,
+                                                    final OnStopTrackingTouch stop,
+                                                    final OnProgressChanged progressChanged,
+                                                    final InverseBindingListener attrChange) {
+        if (start == null && stop == null && progressChanged == null && attrChange == null) {
+            view.addOnProgressChanged(null);
+        } else {
             view.addOnProgressChanged(new IOSStyleSlider.OnProgressChangedListener() {
                 @Override
                 public void onProgressChanged(IOSStyleSlider slider, int progress) {
-                    listener.onChange();
+                        if (progressChanged != null) {
+                            progressChanged.onProgressChanged(slider, progress);
+                        }
+                        if (attrChange != null) {
+                            attrChange.onChange();
+                        }
                 }
 
                 @Override
                 public void onStartTrackingTouch(IOSStyleSlider slider) {
-
+                    if (start != null) {
+                        start.onStartTrackingTouch(slider);
+                    }
                 }
 
                 @Override
                 public void onStopTrackingTouch(IOSStyleSlider slider) {
-
-                }
-
-                @Override
-                public void onSliderEnabled(boolean enabled) {
-
+                    if (stop != null) {
+                        stop.onStopTrackingTouch(slider);
+                    }
                 }
             });
         }
+    }
+
+    public interface OnStartTrackingTouch {
+        void onStartTrackingTouch(IOSStyleSlider slider);
+    }
+
+    public interface OnStopTrackingTouch {
+        void onStopTrackingTouch(IOSStyleSlider seekBar);
+    }
+
+    public interface OnProgressChanged {
+        void onProgressChanged(IOSStyleSlider slider, int progress);
     }
 }
 

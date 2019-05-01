@@ -46,9 +46,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
     private val maxViewScale = 1.2f
     internal var test: OnIconClickListener? = null
 
-
-    var deleteRightView = NONE_VIEW_TO_DELETE
-    var deleteLeftView = NONE_VIEW_TO_DELETE
+    var deleteView = NONE_VIEW_TO_DELETE
 
 
     var rightViewColor: Int by Delegates.observable(
@@ -58,11 +56,7 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
     var leftViewColor: Int by Delegates.observable(
             ContextCompat.getColor(context, R.color.greyFavourite))
     { _, _, new -> leftCircle.paint.color = new }
-    /*
-        var connectorColor: Int by Delegates.observable(
-                ContextCompat.getColor(context, R.color.redDelete))
-        { _, _, new -> connectorPaint.color = new }
-    */
+
     var leftIconResId: Int by Delegates.observable(
             R.drawable.ic_fav)
     { _, _, new -> leftView.setImageResource(new) }
@@ -181,28 +175,27 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
         rightView.setOnClickListener {
             var delay = 0L
-            if (deleteRightView == RIGHT_VIEW_TO_DELETE || deleteRightView == LEFT_VIEW_TO_DELETE) {
+            if (deleteView == RIGHT_VIEW_TO_DELETE) {
                 deleteAnimation(rightCircle, rightViewColor, rightView)
                 delay = 300L
             } else {
                 clickAnimation(rightCircle, rightViewColor, rightView)
             }
             postDelayed({
-                (parent as? SwipeRevealLayout)?.onRightIconClicked?.onRightIconClicked()
+                (parent as? SwipeRevealLayout)?.onIconClickListener?.onRightIconClick(((parent as SwipeRevealLayout)))
             }, delay)
         }
 
         leftView.setOnClickListener {
             var delay = 0L
-            if (deleteLeftView == RIGHT_VIEW_TO_DELETE || deleteLeftView == LEFT_VIEW_TO_DELETE) {
+            if (deleteView == LEFT_VIEW_TO_DELETE) {
                 deleteAnimation(leftCircle, leftViewColor, leftView)
                 delay = 300L
             } else {
                 clickAnimation(leftCircle, leftViewColor, leftView)
             }
             postDelayed({
-               // (test as? SwipeRevealLayout)?.onIconClickListener?.onLeftIconClick()
-                (parent as? SwipeRevealLayout)?.onLeftIconClicked?.onLeftIconClicked()
+                (parent as? SwipeRevealLayout)?.onIconClickListener?.onLeftIconClick(((parent as SwipeRevealLayout)))
             }, delay)
         }
     }
