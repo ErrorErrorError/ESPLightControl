@@ -5,7 +5,6 @@ import com.tenclouds.swipeablerecyclerviewcell.metaball.RIGHT_VIEW_TO_DELETE
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnIconClickListener
 
-
 @BindingAdapter(value = ["onRightIconClicked", "onLeftIconClicked"], requireAll = false)
 fun setListeners(view: SwipeRevealLayout,
                  right: OnRightIconClicked?,
@@ -23,7 +22,6 @@ fun setListeners(view: SwipeRevealLayout,
             }
         }, RIGHT_VIEW_TO_DELETE)
     }
-
 }
 
 interface OnRightIconClicked {

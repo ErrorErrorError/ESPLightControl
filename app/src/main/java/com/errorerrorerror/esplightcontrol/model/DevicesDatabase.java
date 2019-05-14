@@ -1,19 +1,23 @@
-package com.errorerrorerror.esplightcontrol.devices;
+package com.errorerrorerror.esplightcontrol.model;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
+
+import com.errorerrorerror.esplightcontrol.model.device.Device;
+import com.errorerrorerror.esplightcontrol.model.device_music.DeviceMusic;
 
 
 /**
  * Singleton pattern
  */
-@Database(entities = {Devices.class}, version = 1)
+@Database(entities = {Device.class, DeviceMusic.class}, version = 1)
 public abstract class DevicesDatabase extends RoomDatabase {
 
     public abstract DevicesDao getDevicesDao();
 
-    //How to setup Migration
     /*
+    //How to setup Migration
+
     //P = Previous Version
     //N = New Version
 

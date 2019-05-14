@@ -1,9 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <TextView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="musicView"
+            type="com.errorerrorerror.esplightcontrol.views.MusicBottomSheetDialogFragment" />
+        <variable
+            name="viewModel"
+            type="com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel" />
+    </data>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/MusicModeText"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/slideToDisiss"
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="100dp"
+            android:background="@drawable/rounded_rect"/>
+        <com.skydoves.colorpickerview.ColorPickerView
+            android:id="@+id/musicColorPicker"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            app:actionMode="last"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp" />
+
+        <com.errorerrorerror.esplightcontrol.views.CustomRecyclerView
+            android:id="@+id/musicSelectDeviceRecycler"
+            android:layout_width="match_parent"
+            android:columnWidth="80dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:data="@{viewModel.getAllDevices()}"
+            android:layout_height="wrap_content" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addMusicDeviceButton"
+            style="@style/ButtonShadowColor"
+            app:backgroundTint="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+
+            android:layout_marginBottom="30dp"
+            android:text="Set"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
 </layout>

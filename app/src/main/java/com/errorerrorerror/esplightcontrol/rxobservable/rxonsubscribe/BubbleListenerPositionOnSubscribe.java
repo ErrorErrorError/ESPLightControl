@@ -26,7 +26,7 @@ public final class BubbleListenerPositionOnSubscribe extends InitialValueObserva
             this.viewLinear = (BubbleNavigationLinearView) view;
             this.viewConstraint = null;
         } else {
-            throw new RuntimeException("Cannot cast an object to BubbleNavigation");
+            throw new RuntimeException("Cannot cast object to BubbleNavigation");
         }
     }
 
@@ -82,7 +82,7 @@ public final class BubbleListenerPositionOnSubscribe extends InitialValueObserva
             } else if (view instanceof BubbleNavigationLinearView) {
                 ((BubbleNavigationLinearView) view).setNavigationChangeListener(null);
             } else {
-                throw new RuntimeException("Cannot cast an object to BubbleNavigation");
+                throw new RuntimeException("Cannot cast object to BubbleNavigation");
             }
         }
     }

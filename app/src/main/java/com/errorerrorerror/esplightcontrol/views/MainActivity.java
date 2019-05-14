@@ -36,14 +36,12 @@ public class MainActivity extends AppCompatActivity {
     private final PresetsFragment presetsFragment = new PresetsFragment();
     private ActivityMainBinding binding;
     private CompositeDisposable disposable = new CompositeDisposable();
-    private static final String TAG = "MainActivityApp";
+    //private static final String TAG = "MainActivityApp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-
         int currentNightMode = getResources().getConfiguration().uiMode
                 & Configuration.UI_MODE_NIGHT_MASK;
 
@@ -91,10 +89,12 @@ public class MainActivity extends AppCompatActivity {
                         binding.customBubbleBar.setCurrentActiveItem(i)
                 ));
 
-        disposable.add(RxBubbleNavigation.bubbleSelections(binding.customBubbleBar).subscribe(position -> {
-            binding.viewPager.setOffscreenPageLimit(Objects.requireNonNull(binding.viewPager.getAdapter()).getCount());
-            binding.viewPager.setCurrentItem(position, false);
-        }));
+        disposable.add(
+                RxBubbleNavigation.bubbleSelections(binding.customBubbleBar).
+                        subscribe(position -> {
+                            binding.viewPager.setOffscreenPageLimit(Objects.requireNonNull(binding.viewPager.getAdapter()).getCount());
+                            binding.viewPager.setCurrentItem(position, false);
+                        }));
 
     }
 

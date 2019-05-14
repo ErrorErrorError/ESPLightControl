@@ -21,7 +21,7 @@ import com.errorerrorerror.esplightcontrol.EspApp;
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.adapter.RecyclerDeviceAdapter;
 import com.errorerrorerror.esplightcontrol.databinding.DevicesFragmentBinding;
-import com.errorerrorerror.esplightcontrol.devices.Devices;
+import com.errorerrorerror.esplightcontrol.model.device.Device;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.jakewharton.rxbinding3.view.RxView;
@@ -54,7 +54,7 @@ public class HomeFragment extends RxFragment {
         super.onCreate(savedInstanceState);
 
         ((EspApp) Objects.requireNonNull(getActivity()).getApplication())
-                .getApplicationComponent()
+                .getAppComponent()
                 .inject(this);
     }
 
@@ -168,7 +168,7 @@ public class HomeFragment extends RxFragment {
     }
 
     //This method gets called when the delete button is clicked
-    public void removeDevice(Devices device) {
+    public void removeDevice(Device device) {
         collectionViewModel.addDisposable(collectionViewModel.deleteDevice(device)
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
@@ -190,7 +190,6 @@ public class HomeFragment extends RxFragment {
                 id);
 
         newFragment.show(ft, "dialog");
-
         swiper.close(true);
     }
 

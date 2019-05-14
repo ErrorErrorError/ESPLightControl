@@ -11,7 +11,7 @@
 
         <variable
             name="device"
-            type="com.errorerrorerror.esplightcontrol.devices.Devices" />
+            type="com.errorerrorerror.esplightcontrol.model.device.Device" />
     </data>
 
     <LinearLayout

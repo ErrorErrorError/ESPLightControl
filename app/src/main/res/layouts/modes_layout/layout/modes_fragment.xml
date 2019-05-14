@@ -2,11 +2,23 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <LinearLayout
         android:id="@+id/linearLayoutModes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -15,27 +27,45 @@
             android:id="@+id/musicModeCardView"
             style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
-            android:layout_height="95dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="20dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
+            android:minHeight="95dp"
             android:orientation="vertical"
             android:stateListAnimator="@animator/anim_raise">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|start"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="1dp"
-                android:fontFamily="@font/somatic_round"
-                android:text="@string/MusicModeText"
-                android:textSize="20sp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/somatic_round"
+                    android:text="@string/MusicModeText"
+                    android:textSize="20sp" />
+
+                <com.errorerrorerror.esplightcontrol.views.CustomRecyclerView
+                    android:id="@+id/expandableMusic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:columnWidth="80dp"
+                    android:layout_marginBottom="10dp"
+                    app:data="@{viewModel.getAllDeviceMusic()}" />
+            </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -43,7 +73,7 @@
             android:id="@+id/wavesModeCardView"
             style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
-            android:layout_height="95dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
@@ -52,25 +82,43 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
+            android:minHeight="95dp"
             android:orientation="vertical"
             android:stateListAnimator="@animator/anim_raise">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|start"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="1dp"
-                android:fontFamily="@font/somatic_round"
-                android:text="@string/WavesModeText"
-                android:textSize="20sp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/somatic_round"
+                    android:text="@string/WavesModeText"
+                    android:textSize="20sp" />
+
+                <com.errorerrorerror.esplightcontrol.views.CustomRecyclerView
+                    android:id="@+id/expandableWaves"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginStart="25dp"
+                    android:columnWidth="80dp"
+                    android:layout_marginBottom="10dp"
+                    app:data="@{viewModel.getAllDevices()}" />
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/solidModeCardView"
             style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
-            android:layout_height="95dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="top|center"
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
@@ -79,19 +127,39 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
+            android:minHeight="95dp"
             android:orientation="vertical"
             android:stateListAnimator="@animator/anim_raise">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="1dp"
-                android:fontFamily="@font/somatic_round"
-                android:text="@string/SolidModeText"
-                android:textSize="20sp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/somatic_round"
+                    android:text="@string/SolidModeText"
+                    android:textSize="20sp" />
+
+                <com.errorerrorerror.esplightcontrol.views.CustomRecyclerView
+                    android:id="@+id/expandableSolid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:columnWidth="80dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginBottom="10dp"
+                    app:data="@{viewModel.getAllDevices()}" />
+            </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
+
+    </ScrollView>
 </layout>

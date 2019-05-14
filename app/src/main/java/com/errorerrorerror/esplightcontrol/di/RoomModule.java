@@ -5,9 +5,9 @@ import android.app.Application;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
-import com.errorerrorerror.esplightcontrol.devices.DevicesDao;
-import com.errorerrorerror.esplightcontrol.devices.DevicesDataSource;
-import com.errorerrorerror.esplightcontrol.devices.DevicesDatabase;
+import com.errorerrorerror.esplightcontrol.model.DevicesDao;
+import com.errorerrorerror.esplightcontrol.model.DevicesDataSource;
+import com.errorerrorerror.esplightcontrol.model.DevicesDatabase;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesViewModelFactory;
 
 import javax.inject.Singleton;
@@ -26,6 +26,8 @@ public class RoomModule {
                 application.getApplicationContext(),
                 DevicesDatabase.class,
                 DATABASE_NAME)
+                .fallbackToDestructiveMigration()
+                .fallbackToDestructiveMigrationOnDowngrade()
                 .build();
     }
 
@@ -41,8 +43,8 @@ public class RoomModule {
         return devicesDatabase.getDevicesDao();
     }
 
-    @Singleton
     @Provides
+    @Singleton
     DevicesDataSource providesDevicesRepository(DevicesDao devicesDao) {
         return new DevicesDataSource(devicesDao);
     }

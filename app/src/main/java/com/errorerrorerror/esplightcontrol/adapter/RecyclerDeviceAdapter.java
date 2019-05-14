@@ -1,31 +1,28 @@
 package com.errorerrorerror.esplightcontrol.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
 import com.errorerrorerror.esplightcontrol.databinding.RecyclerDevicesListBinding;
-import com.errorerrorerror.esplightcontrol.devices.Devices;
+import com.errorerrorerror.esplightcontrol.model.device.Device;
 import com.errorerrorerror.esplightcontrol.views.HomeFragment;
 
-import java.util.List;
-public class RecyclerDeviceAdapter extends ListAdapter<Devices, DeviceViewHolder> implements BindableAdapter {
+public class RecyclerDeviceAdapter extends DataBindingAdapter<Device> {
 
-    private static final DiffUtil.ItemCallback<Devices> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Devices>() {
+    private static final DiffUtil.ItemCallback<Device> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Device>() {
                 @Override
                 public boolean areItemsTheSame(
-                        @NonNull Devices oldItem, @NonNull Devices newItem) {
+                        @NonNull Device oldItem, @NonNull Device newItem) {
                     return oldItem.getId() == newItem.getId();
                 }
 
                 @Override
-                public boolean areContentsTheSame(@NonNull Devices oldItem,
-                                                  @NonNull Devices newItem) {
+                public boolean areContentsTheSame(@NonNull Device oldItem,
+                                                  @NonNull Device newItem) {
                     return oldItem.equals(newItem);
                 }
             };
@@ -42,7 +39,7 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DeviceViewHolder
 
     @NonNull
     @Override
-    public DeviceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DeviceViewHolder<Device> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
@@ -51,18 +48,7 @@ public class RecyclerDeviceAdapter extends ListAdapter<Devices, DeviceViewHolder
                 RecyclerDevicesListBinding.inflate(layoutInflater, parent, false);
 
         binding.setHomeView(view);
-        return new DeviceViewHolder(binding);
-    }
-
-    @SuppressLint("CheckResult")
-    @Override
-    public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
-        holder.bind(getItem(position));
-    }
-
-    @Override
-    public void setData(List<Devices> data) {
-        submitList(data);
+        return new DeviceViewHolder<>(binding);
     }
 
     @Override

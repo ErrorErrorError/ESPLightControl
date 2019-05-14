@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.errorerrorerror.esplightcontrol.EspApp;
 import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.databinding.DialogFragmentDevicesBinding;
-import com.errorerrorerror.esplightcontrol.devices.Devices;
+import com.errorerrorerror.esplightcontrol.model.device.Device;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
 import com.errorerrorerror.esplightcontrol.utils.DisplayUtils;
 import com.errorerrorerror.esplightcontrol.utils.ValidationUtil;
@@ -40,7 +40,7 @@ public class DialogFragment extends RxDialogFragment {
     ViewModelProvider.Factory viewModelFactory;
     private DialogFragmentDevicesBinding devicesBinding;
     private DevicesCollectionViewModel collectionViewModel;
-    private ValidationUtil validationUtil = new ValidationUtil();;
+    private ValidationUtil validationUtil = new ValidationUtil();
     private String title;
     private String negative;
     private String positive;
@@ -75,7 +75,7 @@ public class DialogFragment extends RxDialogFragment {
         super.onCreate(savedInstanceState);
 
         ((EspApp) Objects.requireNonNull(getActivity()).getApplication())
-                .getApplicationComponent()
+                .getAppComponent()
                 .inject(this);
 
         assert getArguments() != null;
@@ -86,24 +86,6 @@ public class DialogFragment extends RxDialogFragment {
 
         collectionViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(DevicesCollectionViewModel.class);
-/*
-        collectionViewModel.addDisposable(
-                collectionViewModel.getAllDevices()
-                        .compose(bindToLifecycle())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(devicesList -> {
-                            validationUtil = new ValidationUtil(devicesList,
-                                    Objects.requireNonNull(getContext()).getResources().getColor(R.color.colorAccent));
-
-                            if (mode == -2) {
-                                addDevice();
-                            } else {
-                                editDevice(mode);
-                            }
-                        }, onError -> Log.e(TAG, "onCreate: ",onError )));
-
-                        */
     }
 
     @NonNull
@@ -160,7 +142,7 @@ public class DialogFragment extends RxDialogFragment {
                         // Add input to Database if there is input
                         // dismiss the dialog
                         collectionViewModel.addDisposable(
-                                collectionViewModel.insertEditDevice(new Devices(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
+                                collectionViewModel.insertDevice(new Device(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
                                         Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
                                         Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
                                         "",
@@ -206,7 +188,9 @@ public class DialogFragment extends RxDialogFragment {
                     } else {
                         // Edit input to Database if there is input
                         // dismiss the dialog
-                        Devices device = new Devices(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
+
+
+                            Device device = new Device(Objects.requireNonNull(devicesBinding.deviceName.getText()).toString(),
                                 Objects.requireNonNull(devicesBinding.IPAddressInput.getText()).toString(),
                                 Objects.requireNonNull(devicesBinding.portInput.getText()).toString(),
                                 "",
@@ -217,7 +201,7 @@ public class DialogFragment extends RxDialogFragment {
                         device.setId(mode);
 
                         collectionViewModel.addDisposable(
-                                collectionViewModel.insertEditDevice(device)
+                                collectionViewModel.updateDevice(device)
                                         .compose(bindToLifecycle())
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())

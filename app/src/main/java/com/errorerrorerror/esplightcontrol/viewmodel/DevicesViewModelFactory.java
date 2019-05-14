@@ -1,15 +1,11 @@
 package com.errorerrorerror.esplightcontrol.viewmodel;
 
-import com.errorerrorerror.esplightcontrol.devices.DevicesDataSource;
-import com.errorerrorerror.esplightcontrol.di.DevicesScope;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-@DevicesScope
+
+import com.errorerrorerror.esplightcontrol.model.DevicesDataSource;
 public class DevicesViewModelFactory implements ViewModelProvider.Factory {
-
-
 
     private DevicesDataSource devicesDataSource;
 

@@ -5,28 +5,25 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
 import com.errorerrorerror.esplightcontrol.databinding.LightRecyclerviewBinding;
-import com.errorerrorerror.esplightcontrol.devices.Devices;
+import com.errorerrorerror.esplightcontrol.model.device.Device;
 import com.errorerrorerror.esplightcontrol.views.LightFragment;
 
-import java.util.List;
+public class RecyclerLightAdapter extends DataBindingAdapter<Device>{
 
-public class RecyclerLightAdapter extends ListAdapter<Devices, DeviceViewHolder> implements BindableAdapter{
-
-    private static final DiffUtil.ItemCallback<Devices> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Devices>() {
+    private static final DiffUtil.ItemCallback<Device> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Device>() {
                 @Override
                 public boolean areItemsTheSame(
-                        @NonNull Devices oldItem, @NonNull Devices newItem) {
+                        @NonNull Device oldItem, @NonNull Device newItem) {
                     return oldItem.getId() == newItem.getId();
                 }
 
                 @Override
-                public boolean areContentsTheSame(@NonNull Devices oldItem,
-                                                  @NonNull Devices newItem) {
-                    return oldItem.equals(newItem);
+                public boolean areContentsTheSame(@NonNull Device oldItem,
+                                                  @NonNull Device newItem) {
+                    return oldItem.equals(newItem) && oldItem.getOn().equals(newItem.getOn());
                 }
             };
     private LayoutInflater layoutInflater;
@@ -39,7 +36,7 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, DeviceViewHolder>
 
     @NonNull
     @Override
-    public DeviceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DeviceViewHolder<Device> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
@@ -47,21 +44,11 @@ public class RecyclerLightAdapter extends ListAdapter<Devices, DeviceViewHolder>
                 LightRecyclerviewBinding.inflate(layoutInflater, parent, false);
         binding.setLightView(view);
 
-        return new DeviceViewHolder(binding);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
-        holder.bind(getItem(position));
+        return new DeviceViewHolder<>(binding);
     }
 
     @Override
     public long getItemId(int position) {
         return getItem(position).getId();
-    }
-
-    @Override
-    public void setData(List<Devices> data) {
-        submitList(data);
     }
 }

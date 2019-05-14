@@ -5,11 +5,11 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
-import com.errorerrorerror.esplightcontrol.devices.DevicesRepository;
 import com.errorerrorerror.esplightcontrol.di.AppModule;
 import com.errorerrorerror.esplightcontrol.di.RoomModule;
-import com.errorerrorerror.esplightcontrol.di.component.ApplicationComponent;
-import com.errorerrorerror.esplightcontrol.di.component.DaggerApplicationComponent;
+import com.errorerrorerror.esplightcontrol.di.component.AppComponent;
+import com.errorerrorerror.esplightcontrol.di.component.DaggerAppComponent;
+import com.errorerrorerror.esplightcontrol.model.DevicesRepository;
 
 import javax.inject.Inject;
 
@@ -18,18 +18,17 @@ public class EspApp extends Application {
     public static final String CHANNEL_ID = "networkServiceChannel";
     @Inject
     public DevicesRepository devicesRepository;
-    private ApplicationComponent applicationComponent;
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         createNotificationChannel();
         dagger();
     }
 
     void dagger() {
-        applicationComponent = DaggerApplicationComponent
+        appComponent = DaggerAppComponent
                 .builder()
                 .appModule(new AppModule(this))
                 .roomModule(new RoomModule(this))
@@ -52,7 +51,7 @@ public class EspApp extends Application {
         }
     }
 
-    public ApplicationComponent getApplicationComponent() {
-        return applicationComponent;
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 }

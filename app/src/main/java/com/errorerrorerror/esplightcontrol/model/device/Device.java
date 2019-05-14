@@ -1,4 +1,4 @@
-package com.errorerrorerror.esplightcontrol.devices;
+package com.errorerrorerror.esplightcontrol.model.device;
 
 
 import androidx.annotation.Nullable;
@@ -7,8 +7,10 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "devices")
-public class Devices {
+import org.jetbrains.annotations.NotNull;
+
+@Entity(tableName = "device")
+public class Device {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -35,11 +37,11 @@ public class Devices {
     @Ignore
     private boolean open;
 
-    public Devices() {
+    public Device() {
     }
 
     @Ignore
-    public Devices(long id, String deviceName, String ip, String port, String connectivity, Boolean on) {
+    public Device(long id, String deviceName, String ip, String port, String connectivity, Boolean on) {
         this.id = id;
         this.deviceName = deviceName;
         this.ip = ip;
@@ -48,7 +50,19 @@ public class Devices {
         this.on = on;
     }
 
-    public Devices(String deviceName, String ip, String port, String connectivity, Boolean on, boolean opened, int brightness) {
+    @Ignore
+    public Device(Device device) {
+        this.id = device.getId();
+        this.deviceName = device.getDeviceName();
+        this.ip = device.getIp();
+        this.port = device.getPort();
+        this.connectivity = device.getConnectivity();
+        this.on = device.getOn();
+        this.open = device.isOpen();
+        this.brightness = device.getBrightness();
+    }
+
+    public Device(String deviceName, String ip, String port, String connectivity, Boolean on, boolean opened, int brightness) {
         this.deviceName = deviceName;
         this.ip = ip;
         this.port = port;
@@ -58,9 +72,7 @@ public class Devices {
         this.brightness = brightness;
     }
 
-    //Setters and
-
-
+    //Setters and getters
     public Boolean getOn() {
         return on;
     }
@@ -125,9 +137,10 @@ public class Devices {
         this.brightness = brightness;
     }
 
+    @NotNull
     @Override
     public String toString() {
-        return "Devices{" +
+        return "Device{" +
                 "id=" + id +
                 ", deviceName='" + deviceName + '\'' +
                 ", ip='" + ip + '\'' +
@@ -147,16 +160,16 @@ public class Devices {
         if (obj == null)
             return false;
 
-        if (!(obj instanceof Devices))
+        if (!(obj instanceof Device))
             return false;
 
-        Devices devices = (Devices) obj;
+        Device device = (Device) obj;
 
         return
-                this.getDeviceName().equals(devices.getDeviceName()) &&
-                        this.getIp().equals(devices.getIp()) &&
-                        this.getPort().equals(devices.getPort()) &&
-                        this.getBrightness() == devices.getBrightness();
+                this.getDeviceName().equals(device.getDeviceName()) &&
+                        this.getIp().equals(device.getIp()) &&
+                        this.getPort().equals(device.getPort()) &&
+                        this.getBrightness() == device.getBrightness();
     }
 
     @Override

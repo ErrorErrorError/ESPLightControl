@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class LightFragment extends RxFragment {
@@ -40,7 +41,7 @@ public class LightFragment extends RxFragment {
         super.onCreate(savedInstanceState);
 
         ((EspApp) Objects.requireNonNull(getActivity()).getApplication())
-                .getApplicationComponent()
+                .getAppComponent()
                 .inject(this);
     }
 
@@ -65,9 +66,6 @@ public class LightFragment extends RxFragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupRecyclerView();
-
-        //progressChanged();
-
     }
 
     private void setupRecyclerView() {
@@ -99,6 +97,7 @@ public class LightFragment extends RxFragment {
         collectionViewModel.addDisposable(collectionViewModel.updateBrightnessLevel(progress, id)
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {} , onError -> Log.e(TAG, "progressChanged: ", onError)));
     }
 }

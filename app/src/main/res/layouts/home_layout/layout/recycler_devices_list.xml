@@ -8,7 +8,7 @@
             type="com.errorerrorerror.esplightcontrol.views.HomeFragment" />
         <variable
             name="device"
-            type="com.errorerrorerror.esplightcontrol.devices.Devices" />
+            type="com.errorerrorerror.esplightcontrol.model.device.Device" />
     </data>
 
     <com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout
@@ -24,8 +24,8 @@
         app:leftIconBgColor="?colorToContent"
         app:revealedViewBackground="@android:color/transparent"
         app:revealedViewMarginEnd="20dp"
-        app:onRightIconClicked="@{(swipereveal) -> homeView.removeDevice(device)}"
-        app:onLeftIconClicked="@{(swipereveal) -> homeView.editDevice(swipereveal, device.getId())}"
+        app:onRightIconClicked="@{(swipe) -> homeView.removeDevice(device)}"
+        app:onLeftIconClicked="@{(swipe) -> homeView.editDevice(swipe, device.getId())}"
         app:revealedViewMarginStart="20dp"
         app:rightIcon="@drawable/ic_trash_icon"
         app:rightIconBgColor="@color/redDelete">

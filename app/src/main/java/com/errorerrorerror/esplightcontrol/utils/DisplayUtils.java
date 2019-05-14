@@ -65,4 +65,28 @@ public class DisplayUtils {
     public static float convertPixelsToDp(float px, Context context) {
         return px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
+
+    private static int[] calculateNoOfColumns(Context context, int width) {
+        int[] ye = new int[2];
+        int widthPixels= context.getResources().getDisplayMetrics().widthPixels;
+        int numberOfColumns = widthPixels / width;
+        int remaining = widthPixels - (numberOfColumns * width);
+//        System.out.println("\nRemaining\t" + remaining + "\nNumber Of Columns\t" + numberOfColumns);
+        if (remaining / (2 * numberOfColumns) < 15) {
+            numberOfColumns--;
+            remaining = widthPixels - (numberOfColumns * width);
+        }
+
+        ye[0] = numberOfColumns;
+        ye[1] = remaining;
+        return ye;
+    }
+    public static int calculateSpacing(Context context, int width) {
+
+        int[] test = calculateNoOfColumns(context, width);
+//        System.out.println("\nNumber Of Columns\t"+ numberOfColumns+"\nRemaining Space\t"+remaining+"\nSpacing\t"+remaining/(2*numberOfColumns)+"\nWidth\t"+width+"\nHeight\t"+height+"\nDisplay DPI\t"+displayMetrics.densityDpi+"\nDisplay Metrics Width\t"+displayMetrics.widthPixels);
+
+        return test[1] / (2 * test[0]);
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.errorerrorerror.esplightcontrol.utils;
 
 import com.errorerrorerror.esplightcontrol.databinding.DialogFragmentDevicesBinding;
-import com.errorerrorerror.esplightcontrol.devices.Devices;
+import com.errorerrorerror.esplightcontrol.model.device.Device;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Objects;
 public class ValidationUtil {
 
     //private static final String TAG = "ValidationUtil";
-    private List<Devices> devicesList;
+    private List<Device> deviceList;
     private int colorAccent;
 
     private static final String UNUSED_IP = "Enter An Unused IP Address";
@@ -35,13 +35,13 @@ public class ValidationUtil {
     }
 
     /*
-        public ValidationUtil(List<Devices> devicesList, int colorAccent) {
-            this.devicesList = devicesList;
+        public ValidationUtil(List<Device> deviceList, int colorAccent) {
+            this.deviceList = deviceList;
             this.colorAccent = colorAccent;
         }
     */
-    public void updateDeviceList(List<Devices> devicesList) {
-        this.devicesList = devicesList;
+    public void updateDeviceList(List<Device> deviceList) {
+        this.deviceList = deviceList;
     }
 
     public void setColorError(int colorAccent){
@@ -57,8 +57,8 @@ public class ValidationUtil {
         if (!name.isEmpty()) {
             isValid = true;
 
-            for (int i = 0; i < devicesList.size(); i++) {
-                String deviceMatch = devicesList.get(i).getDeviceName();
+            for (int i = 0; i < deviceList.size(); i++) {
+                String deviceMatch = deviceList.get(i).getDeviceName();
 
                 if (name.equals(deviceMatch)) {
                     isRepeated = true;
@@ -81,8 +81,8 @@ public class ValidationUtil {
         }
 
         if (ipValid) {
-            for (int i = 0; i < devicesList.size(); i++) {
-                String ipMatch = devicesList.get(i).getIp();
+            for (int i = 0; i < deviceList.size(); i++) {
+                String ipMatch = deviceList.get(i).getIp();
 
                 if (ip.equals(ipMatch)) {
                     ipRepeated = true;
@@ -109,9 +109,9 @@ public class ValidationUtil {
         if (!name.isEmpty()) {
             isValid = true;
 
-            for (int i = 0; i < devicesList.size(); i++) {
-                if (devicesList.get(i).getId() != id) {
-                    String deviceMatch = devicesList.get(i).getDeviceName();
+            for (int i = 0; i < deviceList.size(); i++) {
+                if (deviceList.get(i).getId() != id) {
+                    String deviceMatch = deviceList.get(i).getDeviceName();
                     if (name.equals(deviceMatch)) {
                         isRepeated = true;
                         break;
@@ -135,9 +135,9 @@ public class ValidationUtil {
             ipValid = true;
         }
         if (ipValid) {
-            for (int i = 0; i < devicesList.size(); i++) {
-                if (devicesList.get(i).getId() != id) {
-                    String ipMatch = devicesList.get(i).getIp();
+            for (int i = 0; i < deviceList.size(); i++) {
+                if (deviceList.get(i).getId() != id) {
+                    String ipMatch = deviceList.get(i).getIp();
                     if (ip.equals(ipMatch)) {
                         ipRepeated = true;
                         break;
