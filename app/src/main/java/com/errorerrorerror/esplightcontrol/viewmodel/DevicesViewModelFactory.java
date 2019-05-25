@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.errorerrorerror.esplightcontrol.model.DevicesDataSource;
+import com.errorerrorerror.esplightcontrol.model.MainRepository;
+
+import javax.inject.Inject;
+
 public class DevicesViewModelFactory implements ViewModelProvider.Factory {
 
-    private DevicesDataSource devicesDataSource;
+    private MainRepository devicesDataSource;
 
-    public DevicesViewModelFactory(DevicesDataSource devicesDataSource) {
+    @Inject
+    public DevicesViewModelFactory(MainRepository devicesDataSource) {
         this.devicesDataSource = devicesDataSource;
     }
 

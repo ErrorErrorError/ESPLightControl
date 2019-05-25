@@ -27,13 +27,15 @@ import android.view.ViewParent;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CompoundButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+
 import com.nightonke.jellytogglebutton.ColorChangeTypes.ColorChangeType;
 import com.nightonke.jellytogglebutton.EaseTypes.EaseType;
 import com.nightonke.jellytogglebutton.JellyTypes.Jelly;
 import com.nightonke.jellytogglebutton.JellyTypes.JellyStyle;
-
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 
 /**
  * Created by Weiping on 2016/5/10.
@@ -49,7 +51,9 @@ public class JellyToggleButton extends CompoundButton {
     private static final int DEFAULT_RIGHT_TEXT_COLOR = Color.parseColor("#4085EE");
     private static final Typeface DEFAULT_LEFT_TEXT_TYPEFACE = Typeface.DEFAULT;
     private static final Typeface DEFAULT_RIGHT_TEXT_TYPEFACE = Typeface.DEFAULT;
+    @Nullable
     private static final String DEFAULT_LEFT_TEXT = null;
+    @Nullable
     private static final String DEFAULT_RIGHT_TEXT = null;
     private static final int DEFAULT_LEFT_TEXT_SIZE = 15;
     private static final int DEFAULT_RIGHT_TEXT_SIZE = 15;
@@ -105,7 +109,9 @@ public class JellyToggleButton extends CompoundButton {
     private Typeface mRightTextTypeface = DEFAULT_RIGHT_TEXT_TYPEFACE;
     private int mLeftTextSize = DEFAULT_LEFT_TEXT_SIZE;
     private int mRightTextSize = DEFAULT_RIGHT_TEXT_SIZE;
+    @Nullable
     private String mLeftText = DEFAULT_LEFT_TEXT;
+    @Nullable
     private String mRightText = DEFAULT_RIGHT_TEXT;
 
     private float mTextMarginLeft;
@@ -136,6 +142,7 @@ public class JellyToggleButton extends CompoundButton {
 
     private ColorChangeType mColorChangeType = DEFAULT_COLOR_CHANGE_TYPE;
     private Jelly mJelly = DEFAULT_JELLY;
+    @Nullable
     private Jelly mRandomJelly = null;
     private EaseType mEaseType = DEFAULT_EASE_TYPE;
 
@@ -144,6 +151,7 @@ public class JellyToggleButton extends CompoundButton {
     private boolean mMoveToSameStateCallListener = DEFAULT_MOVE_TO_SAME_STATE_CALL_LISTENER;
     private boolean mDraggable = DEFAULT_DRAGGABLE;
 
+    @Nullable
     private JellyStyle mCustomJelly = null;
 
     /**
@@ -155,7 +163,9 @@ public class JellyToggleButton extends CompoundButton {
     private TextPaint mRightTextPaint;
     private Path mThumbPath;
 
+    @Nullable
     private Layout mLeftTextLayout;
+    @Nullable
     private Layout mRightTextLayout;
     private float mTextWidth;
     private float mTextHeight;
@@ -168,6 +178,7 @@ public class JellyToggleButton extends CompoundButton {
     private float mProcess;
     private ValueAnimator mProcessAnimator;
 
+    @Nullable
     private State lastState = null;
     private State mState;
 
@@ -200,7 +211,7 @@ public class JellyToggleButton extends CompoundButton {
         init(attrs);
     }
 
-    private void init(AttributeSet attrs) {
+    private void init(@Nullable AttributeSet attrs) {
         mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         mClickTimeout = ViewConfiguration.getPressedStateDuration() +
                 ViewConfiguration.getTapTimeout();
@@ -461,7 +472,7 @@ public class JellyToggleButton extends CompoundButton {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         // background
@@ -534,7 +545,7 @@ public class JellyToggleButton extends CompoundButton {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
 
         if (!isEnabled() || !isClickable()) {
             return false;
@@ -750,7 +761,7 @@ public class JellyToggleButton extends CompoundButton {
         mProcessAnimator = ValueAnimator.ofFloat(mProcess, target);
         mProcessAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
+            public void onAnimationUpdate(@NonNull ValueAnimator animation) {
                 setProcess((Float) animation.getAnimatedValue(), callListener);
             }
         });
@@ -1025,6 +1036,7 @@ public class JellyToggleButton extends CompoundButton {
         setTextSize(getContext().getResources().getDimensionPixelSize(res));
     }
 
+    @Nullable
     public String getLeftText() {
         return mLeftText;
     }
@@ -1040,6 +1052,7 @@ public class JellyToggleButton extends CompoundButton {
         setLeftText(getContext().getResources().getString(res));
     }
 
+    @Nullable
     public String getRightText() {
         return mRightText;
     }
@@ -1295,6 +1308,7 @@ public class JellyToggleButton extends CompoundButton {
         mOnStateChangeListener = onStateChangeListener;
     }
 
+    @Nullable
     public JellyStyle getCustomJelly() {
         return mCustomJelly;
     }
@@ -1342,7 +1356,7 @@ public class JellyToggleButton extends CompoundButton {
     static class SavedState extends BaseSavedState {
         public static final Parcelable.Creator<SavedState> CREATOR
                 = new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
+            public SavedState createFromParcel(@NonNull Parcel in) {
                 return new SavedState(in);
             }
 
@@ -1350,7 +1364,9 @@ public class JellyToggleButton extends CompoundButton {
                 return new SavedState[size];
             }
         };
+        @Nullable
         String leftText;
+        @Nullable
         String rightText;
         boolean isChecked = false;
 
@@ -1358,7 +1374,7 @@ public class JellyToggleButton extends CompoundButton {
             super(superState);
         }
 
-        private SavedState(Parcel in) {
+        private SavedState(@NonNull Parcel in) {
             super(in);
             leftText = in.readString();
             rightText = in.readString();
@@ -1366,7 +1382,7 @@ public class JellyToggleButton extends CompoundButton {
         }
 
         @Override
-        public void writeToParcel(Parcel out, int flags) {
+        public void writeToParcel(@NonNull Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeString(leftText);
             out.writeString(rightText);

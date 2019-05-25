@@ -143,12 +143,14 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
             rightIconRes = a.getResourceId(R.styleable.SwipeRevealLayout_rightIcon,
                     R.drawable.ic_delete)
 
+
+
             revealedConnectorViewColor = a.getColor(R.styleable.SwipeRevealLayout_connectorColor,
-                    ContextCompat.getColor(context, R.color.redDelete))
+                    ContextCompat.getColor(context, R.color.colorError))
             revealedLeftViewColor = a.getColor(R.styleable.SwipeRevealLayout_leftIconBgColor,
                     ContextCompat.getColor(context, R.color.greyFavourite))
             revealedRightViewColor = a.getColor(R.styleable.SwipeRevealLayout_rightIconBgColor,
-                    ContextCompat.getColor(context, R.color.redDelete))
+                    ContextCompat.getColor(context, R.color.colorError))
             revealedViewBackground = a.getResourceId(
                     R.styleable.SwipeRevealLayout_revealedViewBackground,
                     android.R.color.transparent
@@ -304,10 +306,10 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
             var matchParentWidth = false
 
             if (childParams != null) {
-                matchParentHeight = childParams.height == ViewGroup.LayoutParams.MATCH_PARENT ||
-                        childParams.height == ViewGroup.LayoutParams.MATCH_PARENT
-                matchParentWidth = childParams.width == ViewGroup.LayoutParams.MATCH_PARENT ||
-                        childParams.width == ViewGroup.LayoutParams.MATCH_PARENT
+                matchParentHeight = childParams.height == MATCH_PARENT ||
+                        childParams.height == MATCH_PARENT
+                matchParentWidth = childParams.width == MATCH_PARENT ||
+                        childParams.width == MATCH_PARENT
             }
 
             if (matchParentHeight) {
@@ -379,22 +381,22 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
             desiredHeight = Math.max(child.measuredHeight, desiredHeight)
         }
         // create new measure spec using the largest child width
-        currentWidthMeasureSpec = View.MeasureSpec.makeMeasureSpec(desiredWidth, widthMode)
-        currentMeasureSpec = View.MeasureSpec.makeMeasureSpec(desiredHeight, heightMode)
+        currentWidthMeasureSpec = MeasureSpec.makeMeasureSpec(desiredWidth, widthMode)
+        currentMeasureSpec = MeasureSpec.makeMeasureSpec(desiredHeight, heightMode)
 
-        val measuredWidth = View.MeasureSpec.getSize(currentWidthMeasureSpec)
-        val measuredHeight = View.MeasureSpec.getSize(currentMeasureSpec)
+        val measuredWidth = MeasureSpec.getSize(currentWidthMeasureSpec)
+        val measuredHeight = MeasureSpec.getSize(currentMeasureSpec)
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             val childParams = child.layoutParams
 
             if (childParams != null) {
-                if (childParams.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+                if (childParams.height == MATCH_PARENT) {
                     child.minimumHeight = measuredHeight
                 }
 
-                if (childParams.width == ViewGroup.LayoutParams.MATCH_PARENT) {
+                if (childParams.width == MATCH_PARENT) {
                     child.minimumWidth = measuredWidth
                 }
             }
@@ -409,27 +411,27 @@ class SwipeRevealLayout : ViewGroup, OnDeleteListener, OpenCloseListener {
         desiredHeight += paddingTop + paddingBottom
 
         // adjust desired width
-        if (widthMode == View.MeasureSpec.EXACTLY) {
+        if (widthMode == MeasureSpec.EXACTLY) {
             desiredWidth = measuredWidth
         } else {
-            if (params.width == ViewGroup.LayoutParams.MATCH_PARENT) {
+            if (params.width == MATCH_PARENT) {
                 desiredWidth = measuredWidth
             }
 
-            if (widthMode == View.MeasureSpec.AT_MOST) {
+            if (widthMode == MeasureSpec.AT_MOST) {
                 desiredWidth = if (desiredWidth > measuredWidth) measuredWidth else desiredWidth
             }
         }
 
         // adjust desired height
-        if (heightMode == View.MeasureSpec.EXACTLY) {
+        if (heightMode == MeasureSpec.EXACTLY) {
             desiredHeight = measuredHeight
         } else {
-            if (params.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+            if (params.height == MATCH_PARENT) {
                 desiredHeight = measuredHeight
             }
 
-            if (heightMode == View.MeasureSpec.AT_MOST) {
+            if (heightMode == MeasureSpec.AT_MOST) {
                 desiredHeight = if (desiredHeight > measuredHeight) measuredHeight else desiredHeight
             }
         }

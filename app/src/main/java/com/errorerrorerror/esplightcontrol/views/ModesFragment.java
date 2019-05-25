@@ -1,7 +1,6 @@
 package com.errorerrorerror.esplightcontrol.views;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,18 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
+import com.beloo.widget.chipslayoutmanager.SpacingItemDecoration;
 import com.errorerrorerror.esplightcontrol.EspApp;
+import com.errorerrorerror.esplightcontrol.R;
 import com.errorerrorerror.esplightcontrol.adapter.ListModesAdapter;
-import com.errorerrorerror.esplightcontrol.adapter.MusicModeAdapter;
 import com.errorerrorerror.esplightcontrol.databinding.ModesFragmentBinding;
+import com.errorerrorerror.esplightcontrol.model.device.Device;
+import com.errorerrorerror.esplightcontrol.model.device_music.DeviceMusic;
+import com.errorerrorerror.esplightcontrol.model.device_solid.DeviceSolid;
+import com.errorerrorerror.esplightcontrol.model.device_waves.DeviceWaves;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
+import com.google.android.material.chip.Chip;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.trello.rxlifecycle3.components.support.RxFragment;
 
@@ -25,6 +31,8 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class ModesFragment extends RxFragment {
 
@@ -50,72 +58,100 @@ public class ModesFragment extends RxFragment {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DevicesCollectionViewModel.class);
         binding = ModesFragmentBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
+        binding.setView(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        binding.expandableMusic.setAdapter(new MusicModeAdapter());
-        binding.expandableSolid.setAdapter(new ListModesAdapter(this));
-        binding.expandableWaves.setAdapter(new ListModesAdapter(this));
+        initViews();
 
         viewModel.addDisposable(RxView.clicks(binding.musicModeCardView)
-                .throttleFirst(1000, TimeUnit.MICROSECONDS)
-                .subscribe(onNext -> {
-                            Log.d("ModesFragment", "music: ");
-                            showMusicSheet();
-                        }
-                ));
-
-        viewModel.addDisposable(RxView.clicks(binding.wavesModeCardView)
-                .throttleFirst(1000, TimeUnit.MICROSECONDS)
-                .subscribe(onNext -> {
-                    Log.d("ModesFragment", "waves: ");
-                    showWavesSheet();
-                }));
-
-        viewModel.addDisposable(RxView.clicks(binding.solidModeCardView)
-                .throttleFirst(1000, TimeUnit.MICROSECONDS)
-                .subscribe(onNext -> {
-                    Log.d("ModesFragment", "solid: ");
-                    showSolidSheet();
-                })
+                .throttleFirst(700, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .doOnNext(onNext -> showMusicSheet(null))
+                .subscribe()
         );
 
-        
+        viewModel.addDisposable(RxView.clicks(binding.wavesModeCardView)
+                .throttleFirst(700, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe(onNext -> showWavesSheet(null)));
 
-        //ListModesAdapter test = new ListModesAdapter();
-       // binding.expandableMusic.setAdapter(test);
-        //binding.expandableSolid.setAdapter(test);
-        //binding.expandableWaves.setAdapter(test);
-
-        //binding.expandableMusic.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
-        //binding.expandableSolid.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
-        //binding.expandableWaves.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        viewModel.addDisposable(RxView.clicks(binding.solidModeCardView)
+                .throttleFirst(700, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe(onNext -> showSolidSheet(null))
+        );
     }
 
-
-    private void showMusicSheet() {
+    private void showMusicSheet(@Nullable Device device) {
         FragmentTransaction ft = checkDialog();
-        MusicBottomSheetDialogFragment bottomSheet = new MusicBottomSheetDialogFragment();
+        MusicBottomSheetDialogFragment bottomSheet;
+        if (device != null) {
+            bottomSheet = new MusicBottomSheetDialogFragment(device);
+        } else {
+            bottomSheet = new MusicBottomSheetDialogFragment();
+        }
+
+        bottomSheet.show(ft, "modaldialog");
+
+    }
+
+    private void showWavesSheet(@Nullable Device device) {
+        FragmentTransaction ft = checkDialog();
+        WavesBottomSheetDialogFragment bottomSheet;
+
+        if (device != null) {
+            bottomSheet = new WavesBottomSheetDialogFragment(device);
+        } else {
+            bottomSheet = new WavesBottomSheetDialogFragment();
+        }
+        bottomSheet.show(ft, "modaldialog");
+
+    }
+
+    private void initViews(){
+        ChipsLayoutManager one = ChipsLayoutManager.newBuilder(getContext())
+                .setOrientation(ChipsLayoutManager.HORIZONTAL)
+                .build();
+
+        ChipsLayoutManager two = ChipsLayoutManager.newBuilder(getContext())
+                .setOrientation(ChipsLayoutManager.HORIZONTAL)
+                .build();
+
+        ChipsLayoutManager three = ChipsLayoutManager.newBuilder(getContext())
+                .setOrientation(ChipsLayoutManager.HORIZONTAL)
+                .build();
+
+        binding.expandableWaves.setLayoutManager(one);
+        binding.expandableMusic.setLayoutManager(two);
+        binding.expandableSolid.setLayoutManager(three);
+
+        binding.expandableWaves.setAdapter(new ListModesAdapter(this));
+        binding.expandableMusic.setAdapter(new ListModesAdapter(this));
+        binding.expandableSolid.setAdapter(new ListModesAdapter(this));
+
+        binding.expandableSolid.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space),
+                getResources().getDimensionPixelOffset(R.dimen.item_space)));
+        binding.expandableMusic.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space),
+                getResources().getDimensionPixelOffset(R.dimen.item_space)));
+        binding.expandableWaves.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space),
+                getResources().getDimensionPixelOffset(R.dimen.item_space)));
+    }
+
+    private void showSolidSheet(@Nullable Device device) {
+        FragmentTransaction ft = checkDialog();
+        SolidBottomSheetDialogFragment bottomSheet;
+        if (device != null) {
+            bottomSheet = new SolidBottomSheetDialogFragment(device);
+        } else {
+            bottomSheet = new SolidBottomSheetDialogFragment();
+        }
+
         bottomSheet.show(ft, "modaldialog");
     }
 
-    private void showWavesSheet() {
-        FragmentTransaction ft = checkDialog();
-        WavesBottomSheetDialogFragment bottomSheet = new WavesBottomSheetDialogFragment();
-        bottomSheet.show(ft, "modaldialog");
-    }
 
-    private void showSolidSheet() {
-        FragmentTransaction ft = checkDialog();
-        SolidBottomSheetDialogFragment bottomSheet = new SolidBottomSheetDialogFragment();
-        bottomSheet.show(ft, "modaldialog");
-    }
-
-
+    @NonNull
     private FragmentTransaction checkDialog() {
         FragmentTransaction ft = Objects.requireNonNull(getFragmentManager()).beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("modaldialog");
@@ -126,4 +162,16 @@ public class ModesFragment extends RxFragment {
         return ft;
     }
 
+    public void showSetting(@NonNull View v, Device device) {
+        if (device instanceof DeviceMusic) {
+            ((Chip) v).setChecked(false);
+            showMusicSheet(device);
+        } else if (device instanceof DeviceWaves) {
+            ((Chip) v).setChecked(false);
+            showWavesSheet(device);
+        } else if (device instanceof DeviceSolid) {
+            ((Chip) v).setChecked(false);
+            showSolidSheet(device);
+        }
+    }
 }

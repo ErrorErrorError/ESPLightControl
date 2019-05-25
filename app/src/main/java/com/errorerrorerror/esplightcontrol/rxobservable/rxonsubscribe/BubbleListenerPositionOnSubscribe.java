@@ -2,6 +2,8 @@ package com.errorerrorerror.esplightcontrol.rxobservable.rxonsubscribe;
 
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 import com.gauravk.bubblenavigation.BubbleNavigationConstraintView;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
 import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
@@ -15,7 +17,9 @@ import io.reactivex.android.MainThreadDisposable;
 import static com.jakewharton.rxbinding3.internal.Preconditions.checkMainThread;
 
 public final class BubbleListenerPositionOnSubscribe extends InitialValueObservable<Integer> {
+    @Nullable
     private final BubbleNavigationConstraintView viewConstraint;
+    @Nullable
     private final BubbleNavigationLinearView viewLinear;
 
     public BubbleListenerPositionOnSubscribe(Object view) {

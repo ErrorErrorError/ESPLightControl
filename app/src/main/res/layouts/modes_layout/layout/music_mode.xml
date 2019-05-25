@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="musicView"
             type="com.errorerrorerror.esplightcontrol.views.MusicBottomSheetDialogFragment" />
+
         <variable
             name="viewModel"
             type="com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel" />
     </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,41 +23,144 @@
             android:id="@+id/slideToDisiss"
             android:layout_width="wrap_content"
             android:layout_height="10dp"
+            android:layout_marginStart="150dp"
             android:layout_marginTop="20dp"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
-            android:background="@drawable/rounded_rect"/>
-        <com.skydoves.colorpickerview.ColorPickerView
-            android:id="@+id/musicColorPicker"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            app:actionMode="last"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp" />
+            android:layout_marginEnd="150dp"
+            android:backgroundTint="#4FC0C0C0" />
 
-        <com.errorerrorerror.esplightcontrol.views.CustomRecyclerView
-            android:id="@+id/musicSelectDeviceRecycler"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:columnWidth="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
+            <TextView
+                android:id="@+id/lowText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:text="Low"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <com.divyanshu.colorseekbar.ColorSeekBar
+                android:id="@+id/lowColorSlider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignStart="@id/lowText"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="30dp"
+                app:barHeight="15dp"
+                app:cornerRadius="5dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
+            <TextView
+                android:id="@+id/medText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:text="Med"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <com.divyanshu.colorseekbar.ColorSeekBar
+                android:id="@+id/medColorSlider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignStart="@id/medText"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="30dp"
+                app:barHeight="15dp"
+                app:cornerRadius="5dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:id="@+id/highText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:text="High"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <com.divyanshu.colorseekbar.ColorSeekBar
+                android:id="@+id/highColorSlider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignStart="@id/highText"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="30dp"
+                app:barHeight="15dp"
+                app:cornerRadius="5dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:id="@+id/sensitivityText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:text="Intensity"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <SeekBar
+                android:id="@+id/thresholdSlider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignStart="@id/sensitivityText"
+                android:layout_marginStart="80dp"
+                android:layout_marginEnd="30dp"
+                android:max="5" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            app:data="@{viewModel.getAllDevices()}"
-            android:layout_height="wrap_content" />
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/somatic_round"
+            android:text="@string/Devices"
+            android:textColor="@color/grayBoi"
+            android:textSize="20sp" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/musicSelectDeviceChip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:nestedScrollingEnabled="true"
+            app:data="@{viewModel.getAllDevices()}" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addMusicDeviceButton"
-            style="@style/ButtonShadowColor"
-            app:backgroundTint="@color/colorAccent"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
-
             android:layout_marginBottom="30dp"
-            android:text="Set"
-            android:textColor="#FFFFFF" />
-
+            android:text="@string/apply" />
     </LinearLayout>
 </layout>

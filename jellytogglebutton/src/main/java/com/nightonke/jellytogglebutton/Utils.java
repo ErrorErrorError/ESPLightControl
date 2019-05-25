@@ -2,6 +2,8 @@ package com.nightonke.jellytogglebutton;
 
 import android.graphics.Color;
 
+import androidx.annotation.NonNull;
+
 import com.nightonke.jellytogglebutton.ColorChangeTypes.ColorChangeType;
 
 /**
@@ -24,6 +26,7 @@ public class Utils {
 
     private static final float ERROR = 0.001f;
 
+    @NonNull
     public static float[] toHsvVector(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
@@ -77,8 +80,10 @@ public class Utils {
         return offset;
     }
 
+    @NonNull
     private static Utils ourInstance = new Utils();
 
+    @NonNull
     public static Utils getInstance() {
         return ourInstance;
     }

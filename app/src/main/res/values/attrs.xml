@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="contentElevation" format="dimension|reference"/>
-    <attr name="baseBackgroundColor" format="color|reference"/>
-    <attr name="contentColor" format="color|reference"/>
-    <attr name="textColorInverse" format="color|reference"/>
-    <attr name="colorHighlight" format="color|reference"/>
-    <attr name="iconColor" format="color|reference"/>
-    <attr name="innerBox" format="color|reference"/>
-    <attr name="backgroundHighlight" format="color|reference"/>
-    <attr name="dialogBackgroundColor" format="color|reference"/>
-    <attr name="borderInputColor" format="color|reference"/>
-    <attr name="colorToContent" format="color|reference"/>
-    <attr name="sliderBackground" format="color"/>
+    <attr name="alphaEmphasisHigh" format="float"/>
+    <attr name="alphaEmphasisMedium" format="float"/>
+    <attr name="alphaEmphasisDisabled" format="float"/>
 </resources>

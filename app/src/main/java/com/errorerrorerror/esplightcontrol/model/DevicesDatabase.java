@@ -3,17 +3,19 @@ package com.errorerrorerror.esplightcontrol.model;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-import com.errorerrorerror.esplightcontrol.model.device.Device;
 import com.errorerrorerror.esplightcontrol.model.device_music.DeviceMusic;
+import com.errorerrorerror.esplightcontrol.model.device_music.DeviceMusicDao;
+import com.errorerrorerror.esplightcontrol.model.device_solid.DeviceSolid;
+import com.errorerrorerror.esplightcontrol.model.device_solid.DeviceSolidDao;
+import com.errorerrorerror.esplightcontrol.model.device_waves.DeviceWaves;
+import com.errorerrorerror.esplightcontrol.model.device_waves.DeviceWavesDao;
 
-
-/**
- * Singleton pattern
- */
-@Database(entities = {Device.class, DeviceMusic.class}, version = 1)
+@Database(entities = {DeviceMusic.class, DeviceWaves.class, DeviceSolid.class}, version = 1)
 public abstract class DevicesDatabase extends RoomDatabase {
 
-    public abstract DevicesDao getDevicesDao();
+    public abstract DeviceMusicDao getMusicDao();
+    public abstract DeviceWavesDao getWavesDao();
+    public abstract DeviceSolidDao getSolidDao();
 
     /*
     //How to setup Migration

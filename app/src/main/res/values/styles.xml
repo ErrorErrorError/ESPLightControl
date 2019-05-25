@@ -1,109 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="AppTheme.LightMode" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/windowColorLight</item>
-        <item name="baseBackgroundColor">@color/windowColorLight</item>
-        <item name="contentColor">@color/windowColorLight</item>
-        <item name="contentElevation">5dp</item>
-        <item name="textColorInverse">#FFF</item>
-        <item name="iconColor">@color/colorPrimary</item>
-        <item name="colorHighlight">@color/windowColorLight</item>
-        <item name="colorToContent">@color/windowColorLightTest</item>
-        <item name="innerBox">#FFFFFF</item>
-        <item name="backgroundHighlight">@color/buttonCancelHighlight</item>
-        <item name="dialogBackgroundColor">#fff</item>
-        <item name="borderInputColor">#E9F0FF</item>
-       <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/colorPrimary</item>
-        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/colorPrimary</item>
-        <item name="sliderBackground">@color/windowColorLight</item>
-        <item name="textInputStyle">
-            @style/Custom.TextInputLayout.OutlinedBox
-        </item>
 
+    <!--Bottom Sheets-->
+    <style name="ThemeOverlay.MyTheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.MyTheme.BottomSheet.Modal</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="bottomSheetStyle">@style/Widget.MyTheme.BottomSheet.Modal</item>
+        <item name="android:navigationBarColor">?colorSurface</item>
+        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">@android:color/transparent</item>
+    </style>
+    <style name="Widget.MyTheme.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">?shapeAppearanceLargeComponent</item>
     </style>
 
-    <style name="AppTheme.DarkMode" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/windowColorDark</item>
-        <item name="materialCardViewStyle">@color/windowColorDark</item>
-        <item name="baseBackgroundColor">@color/windowColorDark</item>
-        <item name="contentColor">@color/contentColorDark</item>
-        <item name="contentElevation">0dp</item>
-        <item name="textColorInverse">#FFF</item>
-        <item name="iconColor">@color/colorPrimary</item>
-        <item name="colorHighlight">@color/contentColorDark</item>
-        <item name="innerBox">@color/contentColorDark</item>
-        <item name="backgroundHighlight">@color/contentColorDark</item>
-        <item name="dialogBackgroundColor">@color/windowColorDark</item>
-        <item name="borderInputColor">?contentColor</item>
-        <item name="colorToContent">?contentColor</item>
-        <item name="sliderBackground">?contentColor</item>
-        <item name="textInputStyle">
-            @style/Custom.TextInputLayout.OutlinedBox
-        </item>
+    <!-- Dialog -->
+    <style name="DialogTest" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:background">?colorSurface</item>
+        <item name="android:outlineSpotShadowColor" tools:ignore="NewApi">@null</item>
+        <item name="android:outlineAmbientShadowColor" tools:ignore="NewApi">@null</item>
     </style>
 
-    <style name="Custom.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxCornerRadiusBottomEnd">10dp</item>
-        <item name="boxCornerRadiusBottomStart">10dp</item>
-        <item name="boxCornerRadiusTopEnd">10dp</item>
-        <item name="boxCornerRadiusTopStart">10dp</item>
-        <item name="boxStrokeColor">@color/color_border</item>
-        <item name="boxBackgroundColor">?innerBox</item>
-        <item name="errorTextColor">@color/redDelete</item>
+    <!-- InputTextLayout -->
+    <style name="Widget.InputTextLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">@style/TextInputEditText.Theme</item>
+        <item name="errorTextColor">?colorError</item>
+        <item name="shapeAppearance">@style/AppShapeAppearance.SmallComponent</item>
         <item name="android:clipChildren">false</item>
         <item name="android:clipToPadding">false</item>
+        <item name="boxBackgroundColor">?colorOnBackground</item>
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
     </style>
 
-    <style name="ButtonShadowColor" parent="Widget.MaterialComponents.Button">
-        <item name="android:layout_height">52dp</item>
-        <item name="android:layout_width">125dp</item>
-        <item name="android:textSize">15sp</item>
-        <item name="rippleColor">@null</item>
-        <item name="android:stateListAnimator">@null</item>
-        <item name="cornerRadius">@dimen/buttonCorner</item>
-        <item name="android:elevation">?contentElevation</item>
-
+    <style name="TextInputEditText.Theme" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="editTextStyle">@style/TextInputEditText.Style</item>
     </style>
 
-    <style name="TextViewLiveData" parent="Widget.AppCompat.TextView">
-        <item name="android:textSize">20sp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:fontFamily">@font/somatic_round</item>
-        <item name="android:textColor">#CECECE</item>
-        <item name="android:gravity">center</item>
-        <item name="android:text">@string/noDevices</item>
+    <style name="TextInputEditText.Style" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:elevation">5dp</item>
     </style>
 
-    <style name="Custom.MaterialCardView" parent="Base.CardView">
-        <item name="cardCornerRadius">@dimen/corner_radius</item>
-        <item name="rippleColor">@color/colorPrimary</item>
-        <item name="cardBackgroundColor">?contentColor</item>
-        <item name="cardElevation">?contentElevation</item>
+    <style name="CardStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/AppShapeAppearance.LargeComponent</item>
     </style>
 
-    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/dialog_shape</item>
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">5dp</item>
+        <item name="enforceMaterialTheme">true</item>
     </style>
-
-    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
-    </style>
-
-    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">?dialogBackgroundColor</item>
-    </style>
-
 
 </resources>

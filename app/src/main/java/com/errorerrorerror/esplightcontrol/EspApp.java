@@ -9,7 +9,7 @@ import com.errorerrorerror.esplightcontrol.di.AppModule;
 import com.errorerrorerror.esplightcontrol.di.RoomModule;
 import com.errorerrorerror.esplightcontrol.di.component.AppComponent;
 import com.errorerrorerror.esplightcontrol.di.component.DaggerAppComponent;
-import com.errorerrorerror.esplightcontrol.model.DevicesRepository;
+import com.errorerrorerror.esplightcontrol.model.DeviceRepo;
 
 import javax.inject.Inject;
 
@@ -17,7 +17,7 @@ public class EspApp extends Application {
 
     public static final String CHANNEL_ID = "networkServiceChannel";
     @Inject
-    public DevicesRepository devicesRepository;
+    public DeviceRepo deviceRepo;
     private AppComponent appComponent;
 
     @Override

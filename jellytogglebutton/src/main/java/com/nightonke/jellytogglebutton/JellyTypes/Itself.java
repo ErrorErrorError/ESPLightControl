@@ -1,10 +1,11 @@
 package com.nightonke.jellytogglebutton.JellyTypes;
 
+import androidx.annotation.NonNull;
+
 import com.nightonke.jellytogglebutton.EaseTypes.EaseType;
 import com.nightonke.jellytogglebutton.PointWithHorizontalPoints;
 import com.nightonke.jellytogglebutton.PointWithVerticalPoints;
 import com.nightonke.jellytogglebutton.State;
-import com.nightonke.jellytogglebutton.Utils;
 
 /**
  * Created by Weiping on 2016/5/11.
@@ -18,7 +19,7 @@ public class Itself extends JellyStyle {
     }
 
     @Override
-    public void changeOffset(PointWithHorizontalPoints p1, PointWithVerticalPoints p2, PointWithHorizontalPoints p3, PointWithVerticalPoints p4, float totalLength, float extractLength, float process, State state, EaseType easeType) {
+    public void changeOffset(@NonNull PointWithHorizontalPoints p1, @NonNull PointWithVerticalPoints p2, @NonNull PointWithHorizontalPoints p3, @NonNull PointWithVerticalPoints p4, float totalLength, float extractLength, float process, @NonNull State state, @NonNull EaseType easeType) {
         if (state.equals(State.LEFT_TO_RIGHT)) {
             float offset = totalLength * easeType.getOffset(process);
 //            offset = Utils.limitOffset(offset, totalLength);

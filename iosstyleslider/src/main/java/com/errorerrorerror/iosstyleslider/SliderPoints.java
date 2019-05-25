@@ -3,6 +3,8 @@ package com.errorerrorerror.iosstyleslider;
 import android.graphics.Path;
 import android.graphics.PointF;
 
+import androidx.annotation.NonNull;
+
 class SliderPoints {
 
     //private static final String TAG = "sliderpoints";
@@ -22,22 +24,39 @@ class SliderPoints {
        p7 = horizontal point
        p8 = fourth curve
        */
+    @NonNull
     private Path mSliderPath = new Path();
+    @NonNull
     private PointF mSliderP1 = new PointF();
+    @NonNull
     private PointF mSliderP2 = new PointF();
+    @NonNull
     private PointF mSliderP1ControlPointF = new PointF();
+    @NonNull
     private PointF mSliderP2ControlPointF = new PointF();
+    @NonNull
     private PointF mSliderP3 = new PointF();
+    @NonNull
     private PointF mSliderP4 = new PointF();
+    @NonNull
     private PointF mSliderP3ControlPointF = new PointF();
+    @NonNull
     private PointF mSliderP4ControlPointF = new PointF();
+    @NonNull
     private PointF mSliderP5 = new PointF();
+    @NonNull
     private PointF mSliderP6 = new PointF();
+    @NonNull
     private PointF mSliderP5ControlPointF = new PointF();
+    @NonNull
     private PointF mSliderP6ControlPointF = new PointF();
+    @NonNull
     private PointF mSliderP7 = new PointF();
+    @NonNull
     private PointF mSliderP8 = new PointF();
+    @NonNull
     private PointF mSliderP7ControlPointF = new PointF();
+    @NonNull
     private PointF mSliderP8ControlPointF = new PointF();
 
     SliderPoints() {
@@ -165,6 +184,7 @@ class SliderPoints {
     }
 
 
+    @NonNull
     Path getSliderPath() {
         return mSliderPath;
     }

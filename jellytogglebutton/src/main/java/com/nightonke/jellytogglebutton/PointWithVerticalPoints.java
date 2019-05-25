@@ -2,13 +2,17 @@ package com.nightonke.jellytogglebutton;
 
 import android.graphics.PointF;
 
+import androidx.annotation.NonNull;
+
 /**
  * Created by Weiping on 2016/5/10.
  */
 public class PointWithVerticalPoints {
     public float x;
     public float y;
+    @NonNull
     public PointF top = new PointF();
+    @NonNull
     public PointF bottom = new PointF();
 
     public void setX(float x){

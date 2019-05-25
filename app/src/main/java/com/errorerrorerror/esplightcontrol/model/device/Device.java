@@ -3,16 +3,12 @@ package com.errorerrorerror.esplightcontrol.model.device;
 
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
-import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
-@Entity(tableName = "device")
 public class Device {
 
-    @PrimaryKey(autoGenerate = true)
     private long id;
 
     @ColumnInfo(name = "device_name")
@@ -41,8 +37,7 @@ public class Device {
     }
 
     @Ignore
-    public Device(long id, String deviceName, String ip, String port, String connectivity, Boolean on) {
-        this.id = id;
+    public Device(String deviceName, String ip, String port, String connectivity, Boolean on) {
         this.deviceName = deviceName;
         this.ip = ip;
         this.port = port;
@@ -50,7 +45,6 @@ public class Device {
         this.on = on;
     }
 
-    @Ignore
     public Device(Device device) {
         this.id = device.getId();
         this.deviceName = device.getDeviceName();
@@ -72,6 +66,14 @@ public class Device {
         this.brightness = brightness;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     //Setters and getters
     public Boolean getOn() {
         return on;
@@ -79,14 +81,6 @@ public class Device {
 
     public void setOn(Boolean on) {
         this.on = on;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getDeviceName() {
@@ -141,7 +135,6 @@ public class Device {
     @Override
     public String toString() {
         return "Device{" +
-                "id=" + id +
                 ", deviceName='" + deviceName + '\'' +
                 ", ip='" + ip + '\'' +
                 ", port='" + port + '\'' +
@@ -165,11 +158,10 @@ public class Device {
 
         Device device = (Device) obj;
 
-        return
-                this.getDeviceName().equals(device.getDeviceName()) &&
-                        this.getIp().equals(device.getIp()) &&
-                        this.getPort().equals(device.getPort()) &&
-                        this.getBrightness() == device.getBrightness();
+        return this.getDeviceName().equals(device.getDeviceName()) &&
+                this.getIp().equals(device.getIp()) &&
+                this.getPort().equals(device.getPort()) &&
+                this.getBrightness() == device.getBrightness();
     }
 
     @Override

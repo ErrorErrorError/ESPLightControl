@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="view"
+            type="com.errorerrorerror.esplightcontrol.views.ModesFragment" />
         <variable
             name="viewModel"
             type="com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel" />
@@ -25,7 +27,6 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/musicModeCardView"
-            style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -35,7 +36,7 @@
             android:layout_marginBottom="20dp"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:foreground="?attr/selectableItemBackground"
             android:minHeight="95dp"
             android:orientation="vertical"
             android:stateListAnimator="@animator/anim_raise">
@@ -55,23 +56,22 @@
                     android:text="@string/MusicModeText"
                     android:textSize="20sp" />
 
-                <com.errorerrorerror.esplightcontrol.views.CustomRecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/expandableMusic"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="30dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
-                    android:columnWidth="80dp"
                     android:layout_marginBottom="10dp"
                     app:data="@{viewModel.getAllDeviceMusic()}" />
+
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/wavesModeCardView"
-            style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -101,22 +101,22 @@
                     android:text="@string/WavesModeText"
                     android:textSize="20sp" />
 
-                <com.errorerrorerror.esplightcontrol.views.CustomRecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/expandableWaves"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="25dp"
                     android:layout_marginStart="25dp"
-                    android:columnWidth="80dp"
                     android:layout_marginBottom="10dp"
-                    app:data="@{viewModel.getAllDevices()}" />
+                    app:data="@{viewModel.getAllDeviceWaves()}" />
+
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/solidModeCardView"
-            style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
@@ -146,16 +146,16 @@
                     android:text="@string/SolidModeText"
                     android:textSize="20sp" />
 
-                <com.errorerrorerror.esplightcontrol.views.CustomRecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/expandableSolid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:columnWidth="80dp"
                     android:layout_marginEnd="25dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginBottom="10dp"
-                    app:data="@{viewModel.getAllDevices()}" />
+                    app:data="@{viewModel.getAllDeviceSolid()}" />
+
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

@@ -4,6 +4,8 @@ import android.animation.AnimatorSet
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -50,12 +52,12 @@ internal class MetaBalls : LinearLayout, AnimatedRevealView {
 
 
     var rightViewColor: Int by Delegates.observable(
-            ContextCompat.getColor(context, R.color.redDelete))
+            ContextCompat.getColor(context, R.color.colorError))
     { _, _, new -> rightCircle.paint.color = new }
 
     var leftViewColor: Int by Delegates.observable(
             ContextCompat.getColor(context, R.color.greyFavourite))
-    { _, _, new -> leftCircle.paint.color = new }
+    { _, _, new -> leftCircle.paint.colorFilter = PorterDuffColorFilter(new, PorterDuff.Mode.SRC_IN) }
 
     var leftIconResId: Int by Delegates.observable(
             R.drawable.ic_fav)

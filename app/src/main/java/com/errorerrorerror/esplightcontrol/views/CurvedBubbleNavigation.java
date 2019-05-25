@@ -10,10 +10,10 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.errorerrorerror.esplightcontrol.R;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
-
-import java.util.Objects;
 
 public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
     private static final Point mFirstCurveStartPoint = new Point();
@@ -29,17 +29,17 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
     private final int CURVE_RADIUS = getResources().getDimensionPixelOffset(R.dimen.corner_radius); //Do not exceed 200
 
 
-    public CurvedBubbleNavigation(Context context) {
+    public CurvedBubbleNavigation(@NonNull Context context) {
         super(context);
         init();
     }
 
-    public CurvedBubbleNavigation(Context context, AttributeSet attrs) {
+    public CurvedBubbleNavigation(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CurvedBubbleNavigation(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CurvedBubbleNavigation(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -49,7 +49,7 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
         mPath = new Path();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mPaint.setColor(Objects.requireNonNull(getBackgroundTintList()).getDefaultColor());
+        mPaint.setColor(getSolidColor());
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             setLayerType(View.LAYER_TYPE_SOFTWARE, mPaint);
         }
@@ -59,7 +59,7 @@ public class CurvedBubbleNavigation extends BubbleNavigationLinearView {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawPath(mPath, mPaint);
     }

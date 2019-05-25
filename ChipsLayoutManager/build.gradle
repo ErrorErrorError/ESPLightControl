@@ -1,0 +1,113 @@
+
+apply plugin: 'com.android.library'
+
+//upload settings to bintray
+ext {
+    bintrayRepo = 'widget'
+    bintrayName = 'ChipsLayoutManager'
+
+    libraryName = 'ChipsLayoutManager'
+    publishedGroupId = 'com.beloo.widget'
+    artifact = 'ChipsLayoutManager'
+    libraryVersion = '0.3.7'
+
+    libraryDescription = 'Android. A custom layout manager for RecyclerView which mimicric TextView span behaviour, flow layouts behaviour with support of amazing recyclerView features'
+
+    siteUrl = 'https://github.com/BelooS/ChipsLayoutManager'
+    gitUrl = 'https://github.com/BelooS/ChipsLayoutManager.git'
+
+    developerId = 'beloo'
+    developerName = 'Beloy Oleg'
+    developerEmail = 'beloyoleg@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+
+    testBuildType "debug"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 11
+        versionName '0.3.7'
+
+        testApplicationId "com.beloo.chipslayoutmanager.test"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+
+        all {
+            buildConfigField("boolean", "isLogEnabled", "false")
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        development {
+            buildConfigField("boolean", "isLogEnabled", "false")
+        }
+    }
+
+    sourceSets {
+        androidTest {
+            res.srcDirs = ['src/androidTest/res']
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+}
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+}
+
+task androidJavadocsJar(type: Jar) {
+    classifier = 'javadoc'
+    baseName = artifact
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    baseName = artifact
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+}
+
+
+def supportVersion = "28+"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.annotation:annotation:1.0.2'
+    androidTestImplementation 'pl.pragmatists:JUnitParams:1.1.1'
+}
+
+group = publishedGroupId // Maven Group ID for the artifact
+version = libraryVersion
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())

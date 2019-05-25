@@ -7,6 +7,8 @@ import android.view.Display;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+
 import com.errorerrorerror.esplightcontrol.R;
 
 public class DisplayUtils {
@@ -19,6 +21,7 @@ public class DisplayUtils {
     }
 
     //this code is from http://stackoverflow.com/a/29609679 it is stripped down to items needed
+    @NonNull
     private Point getAppUsableScreenSize() {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
@@ -27,6 +30,7 @@ public class DisplayUtils {
         return size;
     }
 
+    @NonNull
     private Point getRealScreenSize() {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
@@ -66,6 +70,7 @@ public class DisplayUtils {
         return px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+    @NonNull
     private static int[] calculateNoOfColumns(Context context, int width) {
         int[] ye = new int[2];
         int widthPixels= context.getResources().getDisplayMetrics().widthPixels;
@@ -81,7 +86,7 @@ public class DisplayUtils {
         ye[1] = remaining;
         return ye;
     }
-    public static int calculateSpacing(Context context, int width) {
+    public static int calculateSpacing(@NonNull Context context, int width) {
 
         int[] test = calculateNoOfColumns(context, width);
 //        System.out.println("\nNumber Of Columns\t"+ numberOfColumns+"\nRemaining Space\t"+remaining+"\nSpacing\t"+remaining/(2*numberOfColumns)+"\nWidth\t"+width+"\nHeight\t"+height+"\nDisplay DPI\t"+displayMetrics.densityDpi+"\nDisplay Metrics Width\t"+displayMetrics.widthPixels);

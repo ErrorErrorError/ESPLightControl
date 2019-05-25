@@ -1,20 +1,15 @@
 package com.tenclouds.swipeablerecyclerviewcell.swipereveal
 
-import android.view.View
-import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.verify
 import com.tenclouds.swipeablerecyclerviewcell.MockActivity
 import com.tenclouds.swipeablerecyclerviewcell.R
 import com.tenclouds.swipeablerecyclerviewcell.metaball.MetaBalls
-import com.tenclouds.swipeablerecyclerviewcell.metaball.RIGHT_VIEW_TO_DELETE
-import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnDeleteListener
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.interfaces.OnIconClickListener
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
@@ -79,7 +74,7 @@ class SwipeRevealLayoutTest {
                 .perform(swipeLeft())
 
         onView(withId(leftIcon.id)).perform(click())
-        verify(onIconClickListener).onLeftIconClick()
+        verify(onIconClickListener).onLeftIconClick(main)
     }
 
     @Test
@@ -91,6 +86,6 @@ class SwipeRevealLayoutTest {
                 .perform(swipeLeft())
 
         onView(withId(rightIcon.id)).perform(click())
-        verify(onIconClickListener).onRightIconClick()
+        verify(onIconClickListener).onRightIconClick(main)
     }
 }

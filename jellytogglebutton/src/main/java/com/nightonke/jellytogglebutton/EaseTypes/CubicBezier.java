@@ -2,6 +2,8 @@ package com.nightonke.jellytogglebutton.EaseTypes;
 
 import android.graphics.PointF;
 
+import androidx.annotation.NonNull;
+
 /**
  * Created by Weiping on 2016/3/3.
  */
@@ -9,8 +11,11 @@ public abstract class CubicBezier {
 
     private PointF start;
     private PointF end;
+    @NonNull
     private PointF a = new PointF();
+    @NonNull
     private PointF b = new PointF();
+    @NonNull
     private PointF c = new PointF();
 
     /**

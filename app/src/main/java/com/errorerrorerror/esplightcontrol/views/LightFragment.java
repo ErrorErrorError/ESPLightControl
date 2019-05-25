@@ -8,16 +8,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.errorerrorerror.esplightcontrol.EspApp;
-import com.errorerrorerror.esplightcontrol.adapter.RecyclerLightAdapter;
+import com.errorerrorerror.esplightcontrol.adapter.AllDevicesRecyclerAdapter;
 import com.errorerrorerror.esplightcontrol.databinding.LightFragmentBinding;
+import com.errorerrorerror.esplightcontrol.model.device.Device;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
-import com.trello.rxlifecycle3.components.support.RxFragment;
 
 import java.util.Objects;
 
@@ -26,7 +27,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class LightFragment extends RxFragment {
+public class LightFragment extends Fragment {
 
     private static final String TAG = "LightFragment";
     @Inject
@@ -34,7 +35,7 @@ public class LightFragment extends RxFragment {
     private DevicesCollectionViewModel collectionViewModel;
 
     private LightFragmentBinding binding;
-    private RecyclerLightAdapter recyclerLightAdapter;
+    private AllDevicesRecyclerAdapter allDevicesRecyclerAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,38 +67,38 @@ public class LightFragment extends RxFragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupRecyclerView();
+
+        allDevicesRecyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                binding.lightRecyclerView.smoothScrollToPosition(0);
+            }
+        });
+
     }
 
     private void setupRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
-                RecyclerView.HORIZONTAL, true);
-        linearLayoutManager.setStackFromEnd(true);
+                RecyclerView.HORIZONTAL, false);
+        linearLayoutManager.setStackFromEnd(false);
         binding.lightRecyclerView.setLayoutManager(linearLayoutManager);
         binding.lightRecyclerView.setHasFixedSize(true);
-        recyclerLightAdapter = new RecyclerLightAdapter(this);
-        binding.lightRecyclerView.setAdapter(recyclerLightAdapter);
+        allDevicesRecyclerAdapter = new AllDevicesRecyclerAdapter(this);
+        binding.lightRecyclerView.setAdapter(allDevicesRecyclerAdapter);
         binding.lightRecyclerView.setItemAnimator(null);
-
-        Objects.requireNonNull(binding.lightRecyclerView.getAdapter())
-                .registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                    @Override
-                    public void onItemRangeInserted(int positionStart, int itemCount) {
-                        if (positionStart > 0) {
-                            binding.lightRecyclerView.smoothScrollToPosition(positionStart);
-                        }
-                    }
-                });
 
     }
 
     /*
     This changes the value from the room's progress with the corresponding slider
      */
-    public void progressChanged(int progress, long id){
-        collectionViewModel.addDisposable(collectionViewModel.updateBrightnessLevel(progress, id)
-                .compose(bindToLifecycle())
+    public void progressChanged(int progress, Device device) {
+        collectionViewModel.addDisposable(collectionViewModel.updateBrightnessLevel(progress, device)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {} , onError -> Log.e(TAG, "progressChanged: ", onError)));
+                .subscribe(() -> {
+                }, onError -> Log.e(TAG, "progressChanged: ", onError)));
     }
+
 }

@@ -1,7 +1,5 @@
 package com.errorerrorerror.esplightcontrol.di;
 
-import android.app.Application;
-
 import com.errorerrorerror.esplightcontrol.EspApp;
 
 import javax.inject.Singleton;
@@ -21,13 +19,6 @@ public class AppModule {
     @Provides
     @Singleton
     EspApp provideEspApplication() {
-        return application;
-    }
-
-    @Provides
-    @Singleton
-    Application provideApplication()
-    {
         return application;
     }
 }

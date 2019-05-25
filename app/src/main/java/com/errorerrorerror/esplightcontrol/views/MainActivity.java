@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private final LightFragment lightFragment = new LightFragment();
     private final PresetsFragment presetsFragment = new PresetsFragment();
     private ActivityMainBinding binding;
+    @NonNull
     private CompositeDisposable disposable = new CompositeDisposable();
     //private static final String TAG = "MainActivityApp";
 
@@ -47,14 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
         switch (currentNightMode) {
             case Configuration.UI_MODE_NIGHT_NO:
-                setTheme(R.style.AppTheme_LightMode);
+                setTheme(R.style.Base_MyTheme);
                 break;
             // Night mode is not active, we're in day time
             case Configuration.UI_MODE_NIGHT_YES:
-                setTheme(R.style.AppTheme_DarkMode);
+                setTheme(R.style.MyTheme_DayNight);
                 break;
         }
-
         super.onCreate(savedInstanceState);
 
 
@@ -83,18 +84,16 @@ public class MainActivity extends AppCompatActivity {
 
         //Set Adapter
         binding.viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments));
-        disposable.add(RxViewPager
-                .pageSelections(binding.viewPager)
-                .subscribe(i ->
-                        binding.customBubbleBar.setCurrentActiveItem(i)
-                ));
 
-        disposable.add(
-                RxBubbleNavigation.bubbleSelections(binding.customBubbleBar).
-                        subscribe(position -> {
-                            binding.viewPager.setOffscreenPageLimit(Objects.requireNonNull(binding.viewPager.getAdapter()).getCount());
-                            binding.viewPager.setCurrentItem(position, false);
-                        }));
+        disposable.add(RxViewPager.pageSelections(binding.viewPager)
+                .doOnNext(i -> binding.customBubbleBar.setCurrentActiveItem(i))
+                .flatMap(integer -> RxBubbleNavigation.bubbleSelections(binding.customBubbleBar))
+                .doOnNext(position -> {
+                    binding.viewPager.setOffscreenPageLimit(Objects.requireNonNull(binding.viewPager.getAdapter()).getCount());
+                    binding.viewPager.setCurrentItem(position, false);
+                })
+                .subscribe());
+
 
     }
 

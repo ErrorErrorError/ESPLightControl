@@ -18,4 +18,5 @@
     <string name="port">Port:</string>
     <string name="description">Description</string>
     <string name="connection">Connection:</string>
+    <string name="apply">Apply</string>
 </resources>

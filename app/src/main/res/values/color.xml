@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
+    <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
+    <!--selection controls.-->
+    <color name="colorPrimary">#6d6ae6 </color>
+    <color name="colorPrimaryVariant">#423D99</color>
+    <color name="colorSecondary">#43CBFF</color>
+    <color name="colorSecondaryVariant">#0D5D82</color>
+
+    <!-- This is for color gradient -->
+    <color name="gradientColorStart">#43CBFF</color>
+    <color name="gradientColorEnd">#9708CC</color>
+
+    <!--colorBackground appears behind scrollable content and is used for the default window-->
+    <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
+    <!--and menus. colorError is used to indicate an error state for components such as-->
+    <!--text fields.-->
+    <color name="colorBackground">#ffffff</color>
+    <color name="colorSurface">#FCFCFC</color>
+    <color name="colorError">#DE4343</color>
+
+    <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
+    <!--on which they appear.-->
+    <color name="colorOnPrimary">#ffffff</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorOnBackground">#FFFFFF</color>
+    <color name="colorOnSurface">#000000</color>
+    <color name="colorOnError">#ffffff</color>
+
+
+    <!-- Components -->
+
+
+    <color name="grayBoi">#7B8193</color>
+    <color name="lightBulbColorLight">#ff9800</color>
+
+    <color name="testy">#F4F7F8</color>
+    <color name="windowColorLight">#FCFCFC</color>
+    <color name="windowColorLightTest">#F4F7FD</color>
+    <color name="contentColorLight">#EFEFEF</color>
+    <color name="contentColorLightTest">#FFF</color>
+    <color name="contentHightlightLight">#f0f0f0</color>
+
+    <color name="windowColorDark">#080808</color>
+    <color name="contentColorDark">#1C1C1C</color>
+    <color name="contentHightlightDark">#333333</color>
+    <color name="buttonAddHighlight">#aaa9f1</color>
+    <color name="buttonCancelText">#A7ABBF</color>
+    <color name="buttonCancelHighlight">#F7FCFF</color>
+
+
+    <!-- Tab Colors -->
+    <color name="devicesBackgroundTab">#156D6AE6</color>
+    <color name="devicesTextTabIcon">@color/colorPrimary</color>
+</resources>

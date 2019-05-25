@@ -1,6 +1,6 @@
 package com.errorerrorerror.iosstyleslider;
 
-import android.annotation.SuppressLint;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -20,10 +20,12 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.core.content.ContextCompat;
@@ -59,13 +61,17 @@ public class IOSStyleSlider extends LinearLayout {
     private SliderPoints sliderPoints;
     private boolean mSliderEnabled;
     private LottieAnimationView iconView;
+    @Nullable
     private PorterDuff.Mode mIconTintMode = null;
     private boolean hasIconTintMode = false;
     private TextView textView;
     private int iconResource;
     private int iconTint = 0;
     private boolean hasIconTint = false;
+    @Nullable
     private List<OnProgressChangedListener> onProgressChangedListener;
+    @Nullable
+    private List<OnSliderEnabledChangeListener> onSliderEnabledChangeListeners;
     private int textColor = 0;
     private int iconSize = 0;
     private int textSize = 0;
@@ -91,6 +97,10 @@ public class IOSStyleSlider extends LinearLayout {
         text,
         textIcon,
         iconText
+    }
+
+    public interface OnSliderEnabledChangeListener {
+        void onSliderEnabledChanged(IOSStyleSlider iosStyleSlider, boolean isOn);
     }
 
     public interface OnProgressChangedListener {
@@ -138,6 +148,7 @@ public class IOSStyleSlider extends LinearLayout {
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
         onProgressChangedListener = null;
+        onSliderEnabledChangeListeners = null;
         setWeightSum(.5f);
 
         mPaint = new Paint();
@@ -155,15 +166,15 @@ public class IOSStyleSlider extends LinearLayout {
         setSliderMin(ta.getInteger(R.styleable.IOSStyleSlider_issSetMinValue, mSliderMin));
         setSlidertMax(ta.getInteger(R.styleable.IOSStyleSlider_issSetMaxValue, mSliderMax));
 
-        if(ta.hasValue(R.styleable.IOSStyleSlider_issAnimatedIcon)){
+        if (ta.hasValue(R.styleable.IOSStyleSlider_issAnimatedIcon)) {
             animatedIconResId = ta.getResourceId(R.styleable.IOSStyleSlider_issAnimatedIcon, 0);
         }
 
-        if(ta.hasValue(R.styleable.IOSStyleSlider_issAnimatedIconProgress)){
+        if (ta.hasValue(R.styleable.IOSStyleSlider_issAnimatedIconProgress)) {
             animatedIconProgress = ta.getFloat(R.styleable.IOSStyleSlider_issAnimatedIconProgress, -1);
         }
 
-        if(ta.hasValue(R.styleable.IOSStyleSlider_issProgressInitialValue)){
+        if (ta.hasValue(R.styleable.IOSStyleSlider_issProgressInitialValue)) {
             mProgressInitialValue = ta.getInt(R.styleable.IOSStyleSlider_issProgressInitialValue, (int) mSliderProgress);
         } else {
             setSliderProgress(ta.getInt(R.styleable.IOSStyleSlider_issProgress, (int) mSliderProgress));
@@ -215,6 +226,7 @@ public class IOSStyleSlider extends LinearLayout {
         this.onProgressChangedListener.add(progressChangedListener);
     }
 
+    @Nullable
     public List<OnProgressChangedListener> getOnProgressChanged() {
         return onProgressChangedListener;
     }
@@ -245,22 +257,35 @@ public class IOSStyleSlider extends LinearLayout {
         } else if (showIconText == IOSStyleView.textIcon.ordinal()) {
             addTextView();
             addIconView();
-        } else if(showIconText == IOSStyleView.iconText.ordinal()){
+        } else if (showIconText == IOSStyleView.iconText.ordinal()) {
             addIconView();
             addTextView();
         }
     }
 
-    public void setAnimatedIcon(@RawRes int res){
+    @Nullable
+    public List<OnSliderEnabledChangeListener> getOnSliderEnabledChangeListeners() {
+        return onSliderEnabledChangeListeners;
+    }
+
+    public void setOnSliderEnabledChangeListeners(OnSliderEnabledChangeListener onSliderEnabledChangeListeners) {
+        if (this.onSliderEnabledChangeListeners == null) {
+            this.onSliderEnabledChangeListeners = new ArrayList<>();
+        }
+
+        this.onSliderEnabledChangeListeners.add(onSliderEnabledChangeListeners);
+    }
+
+    public void setAnimatedIcon(@RawRes int res) {
         iconView.setAnimation(res);
-        if(res != animatedIconResId){
+        if (res != animatedIconResId) {
             animatedIconResId = res;
         }
     }
 
-    public void setAnimatedIconProgress(float progress){
+    public void setAnimatedIconProgress(float progress) {
         iconView.setProgress(progress);
-        if(animatedIconProgress != progress) {
+        if (animatedIconProgress != progress) {
             animatedIconProgress = progress;
         }
     }
@@ -277,22 +302,28 @@ public class IOSStyleSlider extends LinearLayout {
         return animatedIconProgress;
     }
 
-    public void enableSlider(boolean enable){
-        if(mSliderEnabled != enable){
+    public void setSliderEnabled(boolean enable) {
+        if (mSliderEnabled != enable) {
             mSliderEnabled = enable;
             invalidate();
         }
+
+        if (onSliderEnabledChangeListeners != null) {
+            for (int i = 0; i < onSliderEnabledChangeListeners.size(); i++) {
+                onSliderEnabledChangeListeners.get(i).onSliderEnabledChanged(this, enable);
+            }
+        }
     }
 
-    public void setDisabledSliderColor(@ColorInt int color){
-        if(mSliderColorDisabled != color){
+    public void setDisabledSliderColor(@ColorInt int color) {
+        if (mSliderColorDisabled != color) {
             mSliderColorDisabled = color;
             invalidate();
         }
     }
 
-    public void setDisabledSliderBackgroundColor(@ColorInt int color){
-        if(mSliderBackgroundColorDisabled != color){
+    public void setDisabledSliderBackgroundColor(@ColorInt int color) {
+        if (mSliderBackgroundColorDisabled != color) {
             mSliderBackgroundColorDisabled = color;
             invalidate();
         }
@@ -310,11 +341,11 @@ public class IOSStyleSlider extends LinearLayout {
             iconView.setImageTintList(ColorStateList.valueOf(iconTint));
         }
 
-        if(animatedIconResId != 0){
+        if (animatedIconResId != 0) {
             iconView.setAnimation(animatedIconResId);
         }
 
-        if(animatedIconProgress != -1){
+        if (animatedIconProgress != -1) {
             iconView.setProgress(animatedIconProgress);
         }
 
@@ -335,10 +366,15 @@ public class IOSStyleSlider extends LinearLayout {
         addView(textView);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if(mSliderEnabled) {
+    public boolean performClick() {
+        return super.performClick();
+    }
+
+
+    @Override
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
+        if (mSliderEnabled) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 onStopTrackingTouch();
                 getParent().requestDisallowInterceptTouchEvent(false);
@@ -346,7 +382,7 @@ public class IOSStyleSlider extends LinearLayout {
             }
 
             if (this.gestureDetector.onTouchEvent(event)) {
-                Log.d(TAG, "onTouchEvent: ");
+                performClick();
                 return true;
             } else {
                 return super.onTouchEvent(event);
@@ -400,6 +436,15 @@ public class IOSStyleSlider extends LinearLayout {
                 getParent().requestDisallowInterceptTouchEvent(true);
                 return true;
             }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+                //onStartTrackingTouch();
+                //calculateDistanceFling(velocityY);
+                //getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
         };
 
         gestureDetector = new GestureDetector(getContext(), gestureListener);
@@ -408,13 +453,46 @@ public class IOSStyleSlider extends LinearLayout {
         gestureDetector.setIsLongpressEnabled(false);
     }
 
+    private void calculateDistanceFling(float velocity) {
+
+        float pps = -velocity / 100;
+        pps = pps + mSliderProgress;
+        if (pps > mSliderMax) {
+            pps = mSliderMax;
+        } else if (pps < mSliderMin) {
+            pps = mSliderMin;
+        }
+        Log.d(TAG, "calculateDistanceFling: " + pps);
+
+        final ValueAnimator valueAnimator = new ValueAnimator().setDuration(1000);
+        valueAnimator.setFloatValues(mSliderProgress, pps);
+        valueAnimator.setInterpolator(new DecelerateInterpolator(1.2f));
+        final float finalPps = pps;
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator animation) {
+                setSliderProgress((Float) animation.getAnimatedValue());
+                if (((float) animation.getAnimatedValue()) == finalPps) {
+                    valueAnimator.removeUpdateListener(this);
+                }
+
+            }
+        });
+
+        valueAnimator.start();
+
+    }
 
     private float calculateDistance(float distance) {
-        return mSliderProgress + ((distance / getMeasuredHeight()) * 100);
+
+        float t = mSliderProgress + ((distance / getMeasuredHeight()) * 100);
+        Log.d(TAG, "onScroll: " + t);
+
+        return t;
     }
 
     @Override
-    protected synchronized void onDraw(Canvas canvas) {
+    protected synchronized void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         //Slider Background
@@ -423,11 +501,11 @@ public class IOSStyleSlider extends LinearLayout {
         drawSlider(canvas);
     }
 
-    private void drawBackgroundSlider(Canvas canvas){
+    private void drawBackgroundSlider(@NonNull Canvas canvas) {
         mPaint.reset();
         mPaint.setAntiAlias(true);
         mPaint.setColor(mSliderBackgroundColor);
-        if(!mSliderEnabled && mSliderBackgroundColorDisabled != 0) {
+        if (!mSliderEnabled && mSliderBackgroundColorDisabled != 0) {
             mPaint.setColor(mSliderBackgroundColorDisabled);
         }
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -436,17 +514,17 @@ public class IOSStyleSlider extends LinearLayout {
     }
 
     public boolean isSliderEnabled() {
-        return mSliderEnabled;
+        return this.mSliderEnabled;
     }
 
-    private void drawSlider(Canvas canvas){
+    private void drawSlider(@NonNull Canvas canvas) {
         mSliderPath.reset();
         mPaint.setColor(mSliderColor);
-        if(!mSliderEnabled && mSliderColorDisabled != 0){
+        if (!mSliderEnabled && mSliderColorDisabled != 0) {
             mPaint.setColor(mSliderColorDisabled);
         }
 
-        if(!hasSetInitialVal && mProgressInitialValue >= 0){
+        if (!hasSetInitialVal && mProgressInitialValue >= 0) {
             mSliderProgress = mProgressInitialValue;
             hasSetInitialVal = true;
         }
@@ -595,16 +673,18 @@ public class IOSStyleSlider extends LinearLayout {
         }
 
         @Override
-        public void getOutline(View view, Outline outline) {
+        public void getOutline(View view, @NonNull Outline outline) {
             outline.setRoundRect(0, 0, width, height, cornerRadius);
         }
     }
 
-    public void setProgressInitialValue(int initialProgress){
+    public void setProgressInitialValue(int initialProgress) {
         this.mProgressInitialValue = initialProgress;
+        this.hasSetInitialVal = false;
+        invalidate();
     }
 
-    public boolean hasSetInitialVal(){
+    public boolean hasSetInitialVal() {
         return hasSetInitialVal;
     }
 }

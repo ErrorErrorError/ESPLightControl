@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--DARK COLOR THEME-->
+
+    <color name="colorPrimary">#6d6ae6</color>
+    <color name="colorPrimaryVariant">#423D99</color>
+    <color name="colorSecondary">#43CBFF</color>
+    <color name="colorSecondaryVariant">#0D5D82</color>
+
+    <color name="gradientColorStart">#43CBFF</color>
+    <color name="gradientColorEnd">#9708CC</color>
+
+    <color name="colorBackground">#080808</color>
+    <color name="colorSurface">#0D0D0D</color>
+    <color name="colorError">#DE4343</color>
+
+
+    <color name="colorOnPrimary">#000000</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorOnBackground">#1D1D1D</color>
+    <color name="colorOnSurface">#FCFCFC</color>
+    <color name="colorOnError">#262626</color>
+
+</resources>

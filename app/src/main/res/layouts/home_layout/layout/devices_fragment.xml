@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="version"
+            type="Integer" />
+
+        <variable
             name="viewModel"
             type="com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel" />
     </data>
@@ -20,7 +24,6 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/addDeviceButton"
-            style="@style/Custom.MaterialCardView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/addDeviceButtonHeight"
             android:layout_gravity="top|center"
@@ -34,6 +37,7 @@
                 android:id="@+id/linearLayoutAdddevice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@{(version &lt; 24)? @drawable/cardview_background_gradient : @drawable/ic_cardview_background_gradient}"
                 android:clickable="false"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -79,7 +83,7 @@
                     android:fontFamily="@font/somatic_round"
                     android:gravity="center|start"
                     android:text="@string/apps_add_device"
-                    android:textColor="?textColorInverse"
+                    android:textColor="@android:color/white"
                     android:textSize="23sp" />
 
                 <Space
@@ -115,7 +119,11 @@
 
             <TextView
                 android:id="@+id/noDeviceConnectedText"
-                style="@style/TextViewLiveData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/noDevices"
+                android:textSize="20sp"
+                android:layout_gravity="center"
                 app:data="@{viewModel.getAllDevices()}" />
 
             <androidx.recyclerview.widget.RecyclerView

@@ -1,5 +1,7 @@
 package com.nightonke.jellytogglebutton.JellyTypes;
 
+import androidx.annotation.NonNull;
+
 import com.nightonke.jellytogglebutton.EaseTypes.EaseType;
 import com.nightonke.jellytogglebutton.PointWithHorizontalPoints;
 import com.nightonke.jellytogglebutton.PointWithVerticalPoints;
@@ -19,7 +21,7 @@ public class ActiveStiffSlimJim extends JellyStyle {
     private static final float T4 = 1.000f;
 
     @Override
-    public void changeShape(PointWithHorizontalPoints p1, PointWithVerticalPoints p2, PointWithHorizontalPoints p3, PointWithVerticalPoints p4, float stretchDistance, float bezierControlValue, float bezierScaleRatioValue, float thumbRadius, float process, State state) {
+    public void changeShape(@NonNull PointWithHorizontalPoints p1, @NonNull PointWithVerticalPoints p2, @NonNull PointWithHorizontalPoints p3, @NonNull PointWithVerticalPoints p4, float stretchDistance, float bezierControlValue, float bezierScaleRatioValue, float thumbRadius, float process, @NonNull State state) {
         if (state.equals(State.LEFT_TO_RIGHT)) {
             if (T0 <= process && process <= T1) {
                 p1.moveX(stretchDistance * (process - T0) / (T1 - T0));
@@ -70,7 +72,7 @@ public class ActiveStiffSlimJim extends JellyStyle {
     }
 
     @Override
-    public void changeOffset(PointWithHorizontalPoints p1, PointWithVerticalPoints p2, PointWithHorizontalPoints p3, PointWithVerticalPoints p4, float totalLength, float extractLength, float process, State state, EaseType easeType) {
+    public void changeOffset(@NonNull PointWithHorizontalPoints p1, @NonNull PointWithVerticalPoints p2, @NonNull PointWithHorizontalPoints p3, @NonNull PointWithVerticalPoints p4, float totalLength, float extractLength, float process, @NonNull State state, @NonNull EaseType easeType) {
         if (state.equals(State.LEFT_TO_RIGHT)) {
             float offset = totalLength * easeType.getOffset((process - T1) / (T4 - T1));
             offset = Utils.limitOffset(offset, totalLength);

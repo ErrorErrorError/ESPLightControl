@@ -18,15 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.errorerrorerror.esplightcontrol.EspApp;
-import com.errorerrorerror.esplightcontrol.R;
-import com.errorerrorerror.esplightcontrol.adapter.RecyclerDeviceAdapter;
+import com.errorerrorerror.esplightcontrol.adapter.AllDevicesRecyclerAdapter;
 import com.errorerrorerror.esplightcontrol.databinding.DevicesFragmentBinding;
 import com.errorerrorerror.esplightcontrol.model.device.Device;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout;
-import com.trello.rxlifecycle3.components.support.RxFragment;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -34,10 +32,12 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
 
 
-public class HomeFragment extends RxFragment {
+public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
     //ViewModel Injector
@@ -46,7 +46,6 @@ public class HomeFragment extends RxFragment {
     private DevicesCollectionViewModel collectionViewModel;
 
     //Utils
-    private RecyclerDeviceAdapter adapter;
     private DevicesFragmentBinding binding;
 
     @Override
@@ -69,6 +68,7 @@ public class HomeFragment extends RxFragment {
         //Inflates view and databinding
         binding = DevicesFragmentBinding.inflate(inflater, container, false);
         binding.setViewModel(collectionViewModel);
+        binding.setVersion(Build.VERSION.SDK_INT);
         return binding.getRoot();
     }
 
@@ -79,25 +79,26 @@ public class HomeFragment extends RxFragment {
         //Add device button click listener
         collectionViewModel.addDisposable(RxView.clicks(binding.addDeviceButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .compose(bindToLifecycle())
                 .subscribe(unit -> addDeviceDialog(),
                         error -> Log.e(Constants.HOME_TAG, "addDialog: " + error.toString())));
 
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                if (positionStart > 0) {
-                    binding.recyclerviewAddDevice.smoothScrollToPosition(positionStart);
-                }
-            }
-        });
+        collectionViewModel.addDisposable(
+                RxView.longClicks(binding.addDeviceButton)
+                .throttleFirst(2000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<Unit>() {
+                    @Override
+                    public void accept(Unit unit) throws Exception {
+
+                    }
+                })
+                .subscribe()
+        );
     }
 
     //This changes switch from room, is implemented in recycler_devices_list.xml
-    public void setSwitch(boolean bool, long id) {
+    public void setSwitch(Boolean bool, Device device) {
         collectionViewModel.addDisposable(
-                collectionViewModel.setSwitch(bool, id)
-                        .compose(bindToLifecycle())
+                collectionViewModel.setSwitch(bool, device)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(() -> {
@@ -109,12 +110,12 @@ public class HomeFragment extends RxFragment {
 
         androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance(
                 "Add device",
-                "Cancel",
                 "Add",
                 Constants.ADD_DEVICE);
         newFragment.show(ft, "dialog");
     }
 
+    @NonNull
     private FragmentTransaction checkDialog() {
         assert getFragmentManager() != null;
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -130,62 +131,46 @@ public class HomeFragment extends RxFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Changes Vector drawable to png if less than 24api. Vector uses gradient and is only supported 24 =< x
-        setAddDeviceBackground();
-
         //sets up RecyclerView Listeners
         initRecyclerLayers();
 
-    }
+        Objects.requireNonNull(binding.recyclerviewAddDevice.getAdapter()).registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                binding.recyclerviewAddDevice.smoothScrollToPosition(positionStart);
+            }
+        });
 
-    //if lower than 24 api, uses png
-    private void setAddDeviceBackground() {
-        if (Build.VERSION.SDK_INT < 24) {
-            binding.linearLayoutAdddevice.setBackgroundResource(R.drawable.cardview_background_gradient);
-        } else {
-            binding.linearLayoutAdddevice.setBackgroundResource(R.drawable.ic_cardview_background_gradient);
-        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void initRecyclerLayers() {
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
-                RecyclerView.VERTICAL, true);
-        linearLayoutManager.setStackFromEnd(true);
-        binding.recyclerviewAddDevice.setLayoutManager(linearLayoutManager);
-
-        //Gains performance
+        binding.recyclerviewAddDevice.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerviewAddDevice.setAdapter(new AllDevicesRecyclerAdapter(this));
         binding.recyclerviewAddDevice.setHasFixedSize(true);
-
-        //Removes onChange Animation
-        Objects.requireNonNull(binding.recyclerviewAddDevice.getItemAnimator())
-                .setChangeDuration(0);
-
-        adapter = new RecyclerDeviceAdapter(this);
-        binding.recyclerviewAddDevice.setAdapter(adapter);
-
+        Objects.requireNonNull(binding.recyclerviewAddDevice.getItemAnimator()).setChangeDuration(0);
     }
 
     //This method gets called when the delete button is clicked
     public void removeDevice(Device device) {
+        Log.d(TAG, "removeDevice: " + device);
         collectionViewModel.addDisposable(collectionViewModel.deleteDevice(device)
-                .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         () -> {
                         }, onError -> Log.e(TAG, "removeDevice: ", onError)));
+
     }
 
     /*
     This method gets called when the edit button is clicked, which passes the id of the device
      */
-    public void editDevice(SwipeRevealLayout swiper, long id) {
+    public void editDevice(@NonNull SwipeRevealLayout swiper, long id) {
         FragmentTransaction ft = checkDialog();
 
         androidx.fragment.app.DialogFragment newFragment = DialogFragment.newInstance(
                 "Edit device",
-                "Cancel",
                 "Edit",
                 id);
 

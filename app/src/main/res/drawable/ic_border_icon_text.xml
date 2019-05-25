@@ -3,8 +3,8 @@
     android:height="200dp"
     android:viewportWidth="10"
     android:viewportHeight="200"
-    android:alpha=".15">
+    android:alpha=".25">
   <path
       android:pathData="M5,0L5,0A5,5 0,0 1,10 5L10,195A5,5 0,0 1,5 200L5,200A5,5 0,0 1,0 195L0,5A5,5 0,0 1,5 0z"
-      android:fillColor="?textColorInverse"/>
+      android:fillColor="@android:color/white"/>
 </vector>

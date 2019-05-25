@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="lightView"
+            name="view"
             type="com.errorerrorerror.esplightcontrol.views.LightFragment" />
 
         <variable
@@ -26,22 +26,21 @@
             android:layout_height="360dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:elevation="?contentElevation"
             android:outlineAmbientShadowColor="@color/colorPrimary"
             android:outlineSpotShadowColor="@color/colorPrimary"
-            app:issColorBackgroundSlider="?sliderBackground"
             app:issCornerRadius="50dp"
             app:issIconSize="50dp"
             app:issIconTint="#E5E5E5"
+            app:issColorBackgroundSlider="?colorSurface"
             app:issProgressInitialValue="@{device.brightness}"
-            app:issOnProgressChanged="@{(slider, progress) -> lightView.progressChanged(progress, device.getId())}"
+            app:issOnProgressChanged="@{(slider, progress) -> view.progressChanged(progress, device)}"
             app:issIconTintMode="src_in"
             app:issShowIconText="iconText"
             app:issText="@{device.brightness + `%`}"
             app:issAnimatedIcon="@raw/brightness_animation"
             app:issAnimatedIconProgress="@{(float) device.brightness/100}"
             app:issSliderColorDisabled="#C3C3E6"
-            app:issSliderEnabled="@{device.on}"
+            app:issSliderEnabled="@{safeUnbox(device.on)}"
             app:issTextColor="#E5E5E5"
             app:issTextSize="12sp"
             tools:targetApi="p" />
