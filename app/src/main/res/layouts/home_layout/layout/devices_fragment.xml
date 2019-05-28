@@ -27,9 +27,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/addDeviceButtonHeight"
             android:layout_gravity="top|center"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="16dp"
             android:clickable="true"
             android:focusable="true">
 
@@ -96,41 +96,36 @@
         </com.google.android.material.card.MaterialCardView>
 
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/somatic_round"
+            android:text="@string/Devices"
+            android:textAppearance="@style/TextAppearance.MyTheme.Caption"/>
+
         <FrameLayout
             android:id="@+id/linearLayoutConnectedDevices"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:fontFamily="@font/somatic_round"
-                android:text="@string/Devices"
-                android:textColor="#7D7D7D"
-                android:textSize="21sp"
-                android:textStyle="normal" />
-
 
             <TextView
                 android:id="@+id/noDeviceConnectedText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/noDevices"
                 android:textSize="20sp"
-                android:layout_gravity="center"
                 app:data="@{viewModel.getAllDevices()}" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewAddDevice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="30dp"
                 android:overScrollMode="never"
                 android:scrollbars="none"
                 app:data="@{viewModel.getAllDevices()}" />

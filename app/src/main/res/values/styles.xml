@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Bottom Sheets-->
-    <style name="ThemeOverlay.MyTheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+    <style name="ThemeOverlay.MyTheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@style/Animation.MyTheme.BottomSheet.Modal</item>
@@ -12,11 +12,11 @@
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">@android:color/transparent</item>
     </style>
     <style name="Widget.MyTheme.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
-        <item name="shapeAppearanceOverlay">?shapeAppearanceLargeComponent</item>
+        <item name="backgroundTint">@color/colorBackground</item>
     </style>
 
     <!-- Dialog -->
-    <style name="DialogTest" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="DialogStyle" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:background">?colorSurface</item>
         <item name="android:outlineSpotShadowColor" tools:ignore="NewApi">@null</item>
         <item name="android:outlineAmbientShadowColor" tools:ignore="NewApi">@null</item>
@@ -43,11 +43,6 @@
 
     <style name="CardStyle" parent="Widget.MaterialComponents.CardView">
         <item name="shapeAppearance">@style/AppShapeAppearance.LargeComponent</item>
-    </style>
-
-    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="cornerRadius">5dp</item>
-        <item name="enforceMaterialTheme">true</item>
     </style>
 
 </resources>

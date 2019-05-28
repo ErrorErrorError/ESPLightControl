@@ -53,9 +53,4 @@ public class SolidRepository implements DeviceRepo<DeviceSolid> {
     public Single<DeviceSolid> getDevice(long id) {
         return dao.getDevice(id);
     }
-
-    @Override
-    public Completable insertId(long id) {
-        return dao.insertId(id);
-    }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -26,11 +25,10 @@
     </data>
 
     <com.google.android.material.chip.Chip
-        style="@style/Widget.MaterialComponents.Chip.Filter"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:chipIconTint="?colorPrimary"
         android:enabled="@{device.on}"
-        android:onClickListener="@{(v) -> (viewM != null)? viewM.devicesToChange(v, device) : (viewW != null)? viewW.devicesToChange(v, device) : (viewS != null)? viewS.devicesToChange(v ,device) : (viewModes != null)? viewModes.showSetting(v ,device) : null}"
+        android:onCheckedChanged="@{(chip, isChecked) -> (viewM != null)? viewM.devicesToChange(chip, isChecked ,device) : (viewW != null)? viewW.devicesToChange(chip, isChecked, device) : (viewS != null)? viewS.devicesToChange(chip, isChecked ,device) : (viewModes != null)? viewModes.showSetting(chip, device) : null}"
         android:text="@{device.deviceName}" />
 </layout>

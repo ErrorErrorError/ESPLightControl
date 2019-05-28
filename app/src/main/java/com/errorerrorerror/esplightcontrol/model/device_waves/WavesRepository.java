@@ -53,9 +53,4 @@ public class WavesRepository implements DeviceRepo<DeviceWaves> {
     public Single<DeviceWaves> getDevice(long id) {
         return dao.getDevice(id);
     }
-
-    @Override
-    public Completable insertId(long id) {
-        return dao.insertId(id);
-    }
 }

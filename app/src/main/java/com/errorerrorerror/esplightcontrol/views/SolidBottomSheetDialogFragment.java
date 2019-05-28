@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +26,10 @@ import com.errorerrorerror.esplightcontrol.utils.ObservableList;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
+import com.jakewharton.rxbinding3.recyclerview.RxRecyclerView;
 import com.jakewharton.rxbinding3.view.RxView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -48,6 +52,8 @@ public class SolidBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private ObservableList<Device> listSolid = new ObservableList<>();
 
     private Device device;
+
+    private static final String TAG = "SolidBottomSheetDialogF";
 
     public SolidBottomSheetDialogFragment(Device device) {
         this.device = device;
@@ -81,6 +87,7 @@ public class SolidBottomSheetDialogFragment extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initRecyclerViews();
+        listSolid.reInsertList();
 
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
                 .setOrientation(ChipsLayoutManager.HORIZONTAL)
@@ -88,8 +95,8 @@ public class SolidBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         binding.solidSelectDeviceChip.setLayoutManager(chipsLayoutManager);
         binding.solidSelectDeviceChip.setAdapter(new ListModesAdapter(this));
-        binding.solidSelectDeviceChip.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space),
-                getResources().getDimensionPixelOffset(R.dimen.item_space)));
+        binding.solidSelectDeviceChip.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space_horizontal),
+                getResources().getDimensionPixelOffset(R.dimen.item_space_vertical)));
 
         listSolid.getObservableList()
                 .map(list -> !list.isEmpty())
@@ -112,7 +119,6 @@ public class SolidBottomSheetDialogFragment extends BottomSheetDialogFragment {
                                         Observable.just(
                                                 new DeviceSolid(
                                                         device,
-                                                        device.getId(),
                                                         binding.solidColorPicker.getColor())
                                         ))
                                 .flatMap(deviceSolid -> viewModel.insertDevice(deviceSolid)
@@ -154,32 +160,38 @@ public class SolidBottomSheetDialogFragment extends BottomSheetDialogFragment {
             }
             return false;
         });
+
+        viewModel.addDisposable(RxRecyclerView.childAttachStateChangeEvents(binding.solidSelectDeviceChip)
+                .subscribe(recyclerViewChildAttachStateChangeEvent -> {
+                    Chip t = (Chip) recyclerViewChildAttachStateChangeEvent.getChild();
+                    if (device != null && t.getText().toString().equals(device.getDeviceName())) {
+                        setDataBeforeLoad(device, t);
+                    }
+
+                    listSolid.reInsertList();
+                }));
     }
 
     private void initRecyclerViews() {
         binding.solidColorPicker.setColor(Color.WHITE, true);
     }
 
-    private void setDataBeforeLoad(@NonNull Device t) {
+    private void setDataBeforeLoad(@NonNull Device t, @NotNull Chip chip) {
         listSolid.add(t);
-        for (int i = 0; i < binding.solidSelectDeviceChip.getChildCount(); i++) {
-            Chip child = (Chip) binding.solidColorPicker.getChildAt(i);
-
-            if (child.getText().equals(device.getDeviceName())) {
-                child.setChecked(true);
-            }
-        }
-
+        chip.setChecked(true);
         binding.solidColorPicker.setColor(((DeviceSolid) t).getColor(), true);
     }
 
-    public void devicesToChange(@NonNull View v, Device device) {
-        if (listSolid.contains(device)) {
-            listSolid.remove(device);
-            ((Chip) v).setChecked(false);
-        } else {
+    public void devicesToChange(@NonNull CompoundButton v, boolean isChecked, Device device) {
+        if (isChecked) {
+            if (listSolid.contains(device)) {
+                return;
+            }
             listSolid.add(device);
-            ((Chip) v).setChecked(true);
+        } else {
+            if (listSolid.contains(device)) {
+                listSolid.remove(device);
+            }
         }
     }
 }

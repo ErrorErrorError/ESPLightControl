@@ -1,14 +1,15 @@
 package com.errorerrorerror.esplightcontrol.model.device;
 
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
-import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
 
 public class Device {
 
+    @PrimaryKey(autoGenerate = true)
     private long id;
 
     @ColumnInfo(name = "device_name")
@@ -30,19 +31,8 @@ public class Device {
     private int brightness;
 
     //This is just for Swiping items
-    @Ignore
-    private boolean open;
 
     public Device() {
-    }
-
-    @Ignore
-    public Device(String deviceName, String ip, String port, String connectivity, Boolean on) {
-        this.deviceName = deviceName;
-        this.ip = ip;
-        this.port = port;
-        this.connectivity = connectivity;
-        this.on = on;
     }
 
     public Device(Device device) {
@@ -51,18 +41,16 @@ public class Device {
         this.ip = device.getIp();
         this.port = device.getPort();
         this.connectivity = device.getConnectivity();
-        this.on = device.getOn();
-        this.open = device.isOpen();
+        this.on = device.isOn();
         this.brightness = device.getBrightness();
     }
 
-    public Device(String deviceName, String ip, String port, String connectivity, Boolean on, boolean opened, int brightness) {
+    public Device(String deviceName, String ip, String port, String connectivity, Boolean on, int brightness) {
         this.deviceName = deviceName;
         this.ip = ip;
         this.port = port;
         this.connectivity = connectivity;
         this.on = on;
-        this.open = opened;
         this.brightness = brightness;
     }
 
@@ -75,7 +63,7 @@ public class Device {
     }
 
     //Setters and getters
-    public Boolean getOn() {
+    public Boolean isOn() {
         return on;
     }
 
@@ -115,14 +103,6 @@ public class Device {
         this.connectivity = connectivity;
     }
 
-    public boolean isOpen() {
-        return open;
-    }
-
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
-
     public int getBrightness() {
         return brightness;
     }
@@ -131,47 +111,36 @@ public class Device {
         this.brightness = brightness;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String toString() {
         return "Device{" +
+                "id=" + id +
                 ", deviceName='" + deviceName + '\'' +
                 ", ip='" + ip + '\'' +
                 ", port='" + port + '\'' +
                 ", connectivity='" + connectivity + '\'' +
                 ", on=" + on +
                 ", brightness=" + brightness +
-                ", open=" + open +
                 '}';
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null)
-            return false;
-
-        if (!(obj instanceof Device))
-            return false;
-
-        Device device = (Device) obj;
-
-        return this.getDeviceName().equals(device.getDeviceName()) &&
-                this.getIp().equals(device.getIp()) &&
-                this.getPort().equals(device.getPort()) &&
-                this.getBrightness() == device.getBrightness();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Device)) return false;
+        Device device = (Device) o;
+        return getId() == device.getId() &&
+                getBrightness() == device.getBrightness() &&
+                Objects.equals(getDeviceName(), device.getDeviceName()) &&
+                Objects.equals(getIp(), device.getIp()) &&
+                Objects.equals(getPort(), device.getPort()) &&
+                Objects.equals(getConnectivity(), device.getConnectivity()) &&
+                Objects.equals(on, device.on);
     }
 
     @Override
     public int hashCode() {
-        int mult = 31;
-        int hash = 17;
-        hash = mult * (hash + this.getDeviceName().hashCode());
-        hash = mult * (hash + this.getIp().hashCode());
-        hash = mult * (hash + this.getPort().hashCode());
-        hash = mult * (hash + this.getBrightness());
-        return hash;
+        return Objects.hash(getId(), getDeviceName(), getIp(), getPort(), getConnectivity(), on, getBrightness());
     }
 }

@@ -4,7 +4,6 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import com.errorerrorerror.esplightcontrol.model.device.Device;
 
@@ -12,9 +11,6 @@ import java.util.Objects;
 
 @Entity(tableName = "device_waves")
 public class DeviceWaves extends Device {
-
-    @PrimaryKey
-    private long deviceId;
 
     @ColumnInfo(name = "speed")
     private int speed;
@@ -31,25 +27,6 @@ public class DeviceWaves extends Device {
         super(device);
         this.primaryColor = primaryColor;
         this.speed = speed;
-    }
-
-    public DeviceWaves(long id,
-                       @NonNull Device device,
-                       int speed,
-                       @ColorInt int primaryColor) {
-        super(device);
-        this.deviceId = id;
-        this.primaryColor = primaryColor;
-        this.speed = speed;
-    }
-
-    public long getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(long deviceId) {
-        this.deviceId = deviceId;
-        this.setId(deviceId);
     }
 
     public int getSpeed() {
@@ -72,8 +49,7 @@ public class DeviceWaves extends Device {
     @Override
     public String toString() {
         return "DeviceWaves{" +
-                "deviceId=" + deviceId +
-                ", speed=" + speed +
+                "speed=" + speed +
                 ", primaryColor=" + primaryColor +
                 "} " + super.toString();
     }

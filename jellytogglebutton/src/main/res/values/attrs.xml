@@ -98,6 +98,7 @@
 
         <attr name="jtbMoveToSameStateCallListener" format="boolean|reference"/>
         <attr name="jtbDraggable" format="boolean|reference"/>
+        <attr name="jtbInitialValue" format="boolean|reference"/>
 
     </declare-styleable>
 

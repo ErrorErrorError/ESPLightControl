@@ -45,11 +45,10 @@
         <item name="android:outlineAmbientShadowColor" tools:ignore="NewApi">@color/colorPrimary</item>
         <item name="android:outlineSpotShadowColor" tools:ignore="NewApi">@color/colorPrimary</item>
         <!--Component styles-->
-        <item name="materialAlertDialogTheme">@style/DialogTest</item>
+        <item name="materialAlertDialogTheme">@style/DialogStyle</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.MyTheme.BottomSheetDialog</item>
         <item name="textInputStyle">@style/Widget.InputTextLayout</item>
         <item name="materialCardViewStyle">@style/CardStyle</item>
-        <item name="materialButtonStyle">@style/ButtonStyle</item>
     </style>
 
     <!-- Base application theme. -->
@@ -66,8 +65,17 @@
             ?colorControlHighlight
         </item>
 
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+
         <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->
         <item name="colorPrimaryDark">?colorPrimaryVariant</item>
         <item name="colorAccent">?colorSecondary</item>
     </style>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+
 </resources>

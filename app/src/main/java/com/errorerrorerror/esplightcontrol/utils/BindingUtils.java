@@ -85,5 +85,4 @@ public class BindingUtils {
                             , error -> Log.e("HomeFragment", "setRecyclerViewProperties: ", error));
         }
     }
-
 }

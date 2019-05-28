@@ -24,33 +24,18 @@
     <!--on which they appear.-->
     <color name="colorOnPrimary">#ffffff</color>
     <color name="colorOnSecondary">#000000</color>
-    <color name="colorOnBackground">#FFFFFF</color>
+    <color name="colorOnBackground">#F7F7F7</color>
     <color name="colorOnSurface">#000000</color>
     <color name="colorOnError">#ffffff</color>
-
+    <color name="colorDisabled">#C3C3E6</color>
 
     <!-- Components -->
-
-
     <color name="grayBoi">#7B8193</color>
     <color name="lightBulbColorLight">#ff9800</color>
 
-    <color name="testy">#F4F7F8</color>
-    <color name="windowColorLight">#FCFCFC</color>
-    <color name="windowColorLightTest">#F4F7FD</color>
-    <color name="contentColorLight">#EFEFEF</color>
-    <color name="contentColorLightTest">#FFF</color>
-    <color name="contentHightlightLight">#f0f0f0</color>
-
-    <color name="windowColorDark">#080808</color>
-    <color name="contentColorDark">#1C1C1C</color>
-    <color name="contentHightlightDark">#333333</color>
-    <color name="buttonAddHighlight">#aaa9f1</color>
     <color name="buttonCancelText">#A7ABBF</color>
-    <color name="buttonCancelHighlight">#F7FCFF</color>
 
 
     <!-- Tab Colors -->
     <color name="devicesBackgroundTab">#156D6AE6</color>
-    <color name="devicesTextTabIcon">@color/colorPrimary</color>
 </resources>

@@ -36,8 +36,4 @@ public interface DeviceSolidDao {
 
     @Query("SELECT * FROM  device_solid WHERE id =:id")
     Single<DeviceSolid> getDevice(long id);
-
-    @Query("UPDATE device_solid SET id = :id WHERE deviceId = :id")
-    Completable insertId(long id);
-
 }

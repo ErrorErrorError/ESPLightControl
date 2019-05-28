@@ -1,9 +1,10 @@
 package com.errorerrorerror.esplightcontrol.views;
 
 import android.animation.ValueAnimator;
-import android.content.res.Configuration;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -38,24 +39,15 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     @NonNull
     private CompositeDisposable disposable = new CompositeDisposable();
-    //private static final String TAG = "MainActivityApp";
+    private static final String TAG = "MainActivityApp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        int currentNightMode = getResources().getConfiguration().uiMode
-                & Configuration.UI_MODE_NIGHT_MASK;
+        int defaultValue = prefs.getInt("mode",AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
-        switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
-                setTheme(R.style.Base_MyTheme);
-                break;
-            // Night mode is not active, we're in day time
-            case Configuration.UI_MODE_NIGHT_YES:
-                setTheme(R.style.MyTheme_DayNight);
-                break;
-        }
+        AppCompatDelegate.setDefaultNightMode(defaultValue);
         super.onCreate(savedInstanceState);
 
 

@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -30,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
+import com.jakewharton.rxbinding3.recyclerview.RxRecyclerView;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,10 +49,8 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private static final String TAG = "WavesBottomSheetDialog";
     private WavesModeBinding binding;
-    //private List<Device> listWaves = new ArrayList<>();
     @NonNull
     private ObservableList<Device> listWaves = new ObservableList<>();
-    //private PublishSubject<List<Device>> listSubject = PublishSubject.create();
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -108,14 +107,16 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initRecyclerViews();
+        listWaves.reInsertList();
+        
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
                 .setOrientation(ChipsLayoutManager.HORIZONTAL)
                 .build();
 
         binding.wavesSelectDeviceChip.setLayoutManager(chipsLayoutManager);
         binding.wavesSelectDeviceChip.setAdapter(new ListModesAdapter(this));
-        binding.wavesSelectDeviceChip.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space),
-                getResources().getDimensionPixelOffset(R.dimen.item_space)));
+        binding.wavesSelectDeviceChip.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space_horizontal),
+                getResources().getDimensionPixelOffset(R.dimen.item_space_vertical)));
 
         listWaves.getObservableList()
                 .map(list -> !list.isEmpty())
@@ -138,7 +139,6 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
                                 .andThen(
                                         Observable.just(
                                                 new DeviceWaves(
-                                                        device.getId(),
                                                         device,
                                                         100,
                                                         binding.wavesColorPicker.getColor())
@@ -188,35 +188,20 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
             return false;
         });
 
-        final int[] count = {0};
-        binding.wavesSelectDeviceChip.getViewTreeObserver().
-                addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        count[0]++;
-                        if (count[0] >= 3) {
-                            if (device != null) {
-                                setDataBeforeLoad(device);
-                            }
-                            listWaves.reInsertList();
-                            binding.wavesSelectDeviceChip.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            device = null;
-                        }
+        viewModel.addDisposable(RxRecyclerView.childAttachStateChangeEvents(binding.wavesSelectDeviceChip)
+                .subscribe(recyclerViewChildAttachStateChangeEvent -> {
+                    Chip t = (Chip) recyclerViewChildAttachStateChangeEvent.getChild();
+                    if (device != null && t.getText().toString().equals(device.getDeviceName())) {
+                        setDataBeforeLoad(device, t);
                     }
-                });
+                    listWaves.reInsertList();
+                }));
 
     }
 
-    private void setDataBeforeLoad(@NonNull Device t) {
+    private void setDataBeforeLoad(@NonNull Device t, Chip d) {
         listWaves.add(t);
-        for (int i = 0; i < binding.wavesSelectDeviceChip.getChildCount(); i++) {
-            Chip child = (Chip) binding.wavesSelectDeviceChip.getChildAt(i);
-
-            if (child.getText().equals(device.getDeviceName())) {
-                child.setChecked(true);
-            }
-        }
-
+        d.setChecked(true);
         binding.wavesColorPicker.setColor(((DeviceWaves) t).getPrimaryColor(), true);
     }
 
@@ -226,13 +211,16 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
     }
 
 
-    public void devicesToChange(@NonNull View v, Device device) {
-        if (listWaves.contains(device)) {
-            listWaves.remove(device);
-            ((Chip) v).setChecked(false);
-        } else {
+    public void devicesToChange(@NonNull CompoundButton v, boolean isChecked, Device device) {
+        if (isChecked) {
+            if (listWaves.contains(device)) {
+                return;
+            }
             listWaves.add(device);
-            ((Chip) v).setChecked(true);
+        } else {
+            if (listWaves.contains(device)) {
+                listWaves.remove(device);
+            }
         }
     }
 }

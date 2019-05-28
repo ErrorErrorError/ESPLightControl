@@ -1,7 +1,6 @@
 package com.errorerrorerror.esplightcontrol.views;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -120,14 +119,11 @@ public class DialogFragment extends RxDialogFragment {
                             }
                         }, onError -> Log.e(TAG, "onCreate: ", onError)));
 
-        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    dismiss();
-                }
-                return false;
+        getDialog().setOnKeyListener((dialog, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                dismiss();
             }
+            return false;
         });
     }
 
@@ -141,7 +137,6 @@ public class DialogFragment extends RxDialogFragment {
                                 Objects.requireNonNull(binding.portInput.getText()).toString(),
                                 "",
                                 true,
-                                false,
                                 100))
                         .map(device -> new DeviceMusic(
                                 device,
@@ -149,15 +144,10 @@ public class DialogFragment extends RxDialogFragment {
                                 Color.RED,
                                 Color.RED,
                                 5))
-                        .flatMapSingle(deviceMusic -> collectionViewModel.insertDevice(deviceMusic)
+                        .flatMapCompletable(deviceMusic -> collectionViewModel.insertDevice(deviceMusic)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .doOnSuccess(deviceMusic::setDeviceId)
-                                .map((Function<Long, Device>) id -> deviceMusic)
-                        )
-                        .flatMapCompletable(device -> collectionViewModel.insertId(device)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
+                                .ignoreElement()
                                 .doOnComplete(this::dismiss)
                         )
                         .subscribe(() -> Log.d(TAG, "add: SUCCESS"), error -> Log.e(TAG, "add: ", error))
@@ -184,13 +174,13 @@ public class DialogFragment extends RxDialogFragment {
                 .map(ValidationUtil::portValid)
                 .map(i -> ValidationUtil.validation(i, false, binding.portTextLayout, null, ValidationUtil.INVALID_PORT));
 
-        Observable<Boolean> canAddName = Observable
-                .combineLatest(deviceNameObservable
-                        .map(ValidationUtil::nameValid), deviceNameObservable
+        Observable<Boolean> canAddName = deviceNameObservable
+                .map(ValidationUtil::nameValid)
+                .zipWith(deviceNameObservable
                         .map(i -> ValidationUtil.nameRepeated(devices, i, mode)), (valid, repeated) -> ValidationUtil.validation(valid, repeated, binding.deviceNameTextLayout, ValidationUtil.USED_NAME, ValidationUtil.INVALID_NAME));
-        Observable<Boolean> canAddIp = Observable
-                .combineLatest(ipAddressObservable
-                        .map(ValidationUtil::ipValid),ipAddressObservable
+        Observable<Boolean> canAddIp = ipAddressObservable
+                .map(ValidationUtil::ipValid)
+                .zipWith(ipAddressObservable
                         .map(i -> ValidationUtil.ipRepeated(devices, i, mode)), (valid, repeated) -> ValidationUtil.validation(valid, repeated, binding.ipAddressTextLayout, ValidationUtil.USED_IP, ValidationUtil.INVALID_IP));
 
 

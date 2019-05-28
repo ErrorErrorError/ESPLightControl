@@ -20,8 +20,6 @@ public interface DeviceRepo<T> {
     Completable setSwitch(Boolean bool, long id);
     Completable setBrightnessLevel(int progress,  long id);
     Single<T> getDevice(long id);
-    Completable insertId(long id);
-
 }
 
 /*

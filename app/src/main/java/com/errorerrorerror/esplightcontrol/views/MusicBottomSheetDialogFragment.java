@@ -3,12 +3,11 @@ package com.errorerrorerror.esplightcontrol.views;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -30,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
+import com.jakewharton.rxbinding3.recyclerview.RxRecyclerView;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +54,7 @@ public class MusicBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private Device device;
 
     @NonNull
-    private ObservableList<Device> temp = new ObservableList<>();
+    private ObservableList<Device> listMusic = new ObservableList<>();
 
     public MusicBottomSheetDialogFragment(Device device) {
         super();
@@ -108,20 +108,21 @@ public class MusicBottomSheetDialogFragment extends BottomSheetDialogFragment {
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
                 .setOrientation(ChipsLayoutManager.HORIZONTAL)
                 .build();
+        listMusic.reInsertList();
 
 
         binding.musicSelectDeviceChip.setLayoutManager(chipsLayoutManager);
         binding.musicSelectDeviceChip.setAdapter(new ListModesAdapter(this));
-        binding.musicSelectDeviceChip.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space),
-                getResources().getDimensionPixelOffset(R.dimen.item_space)));
+        binding.musicSelectDeviceChip.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space_horizontal),
+                getResources().getDimensionPixelOffset(R.dimen.item_space_vertical)));
 
 
-        temp.getObservableList()
+        listMusic.getObservableList()
                 .map(list -> !list.isEmpty())
                 .doOnNext(bool -> binding.addMusicDeviceButton.setEnabled(bool))
                 .switchMap(bool -> RxView.clicks(binding.addMusicDeviceButton))
                 .take(1)
-                .switchMap(unit -> Observable.fromIterable(temp.getList()))
+                .switchMap(unit -> Observable.fromIterable(listMusic.getList()))
                 .flatMap((Function<Device, ObservableSource<?>>) device -> {
                     if (device instanceof DeviceMusic) {
                         ((DeviceMusic) device).setHigh(binding.highColorSlider.getColor());
@@ -139,7 +140,6 @@ public class MusicBottomSheetDialogFragment extends BottomSheetDialogFragment {
                                 .andThen(
                                         Observable.just(
                                                 new DeviceMusic(
-                                                        device.getId(),
                                                         device,
                                                         binding.lowColorSlider.getColor(),
                                                         binding.medColorSlider.getColor(),
@@ -172,24 +172,16 @@ public class MusicBottomSheetDialogFragment extends BottomSheetDialogFragment {
             return false;
         });
 
-
-        final int[] count = {0};
-        binding.musicSelectDeviceChip.getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        count[0]++;
-                        if (count[0] >= 3) {
-                            if (device != null) {
-                                setDataBeforeLoad(device);
-                            }
-                            temp.reInsertList();
-                            binding.musicSelectDeviceChip.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            device = null;
-                        }
-                        Log.d("ModesFragment", "onGlobalLayout: ");
+        viewModel.addDisposable(RxRecyclerView.childAttachStateChangeEvents(binding.musicSelectDeviceChip)
+                .subscribe(recyclerViewChildAttachStateChangeEvent -> {
+                    Chip t = (Chip) recyclerViewChildAttachStateChangeEvent.getChild();
+                    if (device != null && t.getText().toString().equals(device.getDeviceName())) {
+                        setDataBeforeLoad(device, t);
                     }
-                });
+
+                    listMusic.reInsertList();
+                }));
+
     }
 
 
@@ -198,16 +190,9 @@ public class MusicBottomSheetDialogFragment extends BottomSheetDialogFragment {
      *
      * @param d - Adds the device to the list
      */
-    private void setDataBeforeLoad(Device d) {
-        temp.add(d);
-
-        for (int i = 0; i < binding.musicSelectDeviceChip.getChildCount(); i++) {
-            Chip child = (Chip) binding.musicSelectDeviceChip.getChildAt(i);
-            child.setEnabled(device.getOn());
-            if (child.getText().equals(device.getDeviceName())) {
-                child.setChecked(true);
-            }
-        }
+    private void setDataBeforeLoad(Device device, Chip d) {
+        listMusic.add(device);
+        d.setChecked(true);
 
         binding.lowColorSlider.setInitialColor(((DeviceMusic) device).getLow());
         binding.medColorSlider.setInitialColor(((DeviceMusic) device).getMed());
@@ -217,19 +202,21 @@ public class MusicBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
 
     /**
-     * This is used for DataBinding
+     * This is used for DataBinding.
      *
      * @param v      is The view
      * @param device is the device clicked
      */
-    public void devicesToChange(@NonNull View v, Device device) {
-        if (temp.contains(device)) {
-
-            temp.remove(device);
-            ((Chip) v).setChecked(false);
+    public void devicesToChange(@NonNull CompoundButton v, boolean isChecked, Device device) {
+        if (isChecked) {
+            if (listMusic.contains(device)) {
+                return;
+            }
+            listMusic.add(device);
         } else {
-            temp.add(device);
-            ((Chip) v).setChecked(true);
+            if (listMusic.contains(device)) {
+                listMusic.remove(device);
+            }
         }
     }
 }

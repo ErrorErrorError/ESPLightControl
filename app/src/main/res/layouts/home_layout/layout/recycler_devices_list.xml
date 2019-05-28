@@ -32,114 +32,95 @@
         app:rightIcon="@drawable/ic_trash_icon"
         app:rightIconBgColor="@color/colorError">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false">
-<!--
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewCustomRow"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/theConstraint"
                 android:layout_width="match_parent"
-                android:layout_height="95dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="15dp"
-                android:clickable="false"
-                android:padding="10dp"
+                android:layout_height="96dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
--->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="96dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent">
 
-                    <ImageView
-                        android:id="@+id/imageViewRecycler"
-                        android:layout_width="30dp"
-                        android:layout_height="86dp"
-                        android:layout_marginStart="24dp"
-                        android:contentDescription="@string/todo"
-                        android:scaleType="centerInside"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_microcontroller_icon_mini" />
+                <ImageView
+                    android:id="@+id/imageViewRecycler"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="20dp"
+                    android:contentDescription="@string/todo"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_microcontroller_icon_mini" />
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewRecycler"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/deviceNameRecycler"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginBottom="4dp"
+                        android:layout_alignParentStart="true"
                         android:text="@{device.deviceName}"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toTopOf="@id/connectionStatusRecycler"
-                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler" />
+                        android:textAppearance="@style/TextAppearance.MyTheme.Subtitle1" />
 
                     <TextView
                         android:id="@+id/connectionStatusRecycler"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="@string/connection"
-                        android:textSize="12sp"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_below="@+id/deviceNameRecycler"
+                        android:layout_alignParentStart="true"
+                        android:text="@{device.connectivity}"
+                        android:textAppearance="@style/TextAppearance.MyTheme.Caption" />
 
                     <TextView
                         android:id="@+id/ipAddressRecycler"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:text="@{`Connectivity: ` + device.ip}"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toTopOf="@id/portRecycler"
-                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler"
-                        app:layout_constraintTop_toBottomOf="@id/deviceNameRecycler" />
+                        android:layout_alignTop="@+id/connectionStatusRecycler"
+                        android:layout_alignBottom="@+id/connectionStatusRecycler"
+                        android:layout_toEndOf="@id/connectionStatusRecycler"
+                        android:text="@{device.ip}"
+                        android:textAppearance="@style/TextAppearance.MyTheme.Caption" />
 
                     <TextView
                         android:id="@+id/portRecycler"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:text="@{`Port: ` + device.port}"
-                        android:textSize="12sp"
-                        app:layout_constraintStart_toEndOf="@id/imageViewRecycler"
-                        app:layout_constraintTop_toBottomOf="@id/ipAddressRecycler" />
+                        android:layout_below="@+id/connectionStatusRecycler"
+                        android:layout_alignParentStart="true"
+                        android:text="@{device.port}"
+                        android:textAppearance="@style/TextAppearance.MyTheme.Caption"
+                        android:textSize="12sp" />
+                </RelativeLayout>
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/connectionSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="86dp"
-                        android:checked="@{safeUnbox(device.getOn())}"
-                        android:onCheckedChanged="@{(switch, checked) -> view.setSwitch(checked, device)}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.9"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.555"
-                        app:useMaterialThemeColors="true" />
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/connectionSwitch"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:minWidth="50dp"
+                    android:minHeight="50dp"
+                    android:checked="@{safeUnbox(device.on)}"
+                    android:onCheckedChanged="@{(switch, checked) -> view.setSwitch(checked, device)}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5"
+                    app:switchMinWidth="50dp" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="20dp" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="16dp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-      <!--      </com.google.android.material.card.MaterialCardView> -->
-        </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
     </com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout>
 </layout>

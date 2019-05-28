@@ -26,7 +26,7 @@ public class ListModesAdapter extends DataBindingAdapter<Device> {
                 @Override
                 public boolean areContentsTheSame(@NonNull Device oldItem,
                                                   @NonNull Device newItem) {
-                    return oldItem.equals(newItem) && oldItem.getOn().equals(newItem.getOn());
+                    return oldItem.equals(newItem);
                 }
             };
 

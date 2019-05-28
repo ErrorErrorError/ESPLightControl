@@ -154,6 +154,8 @@ public class JellyToggleButton extends CompoundButton {
     @Nullable
     private JellyStyle mCustomJelly = null;
 
+    private boolean hasInitialValue = false;
+
     /**
      * The following values are used to calculate the position or just for convenience.
      * Should not be modified by library users.
@@ -663,12 +665,12 @@ public class JellyToggleButton extends CompoundButton {
         if (mState.equals(State.LEFT)) {
             super.setChecked(false);
             // if the jelly type is random, change it here
-            if (mJelly.equals(Jelly.RANDOM)) randomChangeJelly();
+            if (mJelly != null && mJelly.equals(Jelly.RANDOM)) randomChangeJelly();
         }
         if (mState.equals(State.RIGHT)) {
             super.setChecked(true);
             // if the jelly type is random, change it here
-            if (mJelly.equals(Jelly.RANDOM)) randomChangeJelly();
+            if (mJelly != null && mJelly.equals(Jelly.RANDOM)) randomChangeJelly();
         }
         if (callListener && mOnStateChangeListener != null) {
             if (mState.equals(State.LEFT) || mState.equals(State.RIGHT)) {
@@ -734,7 +736,7 @@ public class JellyToggleButton extends CompoundButton {
     @Override
     public void setChecked(boolean checked) {
         if (mStopRestoreChecked) return;
-        setChecked(checked, true);
+        setCheckedImmediately(checked, true);
     }
 
     public void setChecked(boolean checked, boolean callListener) {

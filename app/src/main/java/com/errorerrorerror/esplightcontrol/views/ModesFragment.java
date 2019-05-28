@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,9 +24,10 @@ import com.errorerrorerror.esplightcontrol.model.device_music.DeviceMusic;
 import com.errorerrorerror.esplightcontrol.model.device_solid.DeviceSolid;
 import com.errorerrorerror.esplightcontrol.model.device_waves.DeviceWaves;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
-import com.google.android.material.chip.Chip;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.trello.rxlifecycle3.components.support.RxFragment;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -85,15 +87,8 @@ public class ModesFragment extends RxFragment {
 
     private void showMusicSheet(@Nullable Device device) {
         FragmentTransaction ft = checkDialog();
-        MusicBottomSheetDialogFragment bottomSheet;
-        if (device != null) {
-            bottomSheet = new MusicBottomSheetDialogFragment(device);
-        } else {
-            bottomSheet = new MusicBottomSheetDialogFragment();
-        }
-
+        MusicBottomSheetDialogFragment bottomSheet = device != null ? new MusicBottomSheetDialogFragment(device) : new MusicBottomSheetDialogFragment();
         bottomSheet.show(ft, "modaldialog");
-
     }
 
     private void showWavesSheet(@Nullable Device device) {
@@ -109,7 +104,7 @@ public class ModesFragment extends RxFragment {
 
     }
 
-    private void initViews(){
+    private void initViews() {
         ChipsLayoutManager one = ChipsLayoutManager.newBuilder(getContext())
                 .setOrientation(ChipsLayoutManager.HORIZONTAL)
                 .build();
@@ -130,12 +125,12 @@ public class ModesFragment extends RxFragment {
         binding.expandableMusic.setAdapter(new ListModesAdapter(this));
         binding.expandableSolid.setAdapter(new ListModesAdapter(this));
 
-        binding.expandableSolid.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space),
-                getResources().getDimensionPixelOffset(R.dimen.item_space)));
-        binding.expandableMusic.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space),
-                getResources().getDimensionPixelOffset(R.dimen.item_space)));
-        binding.expandableWaves.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space),
-                getResources().getDimensionPixelOffset(R.dimen.item_space)));
+        binding.expandableSolid.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space_horizontal),
+                getResources().getDimensionPixelOffset(R.dimen.item_space_vertical)));
+        binding.expandableMusic.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space_horizontal),
+                getResources().getDimensionPixelOffset(R.dimen.item_space_vertical)));
+        binding.expandableWaves.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space_horizontal),
+                getResources().getDimensionPixelOffset(R.dimen.item_space_vertical)));
     }
 
     private void showSolidSheet(@Nullable Device device) {
@@ -162,15 +157,15 @@ public class ModesFragment extends RxFragment {
         return ft;
     }
 
-    public void showSetting(@NonNull View v, Device device) {
+    public void showSetting(@NonNull CompoundButton v,@NotNull Device device) {
         if (device instanceof DeviceMusic) {
-            ((Chip) v).setChecked(false);
+            v.setChecked(false);
             showMusicSheet(device);
         } else if (device instanceof DeviceWaves) {
-            ((Chip) v).setChecked(false);
+            v.setChecked(false);
             showWavesSheet(device);
         } else if (device instanceof DeviceSolid) {
-            ((Chip) v).setChecked(false);
+            v.setChecked(false);
             showSolidSheet(device);
         }
     }

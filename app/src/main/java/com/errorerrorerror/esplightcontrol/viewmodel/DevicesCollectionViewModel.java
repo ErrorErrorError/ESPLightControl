@@ -42,7 +42,8 @@ public class DevicesCollectionViewModel extends ViewModel {
                     t.addAll(devices3);
                     Collections.sort(t, (o1, o2) -> (int) (o2.getId() - o1.getId()));
                     return t;
-                });
+                })
+                .distinctUntilChanged();
     }
 
     public Completable setSwitch(Boolean bool, Device device) {
@@ -52,12 +53,6 @@ public class DevicesCollectionViewModel extends ViewModel {
                         devicesDataSource.getSolidRepository().setSwitch(bool, device.getId()) :
                         (device instanceof DeviceWaves) ?
                                 devicesDataSource.getWavesRepository().setSwitch(bool, device.getId()) : Completable.error(() -> new Throwable("Cannot Update Switch With Unknown Device"));
-    }
-
-    public Single<Device> getDeviceWithId(long id) {
-        return getAllDevices()
-                .flatMapIterable(devices -> devices)
-                .filter(device -> device.getId() == id).firstOrError();
     }
 
     public Completable updateBrightnessLevel(int progress, Device device) {
@@ -84,7 +79,7 @@ public class DevicesCollectionViewModel extends ViewModel {
                 .map(deviceMusics -> {
                     Collections.sort(deviceMusics, (o1, o2) -> (int) (o2.getId() - o1.getId()));
                     return deviceMusics;
-                });
+                }).distinctUntilChanged();
     }
 
     public Observable<List<DeviceSolid>> getAllDeviceSolid() {
@@ -92,7 +87,7 @@ public class DevicesCollectionViewModel extends ViewModel {
                 .map(deviceSolid -> {
                     Collections.sort(deviceSolid, (o1, o2) -> (int) (o2.getId() - o1.getId()));
                     return deviceSolid;
-                });
+                }).distinctUntilChanged();
 
     }
 
@@ -101,7 +96,7 @@ public class DevicesCollectionViewModel extends ViewModel {
                 .map(deviceWaves -> {
                     Collections.sort(deviceWaves, (o1, o2) -> (int) (o2.getId() - o1.getId()));
                     return deviceWaves;
-                });
+                }).distinctUntilChanged();
 
     }
 
@@ -133,14 +128,5 @@ public class DevicesCollectionViewModel extends ViewModel {
             return devicesDataSource.getWavesRepository().updateDevice((DeviceWaves) device);
         else
             return Completable.error(() -> new Throwable("Cannot Update With Unknown Device"));
-    }
-
-    public Completable insertId(Device device) {
-        return (device instanceof DeviceMusic) ?
-                devicesDataSource.getMusicRepository().insertId(((DeviceMusic) device).getDeviceId()) :
-                (device instanceof DeviceSolid) ?
-                        devicesDataSource.getSolidRepository().insertId(((DeviceSolid) device).getDeviceId()) :
-                        (device instanceof DeviceWaves) ?
-                                devicesDataSource.getWavesRepository().insertId(((DeviceWaves) device).getDeviceId()) : Completable.error(() -> new Throwable("Cannot Insert Id From Unknown Device"));
     }
 }

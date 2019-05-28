@@ -5,7 +5,7 @@
     <string name="light_tab">Light</string>
     <string name="mode_tab">Modes</string>
     <string name="presets_tab">Presets</string>
-    <string name="Devices">Devices</string>
+    <string name="Devices">DEVICES</string>
     <string name="DeviceName">Device Name</string>
     <string name="IPAddress">IP Address</string>
     <string name="Port">Port</string>
@@ -14,9 +14,6 @@
     <string name="WavesModeText">Waves Mode</string>
     <string name="SolidModeText">Solid Mode</string>
     <string name="todo">TODO</string>
-    <string name="title">Title</string>
-    <string name="port">Port:</string>
-    <string name="description">Description</string>
     <string name="connection">Connection:</string>
     <string name="apply">Apply</string>
 </resources>

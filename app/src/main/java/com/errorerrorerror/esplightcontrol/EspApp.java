@@ -19,12 +19,14 @@ public class EspApp extends Application {
     @Inject
     public DeviceRepo deviceRepo;
     private AppComponent appComponent;
+    private static EspApp instance;
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
         dagger();
+        instance = this;
     }
 
     void dagger() {
@@ -49,6 +51,10 @@ public class EspApp extends Application {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
         }
+    }
+
+    public static EspApp getInstance() {
+        return EspApp.instance;
     }
 
     public AppComponent getAppComponent() {

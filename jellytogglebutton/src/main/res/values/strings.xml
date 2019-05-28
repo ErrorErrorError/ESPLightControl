@@ -1,6 +1,4 @@
 <resources>
     <string name="app_name">JellyToggleButton</string>
 
-    <string name="default_on_text">On</string>
-    <string name="default_off_text">Off</string>
 </resources>

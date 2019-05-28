@@ -80,16 +80,13 @@ dependencies {
     implementation project(':swipeablerecyclerviewcell')
 
     //Bubble navigation
-    implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.4'
+    implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.7'
 
     //Lifecycle Components
     def lifecycle_version = "2.1.0-alpha04"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version" // For Kotlin use lifecycle-reactivestreams-ktx
-
-    implementation 'com.minimize.android:rxrecycler-adapter:1.1.1'
-
 
     //Room Dependencies
     def room_version = "2.1.0-beta01"
@@ -136,17 +133,10 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
 
-    /* AutoValue */
-    def auto_value_version = "1.6.2"
-    compileOnly "com.google.auto.value:auto-value:$auto_value_version"
-    api "com.google.auto.value:auto-value-annotations:$auto_value_version"
-    annotationProcessor "com.google.auto.value:auto-value:$auto_value_version"
-
-    //Lottie
-    def lottieVersion = "3.0.0"
-    implementation "com.airbnb.android:lottie:$lottieVersion"
-
     implementation 'com.github.duanhong169:colorpicker:1.1.6'
+
+    implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.3'
+
 
     //JellyToggle
     implementation project(':jellytogglebutton')

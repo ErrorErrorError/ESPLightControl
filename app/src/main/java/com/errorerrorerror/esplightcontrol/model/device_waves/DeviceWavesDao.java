@@ -35,9 +35,4 @@ public interface DeviceWavesDao {
 
     @Query("SELECT * FROM  device_waves WHERE id =:id")
     Single<DeviceWaves> getDevice(long id);
-
-    @Query("UPDATE device_music SET id = :id WHERE deviceId = :id")
-    Completable insertId(long id);
-
-
 }

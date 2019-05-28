@@ -13,12 +13,13 @@ public class ObservableList<T> {
     public ObservableList() {
         this.list = new ArrayList<>();
         this.publishSubject = PublishSubject.create();
+        publishSubject.onNext(this.list);
     }
 
     public ObservableList(List<T> list){
         this.list = list;
         this.publishSubject = PublishSubject.create();
-
+        publishSubject.onNext(this.list);
     }
 
     public void reInsertList(){
