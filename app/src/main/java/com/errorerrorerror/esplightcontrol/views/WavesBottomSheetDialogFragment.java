@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +37,8 @@ import com.jakewharton.rxbinding3.view.RxView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -44,6 +48,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import top.defaults.colorpicker.ColorWheelSelector;
 
 public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
@@ -51,15 +56,16 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private WavesModeBinding binding;
     @NonNull
     private ObservableList<Device> listWaves = new ObservableList<>();
+    private ObservableList<Integer> colors = new ObservableList<>(6);
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     private DevicesCollectionViewModel viewModel;
     @Nullable
-    private Device device;
+    private DeviceWaves device;
 
-    public WavesBottomSheetDialogFragment(Device device) {
+    public WavesBottomSheetDialogFragment(@NotNull DeviceWaves device) {
         this.device = device;
     }
 
@@ -75,7 +81,6 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         dialog.setOnShowListener(dialog1 -> {
             BottomSheetDialog d = (BottomSheetDialog) dialog1;
-
             FrameLayout bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet);
             assert bottomSheet != null;
             BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -99,6 +104,7 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         binding.setViewModel(viewModel);
         binding.setWavesView(this);
+        colors.reInsertList();
         return binding.getRoot();
     }
 
@@ -106,17 +112,34 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initRecyclerViews();
         listWaves.reInsertList();
-        
+        colors.reInsertList();
+
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getContext())
                 .setOrientation(ChipsLayoutManager.HORIZONTAL)
                 .build();
+
+        //First Palette
+        createFirstPalette();
 
         binding.wavesSelectDeviceChip.setLayoutManager(chipsLayoutManager);
         binding.wavesSelectDeviceChip.setAdapter(new ListModesAdapter(this));
         binding.wavesSelectDeviceChip.addItemDecoration(new SpacingItemDecoration(getResources().getDimensionPixelOffset(R.dimen.item_space_horizontal),
                 getResources().getDimensionPixelOffset(R.dimen.item_space_vertical)));
+
+        colors.getObservableList()
+                .map(list -> {
+                    binding.palleteText.setText(String.format(Locale.ENGLISH, "Palettes: %d", list.size()));
+                    return list;
+                })
+                .map(List::size)
+                .map(size -> size < 6)
+                .doOnNext(aBoolean -> binding.addSelectorColor.setEnabled(aBoolean))
+                .subscribe();
+
+        RxView.clicks(binding.addSelectorColor)
+                .doOnNext(unit -> addView(Color.WHITE))
+                .subscribe();
 
         listWaves.getObservableList()
                 .map(list -> !list.isEmpty())
@@ -127,7 +150,7 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
                 .flatMap((Function<Device, ObservableSource<?>>) device -> {
                     if (device instanceof DeviceWaves) {
                         ((DeviceWaves) device).setSpeed(100);
-                        ((DeviceWaves) device).setPrimaryColor(binding.wavesColorPicker.getColor());
+                        ((DeviceWaves) device).setColors(colors.getList());
                         return viewModel.updateDevice(device)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -141,7 +164,7 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
                                                 new DeviceWaves(
                                                         device,
                                                         100,
-                                                        binding.wavesColorPicker.getColor())
+                                                        colors.getList())
                                         ))
                                 .flatMap(deviceWaves -> viewModel.insertDevice(deviceWaves)
                                         .subscribeOn(Schedulers.io())
@@ -153,26 +176,23 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
                 .doOnComplete(this::dismiss)
                 .subscribe();
 
-
-        binding.wavesColorPicker.setOnTouchListener((v, event) ->
-
+        binding.wavesSelectDeviceChip.setOnTouchListener((v, event) ->
         {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    binding.wavesColorPicker.requestDisallowInterceptTouchEvent(true);
+                    binding.wavesSelectDeviceChip.requestDisallowInterceptTouchEvent(true);
                     return true;
                 case MotionEvent.ACTION_MOVE:
-                    binding.wavesColorPicker.requestDisallowInterceptTouchEvent(true);
+                    binding.wavesSelectDeviceChip.requestDisallowInterceptTouchEvent(true);
                     return false;
                 case MotionEvent.ACTION_UP:
-                    binding.wavesColorPicker.requestDisallowInterceptTouchEvent(false);
+                    binding.wavesSelectDeviceChip.requestDisallowInterceptTouchEvent(false);
                     return false;
             }
             return false;
         });
 
-        binding.wavesSelectDeviceChip.setOnTouchListener((v, event) ->
-
+        binding.wavesColorPicker.setOnTouchListener((v, event) ->
         {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -195,21 +215,26 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
                         setDataBeforeLoad(device, t);
                     }
                     listWaves.reInsertList();
+                    colors.reInsertList();
                 }));
-
     }
 
-    private void setDataBeforeLoad(@NonNull Device t, Chip d) {
+    private void setDataBeforeLoad(@NonNull DeviceWaves t, Chip d) {
         listWaves.add(t);
+        colors.remove(0);
+        colors.addAll(t.getColors());
         d.setChecked(true);
-        binding.wavesColorPicker.setColor(((DeviceWaves) t).getPrimaryColor(), true);
+        binding.wavesColorPicker.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                binding.wavesColorPicker.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                binding.wavesColorPicker.setColor(t.getColors().get(0), null);
+                for (int i = 1; i < colors.getList().size(); i++) {
+                    addView(colors.getList().get(i));
+                }
+            }
+        });
     }
-
-
-    private void initRecyclerViews() {
-        binding.wavesColorPicker.setColor(Color.WHITE, true);
-    }
-
 
     public void devicesToChange(@NonNull CompoundButton v, boolean isChecked, Device device) {
         if (isChecked) {
@@ -222,5 +247,49 @@ public class WavesBottomSheetDialogFragment extends BottomSheetDialogFragment {
                 listWaves.remove(device);
             }
         }
+    }
+
+    private void createFirstPalette() {
+        View p = new View(getContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        params.width = params.width / 6;
+        params.setMargins(10, 10, 10, 10);
+        p.setLayoutParams(params);
+        binding.colorPallete.addView(p);
+        binding.wavesColorPicker.getMainSelector().setColorListener(color -> {
+            p.setBackgroundColor(color);
+            if (colors.getList().size() == 0) {
+                colors.add(0, color);
+            } else {
+                colors.set(0, color);
+            }
+        });
+    }
+
+    private void addView(int colorz) {
+        View p = new View(getContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        params.width = params.width / 6;
+        params.setMargins(10, 10, 10, 10);
+
+        ColorWheelSelector selector = binding.wavesColorPicker.addSelector(colorz, getContext());
+        int latestSelector = binding.wavesColorPicker.getSelectorList().size();
+        selector.setColorListener(color -> {
+            p.setBackgroundColor(color);
+            if (colors.getList().size() == latestSelector) {
+                colors.add(latestSelector, color);
+            } else {
+                colors.set(latestSelector, color);
+            }
+        });
+
+        p.setOnLongClickListener(v -> {
+            binding.colorPallete.removeView(v);
+            colors.remove(Integer.valueOf(selector.getColor()));
+            binding.wavesColorPicker.removeView(selector);
+            return true;
+        });
+
+        binding.colorPallete.addView(p, params);
     }
 }

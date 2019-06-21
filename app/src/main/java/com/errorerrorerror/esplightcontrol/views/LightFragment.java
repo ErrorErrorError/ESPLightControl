@@ -24,7 +24,6 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class LightFragment extends Fragment {
@@ -96,7 +95,6 @@ public class LightFragment extends Fragment {
     public void progressChanged(int progress, Device device) {
         collectionViewModel.addDisposable(collectionViewModel.updateBrightnessLevel(progress, device)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                 }, onError -> Log.e(TAG, "progressChanged: ", onError)));
     }

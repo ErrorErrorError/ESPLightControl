@@ -17,7 +17,7 @@
 
     <!-- Dialog -->
     <style name="DialogStyle" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="android:background">?colorSurface</item>
+        <item name="background">?colorSurface</item>
         <item name="android:outlineSpotShadowColor" tools:ignore="NewApi">@null</item>
         <item name="android:outlineAmbientShadowColor" tools:ignore="NewApi">@null</item>
     </style>
@@ -31,6 +31,7 @@
         <item name="android:clipToPadding">false</item>
         <item name="boxBackgroundColor">?colorOnBackground</item>
         <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="TextInputEditText.Theme" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
@@ -38,7 +39,7 @@
     </style>
 
     <style name="TextInputEditText.Style" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
-        <item name="android:elevation">5dp</item>
+        <item name="elevation">5dp</item>
     </style>
 
     <style name="CardStyle" parent="Widget.MaterialComponents.CardView">

@@ -51,12 +51,12 @@ public class MusicBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private DevicesCollectionViewModel viewModel;
     private MusicModeBinding binding;
     @Nullable
-    private Device device;
+    private DeviceMusic device;
 
     @NonNull
     private ObservableList<Device> listMusic = new ObservableList<>();
 
-    public MusicBottomSheetDialogFragment(Device device) {
+    public MusicBottomSheetDialogFragment(DeviceMusic device) {
         super();
         this.device = device;
     }
@@ -190,14 +190,14 @@ public class MusicBottomSheetDialogFragment extends BottomSheetDialogFragment {
      *
      * @param d - Adds the device to the list
      */
-    private void setDataBeforeLoad(Device device, Chip d) {
+    private void setDataBeforeLoad(DeviceMusic device, Chip d) {
         listMusic.add(device);
         d.setChecked(true);
 
-        binding.lowColorSlider.setInitialColor(((DeviceMusic) device).getLow());
-        binding.medColorSlider.setInitialColor(((DeviceMusic) device).getMed());
-        binding.highColorSlider.setInitialColor(((DeviceMusic) device).getHigh());
-        binding.thresholdSlider.setProgress(((DeviceMusic) device).getIntensity());
+        binding.lowColorSlider.setInitialColor(device.getLow());
+        binding.medColorSlider.setInitialColor(device.getMed());
+        binding.highColorSlider.setInitialColor(device.getHigh());
+        binding.thresholdSlider.setProgress(device.getIntensity());
     }
 
 

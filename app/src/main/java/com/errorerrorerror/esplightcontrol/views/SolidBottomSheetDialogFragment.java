@@ -51,11 +51,11 @@ public class SolidBottomSheetDialogFragment extends BottomSheetDialogFragment {
     @NonNull
     private ObservableList<Device> listSolid = new ObservableList<>();
 
-    private Device device;
+    private DeviceSolid device;
 
     private static final String TAG = "SolidBottomSheetDialogF";
 
-    public SolidBottomSheetDialogFragment(Device device) {
+    public SolidBottomSheetDialogFragment(DeviceSolid device) {
         this.device = device;
     }
 
@@ -106,7 +106,7 @@ public class SolidBottomSheetDialogFragment extends BottomSheetDialogFragment {
                 .switchMap(unit -> Observable.fromIterable(listSolid.getList()))
                 .flatMap((Function<Device, ObservableSource<?>>) device -> {
                     if (device instanceof DeviceSolid) {
-                        ((DeviceSolid) device).setColor(binding.solidColorPicker.getColor());
+                        ((DeviceSolid) device).setColor(binding.solidColorPicker.getMainSelector().getColor());
                         return viewModel.updateDevice(device)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -119,7 +119,7 @@ public class SolidBottomSheetDialogFragment extends BottomSheetDialogFragment {
                                         Observable.just(
                                                 new DeviceSolid(
                                                         device,
-                                                        binding.solidColorPicker.getColor())
+                                                        binding.solidColorPicker.getMainSelector().getColor())
                                         ))
                                 .flatMap(deviceSolid -> viewModel.insertDevice(deviceSolid)
                                         .subscribeOn(Schedulers.io())
@@ -173,13 +173,13 @@ public class SolidBottomSheetDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void initRecyclerViews() {
-        binding.solidColorPicker.setColor(Color.WHITE, true);
+        binding.solidColorPicker.setColor(Color.WHITE, null);
     }
 
-    private void setDataBeforeLoad(@NonNull Device t, @NotNull Chip chip) {
+    private void setDataBeforeLoad(@NonNull DeviceSolid t, @NotNull Chip chip) {
         listSolid.add(t);
         chip.setChecked(true);
-        binding.solidColorPicker.setColor(((DeviceSolid) t).getColor(), true);
+        binding.solidColorPicker.setColor(t.getColor(), null);
     }
 
     public void devicesToChange(@NonNull CompoundButton v, boolean isChecked, Device device) {

@@ -1,55 +1,107 @@
 package top.defaults.colorpicker;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
+import android.os.Build;
 import android.util.AttributeSet;
-import android.view.View;
+import android.view.MotionEvent;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import static top.defaults.colorpicker.Constants.SELECTOR_RADIUS_DP;
+@SuppressLint("AppCompatCustomView")
+public class ColorWheelSelector extends ImageView {
 
-public class ColorWheelSelector extends View {
-
-    private Paint selectorPaint;
-    private float selectorRadiusPx = SELECTOR_RADIUS_DP * 3;
-    private PointF currentPoint = new PointF();
+    private int color = 0;
+    Bitmap bm;
+    private ColorObserver colorListener;
+    private static final String TAG = "ColorWheelSelector";
 
     public ColorWheelSelector(Context context) {
-        this(context, null);
+        super(context);
+        init();
     }
 
     public ColorWheelSelector(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        init();
     }
 
     public ColorWheelSelector(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
-        selectorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        selectorPaint.setColor(Color.BLACK);
-        selectorPaint.setStyle(Paint.Style.STROKE);
-        selectorPaint.setStrokeWidth(2);
+        init();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public ColorWheelSelector(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
+
+    private void init() {
+        setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.wheel));
+    }
+
+    private float xDelta;
+    private float yDelta;
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onDraw(Canvas canvas) {
-        canvas.drawLine(currentPoint.x - selectorRadiusPx, currentPoint.y,
-                currentPoint.x + selectorRadiusPx, currentPoint.y, selectorPaint);
-        canvas.drawLine(currentPoint.x, currentPoint.y - selectorRadiusPx,
-                currentPoint.x, currentPoint.y + selectorRadiusPx, selectorPaint);
-        canvas.drawCircle(currentPoint.x, currentPoint.y, selectorRadiusPx * 0.66f, selectorPaint);
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+
+            case MotionEvent.ACTION_DOWN:
+                getParent().requestDisallowInterceptTouchEvent(true);
+                xDelta = getX() - event.getRawX();
+                yDelta = getY() - event.getRawY();
+
+                ((ColorWheelView) getParent()).setColor((((ColorWheelView) getParent()).getColorAtPoint(event.getRawX() + xDelta, event.getRawY() + yDelta)), this);
+                return true;
+
+            case MotionEvent.ACTION_UP:
+                getParent().requestDisallowInterceptTouchEvent(false);
+                ((ColorWheelView) getParent()).setColor((((ColorWheelView) getParent()).getColorAtPoint(event.getRawX() + xDelta, event.getRawY() + yDelta)), this);
+                return true;
+
+            case MotionEvent.ACTION_MOVE:
+                getParent().requestDisallowInterceptTouchEvent(true);
+                ((ColorWheelView) getParent()).setColor((((ColorWheelView) getParent()).getColorAtPoint(event.getRawX() + xDelta, event.getRawY() + yDelta)), this);
+                return true;
+        }
+
+        ((ColorWheelView) getParent()).invalidate();
+        return false;
     }
 
-    public void setSelectorRadiusPx(float selectorRadiusPx) {
-        this.selectorRadiusPx = selectorRadiusPx;
-    }
 
     public void setCurrentPoint(PointF currentPoint) {
-        this.currentPoint = currentPoint;
-        invalidate();
+        setX(currentPoint.x - getWidth()/2);
+        setY(currentPoint.y - getHeight()/2);
     }
+
+    public void setColorListener(@NonNull ColorObserver colorListener) {
+        this.colorListener = colorListener;
+    }
+
+    public final int getColor() {
+        return this.color;
+    }
+
+    public final void setColor(int color) {
+        this.color = color;
+        if (colorListener != null) {
+            colorListener.onColorSelected(color);
+        }
+    }
+
+    public final ColorObserver getColorObserver() {
+        return this.colorListener;
+    }
+
 }

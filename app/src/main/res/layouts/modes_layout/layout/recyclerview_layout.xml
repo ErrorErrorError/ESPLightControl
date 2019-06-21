@@ -29,6 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="@{device.on}"
+        android:textAlignment="center"
         android:onCheckedChanged="@{(chip, isChecked) -> (viewM != null)? viewM.devicesToChange(chip, isChecked ,device) : (viewW != null)? viewW.devicesToChange(chip, isChecked, device) : (viewS != null)? viewS.devicesToChange(chip, isChecked ,device) : (viewModes != null)? viewModes.showSetting(chip, device) : null}"
         android:text="@{device.deviceName}" />
 </layout>

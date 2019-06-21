@@ -85,13 +85,13 @@ public class ModesFragment extends RxFragment {
         );
     }
 
-    private void showMusicSheet(@Nullable Device device) {
+    private void showMusicSheet(@Nullable DeviceMusic device) {
         FragmentTransaction ft = checkDialog();
         MusicBottomSheetDialogFragment bottomSheet = device != null ? new MusicBottomSheetDialogFragment(device) : new MusicBottomSheetDialogFragment();
         bottomSheet.show(ft, "modaldialog");
     }
 
-    private void showWavesSheet(@Nullable Device device) {
+    private void showWavesSheet(@Nullable DeviceWaves device) {
         FragmentTransaction ft = checkDialog();
         WavesBottomSheetDialogFragment bottomSheet;
 
@@ -133,7 +133,7 @@ public class ModesFragment extends RxFragment {
                 getResources().getDimensionPixelOffset(R.dimen.item_space_vertical)));
     }
 
-    private void showSolidSheet(@Nullable Device device) {
+    private void showSolidSheet(@Nullable DeviceSolid device) {
         FragmentTransaction ft = checkDialog();
         SolidBottomSheetDialogFragment bottomSheet;
         if (device != null) {
@@ -160,13 +160,13 @@ public class ModesFragment extends RxFragment {
     public void showSetting(@NonNull CompoundButton v,@NotNull Device device) {
         if (device instanceof DeviceMusic) {
             v.setChecked(false);
-            showMusicSheet(device);
+            showMusicSheet((DeviceMusic) device);
         } else if (device instanceof DeviceWaves) {
             v.setChecked(false);
-            showWavesSheet(device);
+            showWavesSheet((DeviceWaves) device);
         } else if (device instanceof DeviceSolid) {
             v.setChecked(false);
-            showSolidSheet(device);
+            showSolidSheet((DeviceSolid) device);
         }
     }
 }

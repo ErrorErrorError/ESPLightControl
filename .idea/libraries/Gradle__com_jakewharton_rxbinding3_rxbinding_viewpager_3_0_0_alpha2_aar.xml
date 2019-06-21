@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.jakewharton.rxbinding3:rxbinding-viewpager:3.0.0-alpha2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/78e1edd6630a2b6b76927aae1a6a5e7e/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/78e1edd6630a2b6b76927aae1a6a5e7e/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/cde1e8139fbce3efe42fc10bde55ed9f/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/cde1e8139fbce3efe42fc10bde55ed9f/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

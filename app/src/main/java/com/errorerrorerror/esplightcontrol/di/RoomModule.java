@@ -32,6 +32,7 @@ public class RoomModule {
                 application.getApplicationContext(),
                 DevicesDatabase.class,
                 DATABASE_NAME)
+                .fallbackToDestructiveMigration()
                 .build();
     }
 

@@ -1,1 +1,1 @@
-include ':app', ':swipeablerecyclerviewcell', ':jellytogglebutton', ':iosstyleslider', ':colorseekbar', ':ChipsLayoutManager'
+include ':app', ':swipeablerecyclerviewcell', ':jellytogglebutton', ':iosstyleslider', ':colorseekbar', ':ChipsLayoutManager', ':colorpicker'

@@ -16,4 +16,5 @@
     <string name="todo">TODO</string>
     <string name="connection">Connection:</string>
     <string name="apply">Apply</string>
+    <string name="addColor">Add Color</string>
 </resources>

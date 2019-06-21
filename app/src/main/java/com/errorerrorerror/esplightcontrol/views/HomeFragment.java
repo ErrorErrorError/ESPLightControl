@@ -27,9 +27,13 @@ import com.errorerrorerror.esplightcontrol.adapter.AllDevicesRecyclerAdapter;
 import com.errorerrorerror.esplightcontrol.databinding.DevicesFragmentBinding;
 import com.errorerrorerror.esplightcontrol.model.device.Device;
 import com.errorerrorerror.esplightcontrol.utils.Constants;
-import com.errorerrorerror.esplightcontrol.utils.NetworkUtils;
+import com.errorerrorerror.esplightcontrol.utils.JsonModeFactory;
+import com.errorerrorerror.esplightcontrol.utils.ObservableSocket;
 import com.errorerrorerror.esplightcontrol.viewmodel.DevicesCollectionViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.GsonBuilder;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.tenclouds.swipeablerecyclerviewcell.swipereveal.SwipeRevealLayout;
 
@@ -40,7 +44,10 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -54,13 +61,15 @@ public class HomeFragment extends Fragment {
 
     //Utils
     private DevicesFragmentBinding binding;
-    private List<NetworkUtils> sockets = new ArrayList<>();
     private AllDevicesRecyclerAdapter adapter;
+    private List<ObservableSocket> socketList = new ArrayList<>();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("message");
+
 
     private void onClick(DialogInterface dialog) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = sharedPref.edit();
-
         int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
         Log.d(TAG, "onClick: " + selectedPosition);
 
@@ -121,7 +130,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        myRef.setValue("Hello, World!");
         //Add device button click listener
         collectionViewModel.addDisposable(RxView.clicks(binding.addDeviceButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
@@ -142,7 +151,50 @@ public class HomeFragment extends Fragment {
                         .subscribe()
         );
 
+        collectionViewModel.addDisposable(collectionViewModel.getAllDevices()
+                .flatMapIterable(devices -> devices)
+                .switchMap((Function<Device, ObservableSource<Device>>) device -> {
 
+                    JsonModeFactory<Device> rta = JsonModeFactory.of(
+                            Device.class)
+                            .registerSubtype(device.getClass());
+                    String data = new GsonBuilder()
+                            .registerTypeAdapterFactory(rta)
+                            .create()
+                            .toJson(device, Device.class);
+
+                    for (ObservableSocket obs : socketList) {
+                        if (device.getId() == obs.getId()) {
+                            if (!device.getIp().equals(obs.getHost()) || Integer.parseInt(device.getPort()) != obs.getPort()) {
+                                obs.setHost(device.getIp());
+                                obs.setPort(Integer.parseInt(device.getPort()));
+                            }
+
+                            obs.setRunning(device.isOn());
+                            obs.setData(data);
+                            return obs.getConnectionObserver().map(bool -> setText(bool, device));
+                        }
+                    }
+
+                    ObservableSocket observableSocket = new ObservableSocket(device.getId(), 0, 2000, device.getIp(), Integer.parseInt(device.getPort()), 2000, data, device.isOn());
+                    Observable<Device> retVal = observableSocket.startObservableConnection().map(bool -> setText(bool, device));
+                    socketList.add(observableSocket);
+                    return retVal;
+                })
+                .subscribe());
+    }
+
+    private Device setText(boolean d, Device device) {
+        if (d && device.isOn()) {
+            //        device.setConnectivity("Connected To: ");
+        } else if (!d && device.isOn()) {
+            //       device.setConnectivity("Could not connect to: ");
+            device.setOn(false);
+        } else if (d && !device.isOn() || !d && !device.isOn()) {
+            //       device.setConnectivity("Not Connected To: ");
+        }
+
+        return device;
     }
 
     //This changes switch from room, is implemented in recycler_devices_list.xml
@@ -191,7 +243,6 @@ public class HomeFragment extends Fragment {
                 binding.recyclerviewAddDevice.smoothScrollToPosition(positionStart);
             }
         });
-
     }
 
 
@@ -201,20 +252,20 @@ public class HomeFragment extends Fragment {
         adapter = new AllDevicesRecyclerAdapter(this);
         binding.recyclerviewAddDevice.setAdapter(adapter);
         binding.recyclerviewAddDevice.setHasFixedSize(true);
-        //Objects.requireNonNull(binding.recyclerviewAddDevice.getItemAnimator()).setChangeDuration(0);
+        Objects.requireNonNull(binding.recyclerviewAddDevice.getItemAnimator()).setChangeDuration(0);
     }
 
     //This method gets called when the delete button is clicked
     public void removeDevice(Device device) {
-        Runnable t = () -> {
-            for (int i = 0; i < sockets.size(); i++) {
-                if (device.getId() == sockets.get(i).getId()) {
-                    sockets.remove(sockets.get(i));
-                    break;
-                }
+
+        for (ObservableSocket socket : socketList) {
+            if (socket.getId() == device.getId()) {
+                socket.stop();
+                //socketList.remove(socket);
             }
-        };
-        t.run();
+        }
+
+        Log.d(TAG, "removeDevice: " + socketList.size());
         collectionViewModel.addDisposable(collectionViewModel.deleteDevice(device)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -238,10 +289,13 @@ public class HomeFragment extends Fragment {
         swiper.close(true);
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding.unbind();
     }
+
+
 }
 

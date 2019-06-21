@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -59,6 +60,7 @@ dependencies {
 
     //Material Components
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.firebase:firebase-database:16.0.4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0-beta01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
@@ -86,7 +88,8 @@ dependencies {
     def lifecycle_version = "2.1.0-alpha04"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version" // For Kotlin use lifecycle-reactivestreams-ktx
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
+    // For Kotlin use lifecycle-reactivestreams-ktx
 
     //Room Dependencies
     def room_version = "2.1.0-beta01"
@@ -133,11 +136,10 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
 
-    implementation 'com.github.duanhong169:colorpicker:1.1.6'
-
     implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.3'
 
-
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation group: 'org.danilopianini', name: 'gson-extras', version: '0.2.1'
     //JellyToggle
     implementation project(':jellytogglebutton')
 
@@ -147,6 +149,9 @@ dependencies {
     //colorseekbar
     implementation project(':colorseekbar')
     implementation project(path: ':ChipsLayoutManager')
+    implementation project(path: ':colorpicker')
+
+
 }
 
 repositories {

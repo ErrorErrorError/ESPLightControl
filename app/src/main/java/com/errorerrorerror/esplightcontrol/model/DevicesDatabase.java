@@ -2,6 +2,7 @@ package com.errorerrorerror.esplightcontrol.model;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.errorerrorerror.esplightcontrol.model.device_music.DeviceMusic;
 import com.errorerrorerror.esplightcontrol.model.device_music.DeviceMusicDao;
@@ -9,8 +10,10 @@ import com.errorerrorerror.esplightcontrol.model.device_solid.DeviceSolid;
 import com.errorerrorerror.esplightcontrol.model.device_solid.DeviceSolidDao;
 import com.errorerrorerror.esplightcontrol.model.device_waves.DeviceWaves;
 import com.errorerrorerror.esplightcontrol.model.device_waves.DeviceWavesDao;
+import com.errorerrorerror.esplightcontrol.utils.Converters;
 
 @Database(entities = {DeviceMusic.class, DeviceWaves.class, DeviceSolid.class}, version = 1)
+@TypeConverters(Converters.class)
 public abstract class DevicesDatabase extends RoomDatabase {
 
     public abstract DeviceMusicDao getMusicDao();
